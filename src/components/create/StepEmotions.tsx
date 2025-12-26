@@ -44,7 +44,10 @@ const StepEmotions = () => {
           <VariantSelector
             variants={EMOTIONS_VARIANTS}
             selectedVariant={variant}
-            onSelect={setVariant}
+            onSelect={(v) => {
+              setVariant(v);
+              setSelected([]);
+            }}
           />
         </div>
         <p className="text-muted-foreground text-lg mb-10 opacity-0 animate-fade-up delay-100">

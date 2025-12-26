@@ -38,7 +38,10 @@ const StepMainCharacterEra = () => {
           <VariantSelector
             variants={ERA_VARIANTS}
             selectedVariant={variant}
-            onSelect={setVariant}
+            onSelect={(v) => {
+              setVariant(v);
+              setSelected(undefined);
+            }}
           />
         </div>
         <p className="text-muted-foreground text-lg mb-10 opacity-0 animate-fade-up delay-100">

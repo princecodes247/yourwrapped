@@ -348,6 +348,15 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
 
 export const FAVORITES_VARIANTS: QuestionVariant[] = [
   {
+    id: 'song',
+    question: "What song defined their year?",
+    displayPrefix: "Favorite Song",
+    options: [
+      { value: 'i-will', label: 'I Will', emoji: '🎤' },
+      { value: 'beat-it', label: 'Beat It', emoji: '🎸' },
+    ]
+  },
+  {
     id: 'music',
     question: "What was on their playlist like?",
     displayPrefix: "Favorite music Genre",
