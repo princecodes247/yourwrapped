@@ -25,7 +25,7 @@ const StepMainCharacterEra = () => {
   return (
     <StepLayout
       stepNumber={3}
-      totalSteps={8}
+      totalSteps={9}
       onNext={handleNext}
       onBack={prevStep}
       canProgress={!!selected}

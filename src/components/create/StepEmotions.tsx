@@ -31,7 +31,7 @@ const StepEmotions = () => {
   return (
     <StepLayout
       stepNumber={5}
-      totalSteps={8}
+      totalSteps={9}
       onNext={handleNext}
       onBack={prevStep}
       canProgress={selected.length > 0}

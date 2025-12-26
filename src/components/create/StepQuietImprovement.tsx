@@ -24,8 +24,8 @@ const StepQuietImprovement = () => {
 
   return (
     <StepLayout
-      stepNumber={7}
-      totalSteps={8}
+      stepNumber={8}
+      totalSteps={9}
       onNext={handleNext}
       onBack={prevStep}
       canProgress={!!selected}

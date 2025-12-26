@@ -16,8 +16,8 @@ const StepCreatorName = () => {
 
   return (
     <StepLayout
-      stepNumber={8}
-      totalSteps={8}
+      stepNumber={9}
+      totalSteps={9}
       onNext={handleNext}
       onBack={() => prevStep()}
       canProgress={name.trim().length > 0}

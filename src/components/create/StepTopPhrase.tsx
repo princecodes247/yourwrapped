@@ -22,7 +22,7 @@ const StepTopPhrase = () => {
   return (
     <StepLayout
       stepNumber={4}
-      totalSteps={8}
+      totalSteps={9}
       onNext={handleNext}
       onBack={prevStep}
       canProgress={phrase.trim().length > 0}

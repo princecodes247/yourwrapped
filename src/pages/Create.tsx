@@ -5,6 +5,7 @@ import StepMainCharacterEra from "@/components/create/StepMainCharacterEra";
 import StepTopPhrase from "@/components/create/StepTopPhrase";
 import StepEmotions from "@/components/create/StepEmotions";
 import StepObsessions from "@/components/create/StepObsessions";
+import StepFavorites from "@/components/create/StepFavorites";
 import StepQuietImprovement from "@/components/create/StepQuietImprovement";
 import StepCreatorName from "@/components/create/StepCreatorName";
 
@@ -18,6 +19,7 @@ const Create = () => {
     <StepTopPhrase key="phrase" />,
     <StepEmotions key="emotions" />,
     <StepObsessions key="obsessions" />,
+    <StepFavorites key="favorites" />,
     <StepQuietImprovement key="improvement" />,
     <StepCreatorName key="creator" />,
   ];

@@ -13,6 +13,7 @@ import {
   EMOTIONS_VARIANTS,
   OBSESSIONS_VARIANTS,
   IMPROVEMENT_VARIANTS,
+  FAVORITES_VARIANTS,
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 import { encodeData, decodeData } from "@/lib/share";
@@ -73,6 +74,7 @@ const Preview = () => {
   const phraseVariant = PHRASE_VARIANTS.find(v => v.id === wrappedData.phraseVariant) || PHRASE_VARIANTS[0];
   const emotionsVariant = EMOTIONS_VARIANTS.find(v => v.id === wrappedData.emotionsVariant) || EMOTIONS_VARIANTS[0];
   const obsessionsVariant = OBSESSIONS_VARIANTS.find(v => v.id === wrappedData.obsessionsVariant) || OBSESSIONS_VARIANTS[0];
+  const favoritesVariant = FAVORITES_VARIANTS.find(v => v.id === wrappedData.favoritesVariant) || FAVORITES_VARIANTS[0];
   const improvementVariant = IMPROVEMENT_VARIANTS.find(v => v.id === wrappedData.improvementVariant) || IMPROVEMENT_VARIANTS[0];
 
   const handleShare = () => {
@@ -220,7 +222,30 @@ const Preview = () => {
         </div>
       )
     },
-    // Slide 7: Quiet Improvement
+    // Slide 7: Favorites
+    {
+      id: 'favorites',
+      content: (
+        <div className="text-center">
+          <p className="text-muted-foreground mb-8 uppercase tracking-widest text-sm opacity-0 animate-fade-up">
+            {favoritesVariant.displayPrefix}
+          </p>
+          <div className="space-y-4">
+            {wrappedData.favorites?.map((fav, index) => (
+              <div
+                key={index}
+                className="opacity-0 animate-fade-up"
+                style={{ animationDelay: `${200 + index * 150}ms` }}
+              >
+                <span className="text-muted-foreground text-lg mr-3">#{index + 1}</span>
+                <span className="text-2xl md:text-3xl font-light text-foreground">{fav}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    },
+    // Slide 8: Quiet Improvement
     {
       id: 'improvement',
       content: (

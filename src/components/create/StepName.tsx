@@ -15,7 +15,7 @@ const StepName = () => {
   return (
     <StepLayout
       stepNumber={1}
-      totalSteps={8}
+      totalSteps={9}
       onNext={handleNext}
       canProgress={name.trim().length > 0}
       showBack={false}
@@ -27,7 +27,7 @@ const StepName = () => {
         <p className="text-muted-foreground text-lg mb-10 opacity-0 animate-fade-up delay-100">
           Enter their first name
         </p>
-        
+
         <div className="opacity-0 animate-fade-up delay-200">
           <Input
             type="text"

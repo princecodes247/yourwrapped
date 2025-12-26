@@ -42,7 +42,11 @@ export interface WrappedData {
   obsessions?: string[];
   obsessionsVariant?: string;
 
-  // Slide 7 - Quiet Improvement
+  // Slide 7 - Favorites
+  favorites?: string[];
+  favoritesVariant?: string;
+
+  // Slide 8 - Quiet Improvement
   quietImprovement?: string;
   quietImprovementNote?: string;
   improvementVariant?: string;
@@ -221,6 +225,7 @@ export const PHRASE_VARIANTS: QuestionVariant[] = [
     displayPrefix: "Most Used Phrase",
     options: [
       { value: 'slay', label: 'Slay', emoji: '💅' },
+      { value: 'clock-it', label: 'Clock it', emoji: '🤏' },
       { value: 'real', label: 'Real', emoji: '💯' },
       { value: 'literally', label: 'Literally', emoji: '💀' },
       { value: 'obsessed', label: 'Obsessed', emoji: '😍' },
@@ -283,11 +288,11 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
     question: "What were they completely into?",
     displayPrefix: "2025 Obsessions",
     options: [
-      { value: 'pickleball', label: 'Pickleball', emoji: '🥒' },
-      { value: 'sourdough', label: 'Sourdough', emoji: '🍞' },
+      { value: 'football', label: 'Football', emoji: '🏈' },
+      { value: 'soccer', label: 'Soccer', emoji: '⚽' },
       { value: 'running', label: 'Running', emoji: '🏃' },
-      { value: 'pilates', label: 'Pilates', emoji: '🧘' },
-      { value: 'matcha', label: 'Matcha', emoji: '🍵' },
+      { value: 'gym', label: 'Gym', emoji: '🏋️' },
+      { value: 'cooking', label: 'Cooking', emoji: '🍳' },
       { value: 'thrifting', label: 'Thrifting', emoji: '👗' },
       { value: 'travel', label: 'Travel', emoji: '✈️' },
       { value: 'reading', label: 'Reading', emoji: '📚' },
@@ -296,15 +301,16 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
   {
     id: 'hyperfixations',
     question: "What consumed their attention?",
-    displayPrefix: "Hyperfixations",
+    displayPrefix: "2025 Biggest Obsessions",
     options: [
       { value: 'f1', label: 'Formula 1', emoji: '🏎️' },
       { value: 'eras-tour', label: 'The Eras Tour', emoji: '🎤' },
-      { value: 'acotar', label: 'ACOTAR', emoji: '🧚' },
+      { value: 'soccer', label: 'Soccer', emoji: '⚽' },
       { value: 'baldurs-gate', label: 'Baldur\'s Gate 3', emoji: '🎲' },
       { value: 'kpop', label: 'K-Pop', emoji: '🎵' },
       { value: 'astrology', label: 'Astrology', emoji: '🔮' },
       { value: 'coding', label: 'Coding', emoji: '💻' },
+      { value: 'anime', label: 'Anime', emoji: '📺' },
       { value: 'chess', label: 'Chess', emoji: '♟️' },
     ]
   },
@@ -336,6 +342,69 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
       { value: 'movies', label: 'Movies', emoji: '🎬' },
       { value: 'music', label: 'Music', emoji: '🎧' },
       { value: 'food', label: 'Food', emoji: '🍕' },
+    ]
+  },
+];
+
+export const FAVORITES_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'music',
+    question: "What was on their playlist like?",
+    displayPrefix: "Favorite music Genre",
+    options: [
+      { value: 'pop', label: 'Pop', emoji: '🎤' },
+      { value: 'indie', label: 'Indie', emoji: '🎸' },
+      { value: 'rap', label: 'Rap', emoji: '🧢' },
+      { value: 'k-pop', label: 'K-Pop', emoji: '✨' },
+      { value: 'techno', label: 'Techno', emoji: '🎛️' },
+      { value: 'jazz', label: 'Jazz', emoji: '🎷' },
+      { value: 'metal', label: 'Metal', emoji: '🤘' },
+      { value: 'classical', label: 'Classical', emoji: '🎻' },
+    ]
+  },
+  {
+    id: 'movies',
+    question: "What kind of movies defined their year?",
+    displayPrefix: "Genre of the Year",
+    options: [
+      { value: 'horror', label: 'Horror', emoji: '👻' },
+      { value: 'romcom', label: 'RomCom', emoji: '💘' },
+      { value: 'sci-fi', label: 'Sci-Fi', emoji: '👽' },
+      { value: 'thriller', label: 'Thriller', emoji: '🔪' },
+      { value: 'documentary', label: 'Documentary', emoji: '📹' },
+      { value: 'animation', label: 'Animation', emoji: '🎨' },
+      { value: 'drama', label: 'Drama', emoji: '🎭' },
+      { value: 'action', label: 'Action', emoji: '💥' },
+    ]
+  },
+  {
+    id: 'anime',
+    question: "What anime world were they living in?",
+    displayPrefix: "Anime World",
+    options: [
+      { value: 'shonen', label: 'Shonen', emoji: '⚔️' },
+      { value: 'shojo', label: 'Shojo', emoji: '🌸' },
+      { value: 'isekai', label: 'Isekai', emoji: '🌀' },
+      { value: 'slice-of-life', label: 'Slice of Life', emoji: '🍰' },
+      { value: 'mecha', label: 'Mecha', emoji: '🤖' },
+      { value: 'sports', label: 'Sports', emoji: '🏀' },
+      { value: 'psychological', label: 'Psychological', emoji: '🧠' },
+      { value: 'fantasy', label: 'Fantasy', emoji: '🐉' },
+    ]
+  },
+  {
+    id: 'books',
+    question: "What genre did they get lost in?",
+    displayPrefix: "Book Genre",
+    options: [
+      { value: 'fantasy', label: 'Fantasy', emoji: '🧚' },
+      { value: 'romance', label: 'Romance', emoji: '❤️' },
+      { value: 'thriller', label: 'Thriller', emoji: '🔍' },
+      { value: 'non-fiction', label: 'Non-fiction', emoji: '🧠' },
+      { value: 'sci-fi', label: 'Sci-Fi', emoji: '🚀' },
+      { value: 'mystery', label: 'Mystery', emoji: '🕵️' },
+      { value: 'classics', label: 'Classics', emoji: '📜' },
+      { value: 'poetry', label: 'Poetry', emoji: '✒️' },
     ]
   },
 ];

@@ -34,7 +34,7 @@ const StepRelationship = () => {
   return (
     <StepLayout
       stepNumber={2}
-      totalSteps={8}
+      totalSteps={9}
       onNext={handleNext}
       onBack={prevStep}
       canProgress={!!selected}
@@ -46,7 +46,7 @@ const StepRelationship = () => {
         <p className="text-muted-foreground text-lg mb-10 opacity-0 animate-fade-up delay-100">
           This helps us personalize the experience
         </p>
-        
+
         <div className="grid grid-cols-2 gap-3 opacity-0 animate-fade-up delay-200">
           {relationships.map((rel, index) => (
             <button
