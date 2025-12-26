@@ -24,7 +24,19 @@ const Create = () => {
     <StepCreatorName key="creator" />,
   ];
 
-  return steps[currentStep] || steps[0];
+  return (
+    <>
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <div className="h-1 bg-secondary">
+          <div
+            className="h-full bg-primary transition-all duration-500 ease-out"
+            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+          />
+        </div>
+      </div>
+      {steps[currentStep] || steps[0]}
+    </>
+  );
 };
 
 export default Create;

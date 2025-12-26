@@ -14,7 +14,7 @@ const Landing = () => {
       <div className="min-h-screen bg-background flex flex-col">
         {/* Ambient glow effect */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div 
+          <div
             className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow"
           />
         </div>
@@ -23,7 +23,7 @@ const Landing = () => {
         <main className="flex-1 flex flex-col items-center justify-center px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
             {/* Badge */}
-            <div 
+            <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8 opacity-0 animate-fade-up"
               style={{ animationDelay: '100ms' }}
             >
@@ -32,7 +32,7 @@ const Landing = () => {
             </div>
 
             {/* Headline */}
-            <h1 
+            <h1
               className="text-emotional text-foreground mb-6 opacity-0 animate-fade-up"
               style={{ animationDelay: '200ms' }}
             >
@@ -42,16 +42,16 @@ const Landing = () => {
             </h1>
 
             {/* Subheadline */}
-            <p 
+            <p
               className="text-editorial text-muted-foreground mb-12 max-w-lg mx-auto opacity-0 animate-fade-up"
               style={{ animationDelay: '300ms' }}
             >
-              Not data. Not algorithms. Just you, telling their story — 
+              Not data. Not algorithms. Just you, telling their story
               in a beautiful, shareable experience.
             </p>
 
             {/* CTA */}
-            <div 
+            <div
               className="opacity-0 animate-fade-up"
               style={{ animationDelay: '400ms' }}
             >
@@ -64,16 +64,15 @@ const Landing = () => {
                 className="group"
               >
                 Create a Wrapped
-                <ArrowRight 
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    isHovered ? 'translate-x-1' : ''
-                  }`} 
+                <ArrowRight
+                  className={`w-5 h-5 transition-transform duration-200 ${isHovered ? 'translate-x-1' : ''
+                    }`}
                 />
               </Button>
             </div>
 
             {/* Subtle hint */}
-            <p 
+            <p
               className="mt-8 text-sm text-muted-foreground/60 opacity-0 animate-fade-up"
               style={{ animationDelay: '500ms' }}
             >

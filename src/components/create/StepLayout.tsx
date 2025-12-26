@@ -25,15 +25,7 @@ const StepLayout = ({
 }: StepLayoutProps) => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <div className="h-1 bg-secondary">
-          <div
-            className="h-full bg-primary transition-all duration-500 ease-out"
-            style={{ width: `${(stepNumber / totalSteps) * 100}%` }}
-          />
-        </div>
-      </div>
+
 
       {/* Back button */}
       {showBack && onBack && (
