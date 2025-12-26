@@ -5,20 +5,33 @@ import WrappedSlides from "@/components/WrappedSlides";
 import { createWrapped } from "@/api/wrapped";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import confetti from "canvas-confetti";
+import { ShareDialog } from "@/components/ShareDialog";
 
 const Preview = () => {
   const navigate = useNavigate();
   const { wrappedData } = useWrappedStore();
   const [isCreating, setIsCreating] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [createdId, setCreatedId] = useState<string>("");
 
   const handleCreateWrapped = async () => {
     console.log("jo")
     try {
       setIsCreating(true);
       const id = await createWrapped(wrappedData as any);
+      setCreatedId(id);
       toast.success("Wrapped created successfully!");
-      // Redirect to the share page with the new ID
-      window.location.href = `/share?id=${id}`;
+
+      // Trigger confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Open share dialog
+      setShareDialogOpen(true);
     } catch (error) {
       console.error("Failed to create wrapped:", error);
       toast.error("Failed to create your Wrapped. Please try again.");
@@ -50,6 +63,12 @@ const Preview = () => {
         onAction={handleCreateWrapped}
         actionLabel="Create & Share Wrapped"
         isActionLoading={isCreating}
+      />
+
+      <ShareDialog
+        open={shareDialogOpen}
+        onOpenChange={setShareDialogOpen}
+        wrappedId={createdId}
       />
     </div>
   );
