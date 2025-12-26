@@ -62,13 +62,14 @@ const Preview = () => {
   const getEmotionLabel = (value: string) => {
     const variant = EMOTIONS_VARIANTS.find(v => v.id === wrappedData.emotionsVariant) || EMOTIONS_VARIANTS[0];
     const options = variant.options || EMOTIONS;
-    return options.find(e => e.value === value);
+    const found = options.find(e => e.value === value);
+    return found || { label: value, emoji: '✨', value };
   };
 
   const getImprovementLabel = (value: string) => {
     const variant = IMPROVEMENT_VARIANTS.find(v => v.id === wrappedData.improvementVariant) || IMPROVEMENT_VARIANTS[0];
     const options = variant.options || QUIET_IMPROVEMENTS;
-    return options.find(i => i.value === value)?.label;
+    return options.find(i => i.value === value)?.label || value;
   };
 
   // Get variant display prefixes

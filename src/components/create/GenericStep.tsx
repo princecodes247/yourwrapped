@@ -32,6 +32,8 @@ const GenericStep = ({
     const [variantId, setVariantId] = useState<string | undefined>(
         config.variantKey ? (wrappedData[config.variantKey] as string) : undefined
     );
+    const [customInputValue, setCustomInputValue] = useState("");
+    const [isCustomInputActive, setIsCustomInputActive] = useState(false);
 
     // Initialize variant if needed
     useEffect(() => {
@@ -57,6 +59,8 @@ const GenericStep = ({
         } else {
             setValue(config.type === 'text' || config.type === 'text-with-suggestions' ? '' : undefined);
         }
+        setCustomInputValue("");
+        setIsCustomInputActive(false);
     };
 
     // Input handlers
@@ -64,16 +68,47 @@ const GenericStep = ({
         setValue(text);
     };
 
-    const handleSingleSelect = (selectedValue: string) => {
-        setValue(selectedValue);
+    const handleSingleSelect = (option: any) => {
+        if (option.allowCustomInput) {
+            setIsCustomInputActive(true);
+            setValue(customInputValue); // Set to current custom input value
+        } else {
+            setIsCustomInputActive(false);
+            setValue(option.value);
+        }
     };
 
-    const handleMultiSelect = (selectedValue: string) => {
+    const handleCustomInputChange = (text: string) => {
+        setCustomInputValue(text);
+        setValue(text);
+    };
+
+    const handleMultiSelect = (option: any) => {
+        if (option.allowCustomInput) {
+            // Toggle custom input visibility
+            setIsCustomInputActive(!isCustomInputActive);
+            if (!isCustomInputActive) {
+                // If opening, maybe focus?
+            }
+        } else {
+            const selectedValue = option.value;
+            const currentArray = (value as string[]) || [];
+            if (currentArray.includes(selectedValue)) {
+                setValue(currentArray.filter(v => v !== selectedValue));
+            } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
+                setValue([...currentArray, selectedValue]);
+            }
+        }
+    };
+
+    const handleCustomMultiAdd = () => {
+        if (!customInputValue.trim()) return;
+
         const currentArray = (value as string[]) || [];
-        if (currentArray.includes(selectedValue)) {
-            setValue(currentArray.filter(v => v !== selectedValue));
-        } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
-            setValue([...currentArray, selectedValue]);
+        if (!config.maxSelections || currentArray.length < config.maxSelections) {
+            setValue([...currentArray, customInputValue.trim()]);
+            setCustomInputValue("");
+            setIsCustomInputActive(false); // Close after adding? Or keep open? Let's close.
         }
     };
 
@@ -172,36 +207,71 @@ const GenericStep = ({
                         "grid gap-3",
                         currentOptions.length > 6 ? "grid-cols-2" : "grid-cols-1 md:grid-cols-2"
                     )}>
-                        {currentOptions.map((option, index) => (
-                            <button
-                                key={option.value}
-                                onClick={() => handleSingleSelect(option.value)}
-                                className={cn(
-                                    "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left",
-                                    value === option.value
-                                        ? "border-primary bg-primary/10 text-foreground"
-                                        : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
-                                )}
-                                style={{ animationDelay: `${200 + index * 50}ms` }}
-                            >
-                                {option.emoji && <span className="text-2xl">{option.emoji}</span>}
-                                <span className="text-sm font-medium">{option.label}</span>
-                            </button>
-                        ))}
+                        {currentOptions.map((option, index) => {
+                            const isSelected = !option.allowCustomInput && value === option.value;
+                            const isCustomSelected = option.allowCustomInput && isCustomInputActive;
+
+                            return (
+                                <button
+                                    key={option.value}
+                                    onClick={() => handleSingleSelect(option)}
+                                    className={cn(
+                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left",
+                                        isSelected || isCustomSelected
+                                            ? "border-primary bg-primary/10 text-foreground"
+                                            : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
+                                    )}
+                                    style={{ animationDelay: `${200 + index * 50}ms` }}
+                                >
+                                    {option.emoji && <span className="text-2xl">{option.emoji}</span>}
+                                    <span className="text-sm font-medium">{option.label}</span>
+                                </button>
+                            );
+                        })}
+                        {isCustomInputActive && (
+                            <div className={cn("col-span-full animate-fade-up")}>
+                                <Input
+                                    type="text"
+                                    placeholder="Type your answer..."
+                                    value={customInputValue}
+                                    onChange={(e) => handleCustomInputChange(e.target.value)}
+                                    className="text-center text-lg h-14"
+                                    autoFocus
+                                />
+                            </div>
+                        )}
                     </div>
                 );
 
             case 'multi-select':
                 return (
                     <div>
+                        {/* Tags display for multi-select */}
+                        <div className="flex flex-wrap gap-2 justify-center mb-6 min-h-[40px]">
+                            {(value as string[])?.map((item, index) => (
+                                <span
+                                    key={index}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
+                                >
+                                    <span className="text-sm font-medium">{item}</span>
+                                    <button
+                                        onClick={() => handleListRemove(index)}
+                                        className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+
                         <div className="grid grid-cols-2 gap-3">
                             {currentOptions.map((option) => (
                                 <button
                                     key={option.value}
-                                    onClick={() => handleMultiSelect(option.value)}
+                                    onClick={() => handleMultiSelect(option)}
                                     className={cn(
                                         "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200",
-                                        (value as string[])?.includes(option.value)
+                                        (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
                                             ? "border-primary bg-primary/10 text-foreground"
                                             : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
                                     )}
@@ -211,6 +281,25 @@ const GenericStep = ({
                                 </button>
                             ))}
                         </div>
+                        {isCustomInputActive && (
+                            <div className="mt-4 animate-fade-up flex gap-2">
+                                <Input
+                                    type="text"
+                                    placeholder="Add your own..."
+                                    value={customInputValue}
+                                    onChange={(e) => setCustomInputValue(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleCustomMultiAdd()}
+                                    className="text-lg h-12"
+                                    autoFocus
+                                />
+                                <button
+                                    onClick={handleCustomMultiAdd}
+                                    className="px-4 bg-primary text-primary-foreground rounded-md font-medium"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                        )}
                         {config.maxSelections && (
                             <p className="text-xs text-muted-foreground mt-4">
                                 {(value as string[])?.length || 0}/{config.maxSelections} selected

@@ -11,6 +11,7 @@ export interface Option {
   value: string;
   label: string;
   emoji?: string;
+  allowCustomInput?: boolean;
 }
 
 export interface QuestionVariant {
@@ -84,6 +85,7 @@ export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
   'sibling': 'My Sibling',
   'parent': 'My Parent',
   'child': 'My Child',
+  'enemy': 'My Enemy',
   'other': 'Someone Special',
 };
 
@@ -172,7 +174,7 @@ export const EMOTIONS_VARIANTS: QuestionVariant[] = [
     id: 'top-emotions',
     question: "Pick up to 2 that defined their year",
     displayPrefix: "Top Emotions",
-    options: EMOTIONS
+    options: [...EMOTIONS, { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true }]
   },
   {
     id: 'mood-board',
@@ -187,6 +189,7 @@ export const EMOTIONS_VARIANTS: QuestionVariant[] = [
       { value: 'ocean', label: 'Ocean Blue', emoji: '🌊' },
       { value: 'sunset', label: 'Sunset Fire', emoji: '🌇' },
       { value: 'midnight', label: 'Midnight Rain', emoji: '🌧️' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
   {
@@ -202,6 +205,7 @@ export const EMOTIONS_VARIANTS: QuestionVariant[] = [
       { value: 'affection', label: 'Affection', emoji: '🥰' },
       { value: 'melancholy', label: 'Melancholy', emoji: '🥀' },
       { value: 'euphoria', label: 'Euphoria', emoji: '🤩' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
   {
@@ -217,6 +221,7 @@ export const EMOTIONS_VARIANTS: QuestionVariant[] = [
       { value: 'generosity', label: 'Generosity', emoji: '🎁' },
       { value: 'empathy', label: 'Empathy', emoji: '🫂' },
       { value: 'resilience', label: 'Resilience', emoji: '🌱' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
 ];
@@ -437,7 +442,7 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
     id: 'quiet',
     question: "Something they got better at (that they might not even realize)",
     displayPrefix: "A Quiet Improvement",
-    options: QUIET_IMPROVEMENTS
+    options: [...QUIET_IMPROVEMENTS, { value: 'other', label: 'Other', allowCustomInput: true }]
   },
   {
     id: 'growth',
@@ -452,6 +457,7 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
       { value: 'creativity', label: 'Creativity', emoji: '🎨' },
       { value: 'leadership', label: 'Leadership', emoji: '👑' },
       { value: 'mindfulness', label: 'Mindfulness', emoji: '🧘' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
   {
@@ -467,6 +473,7 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
       { value: 'productivity', label: 'Productivity', emoji: '⚡' },
       { value: 'tech-skills', label: 'Tech Skills', emoji: '💻' },
       { value: 'hosting', label: 'Hosting', emoji: '🥂' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
   {
@@ -482,6 +489,7 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
       { value: 'learning', label: 'Learning From Mistakes', emoji: '📝' },
       { value: 'dreaming', label: 'Dreaming Big', emoji: '💭' },
       { value: 'being-themselves', label: 'Just Being Themselves', emoji: '🌈' },
+      { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
 ];
@@ -547,6 +555,8 @@ export const OUTRO_VARIANTS: QuestionVariant[] = [
     question: "Write a custom dedication?",
     displayPrefix: "Outro Style",
     hideInput: false,
-    options: []
+    options: [
+      { value: 'dedication', label: 'Write your own', allowCustomInput: true }
+    ]
   }
 ];
