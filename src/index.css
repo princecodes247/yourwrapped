@@ -83,7 +83,11 @@
 
   /* Slide container */
   .slide-container {
-    @apply min-h-screen flex flex-col items-center justify-center px-6 py-12;
+    @apply min-h-[100dvh] flex flex-col items-center justify-center px-6 py-12;
+  }
+
+  .min-h-screen {
+    min-height: 100dvh;
   }
 
   /* Emotional text styling */

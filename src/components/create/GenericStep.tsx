@@ -216,7 +216,7 @@ const GenericStep = ({
                                     key={option.value}
                                     onClick={() => handleSingleSelect(option)}
                                     className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left",
+                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98]",
                                         isSelected || isCustomSelected
                                             ? "border-primary bg-primary/10 text-foreground"
                                             : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
@@ -270,7 +270,7 @@ const GenericStep = ({
                                     key={option.value}
                                     onClick={() => handleMultiSelect(option)}
                                     className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200",
+                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98]",
                                         (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
                                             ? "border-primary bg-primary/10 text-foreground"
                                             : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
@@ -359,7 +359,7 @@ const GenericStep = ({
                                             className={cn(
                                                 "text-xs px-3 py-1.5 rounded-full border transition-all duration-200 flex items-center gap-1.5",
                                                 (value as string[])?.includes(option.label)
-                                                    ? "opacity-50 cursor-not-allowed bg-secondary/20 border-transparent"
+                                                    ? "opacity-30 cursor-not-allowed bg-secondary/20 border-transparent grayscale"
                                                     : "bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
                                             )}
                                         >

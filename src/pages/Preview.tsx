@@ -405,7 +405,7 @@ const Preview = () => {
           Previewing your Wrapped. <button onClick={() => navigate('/create')} className="underline hover:text-primary/80">Back to Editing</button>
         </div>
       )}
-      <div className="min-h-screen relative bg-background flex flex-col">
+      <div className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh]">
         {/* Ambient glow */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
           <div
@@ -448,7 +448,7 @@ const Preview = () => {
 
 
         {/* Main content */}
-        <main className="flex-1 flex items-center justify-center px-6 py-20 relative z-10">
+        <main className="flex-1 flex items-center justify-center px-6 py-16 md:py-20 relative z-10">
           <div className="w-full max-w-2xl mx-auto">
             <div key={currentSlide} className={cn(isAnimating && "pointer-events-none")}>
               {slides[currentSlide].content}

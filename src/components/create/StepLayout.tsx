@@ -24,7 +24,7 @@ const StepLayout = ({
   showBack = true,
 }: StepLayoutProps) => {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100svh] bg-background flex flex-col supports-[min-height:100svh]:min-h-[100svh]">
 
 
       {/* Back button */}
@@ -50,7 +50,7 @@ const StepLayout = ({
       </div>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-20">
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-20 pb-24 md:pb-20">
         <div className="w-full max-w-lg mx-auto">
           {children}
         </div>
@@ -58,7 +58,7 @@ const StepLayout = ({
 
       {/* Next button */}
       {onNext && (
-        <div className="fixed bottom-8 left-0 right-0 flex justify-center px-6">
+        <div className="fixed bottom-0 left-0 right-0 flex justify-center px-6 pb-8 pt-4 bg-gradient-to-t from-background via-background to-transparent z-30 safe-area-bottom">
           <Button
             variant="hero"
             size="lg"
