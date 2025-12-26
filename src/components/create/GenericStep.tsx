@@ -103,6 +103,7 @@ const GenericStep = ({
 
     // Validation
     const isValid = () => {
+        if (currentVariant?.hideInput) return true;
         if (Array.isArray(value)) {
             return value.length > 0;
         }
@@ -129,6 +130,8 @@ const GenericStep = ({
 
     // Render helpers
     const renderInput = () => {
+        if (currentVariant?.hideInput) return null;
+
         switch (config.type) {
             case 'text':
             case 'text-with-suggestions':

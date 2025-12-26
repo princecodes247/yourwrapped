@@ -7,17 +7,19 @@ import {
     FAVORITES_VARIANTS,
     IMPROVEMENT_VARIANTS,
     CREATOR_VARIANTS,
+    OUTRO_VARIANTS,
     RelationshipType
 } from "@/types/wrapped";
 
 const RELATIONSHIP_OPTIONS = [
     { value: 'partner', label: 'Partner', emoji: '💕' },
+    { value: 'other', label: 'Someone Special', emoji: '✨' },
     { value: 'best-friend', label: 'Best Friend', emoji: '👯' },
     { value: 'friend', label: 'Friend', emoji: '🤝' },
     { value: 'sibling', label: 'Sibling', emoji: '👨‍👩‍👧‍👦' },
     { value: 'parent', label: 'Parent', emoji: '👨‍👧' },
     { value: 'child', label: 'Child', emoji: '👶' },
-    { value: 'other', label: 'Someone Special', emoji: '✨' },
+    { value: 'enemy', label: 'Enemy', emoji: '😈' },
 ];
 
 export const steps: StepConfig[] = [
@@ -91,6 +93,27 @@ export const steps: StepConfig[] = [
         variantKey: 'improvementVariant',
         title: 'A quiet improvement',
         variants: IMPROVEMENT_VARIANTS,
+    },
+    {
+        id: 'outro',
+        type: 'single-select',
+        dataKey: 'outroMessage',
+        variantKey: 'outroVariant',
+        title: "How should we sign off?",
+        staticOptions: [
+            {
+                value: 'default',
+                label: "Keep the classic ending?",
+            },
+            {
+                value: 'summary',
+                label: "Show a summary of their year?",
+            },
+            {
+                value: 'dedication',
+                label: "Write a custom dedication?",
+            }
+        ],
     },
     {
         id: 'creator',

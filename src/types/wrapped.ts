@@ -19,6 +19,7 @@ export interface QuestionVariant {
   displayPrefix?: string;
   displaySuffix?: string;
   options?: Option[];
+  hideInput?: boolean;
 }
 
 export interface WrappedData {
@@ -65,6 +66,7 @@ export interface WrappedData {
 
   // Slide 12 - Outro
   outroMessage?: string;
+  outroVariant?: string;
   creatorVariant?: string;
 }
 
@@ -522,5 +524,29 @@ export const CREATOR_VARIANTS: QuestionVariant[] = [
       { value: 'love', label: 'With all my love', emoji: '❤️' },
       { value: 'proud', label: 'So proud of you', emoji: '🌟' },
     ]
+  }
+];
+
+export const OUTRO_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'default',
+    question: "Keep the classic ending?",
+    displayPrefix: "Outro Style",
+    hideInput: true,
+    options: []
+  },
+  {
+    id: 'summary',
+    question: "Show a summary of their year?",
+    displayPrefix: "Outro Style",
+    hideInput: true,
+    options: []
+  },
+  {
+    id: 'dedication',
+    question: "Write a custom dedication?",
+    displayPrefix: "Outro Style",
+    hideInput: false,
+    options: []
   }
 ];

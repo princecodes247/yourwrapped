@@ -15,6 +15,7 @@ import {
   IMPROVEMENT_VARIANTS,
   FAVORITES_VARIANTS,
   CREATOR_VARIANTS,
+  OUTRO_VARIANTS,
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 import { encodeData, decodeData } from "@/lib/share";
@@ -78,6 +79,7 @@ const Preview = () => {
   const favoritesVariant = FAVORITES_VARIANTS.find(v => v.id === wrappedData.favoritesVariant) || FAVORITES_VARIANTS[0];
   const improvementVariant = IMPROVEMENT_VARIANTS.find(v => v.id === wrappedData.improvementVariant) || IMPROVEMENT_VARIANTS[0];
   const creatorVariant = CREATOR_VARIANTS.find(v => v.id === wrappedData.creatorVariant) || CREATOR_VARIANTS[0];
+  const outroVariant = OUTRO_VARIANTS.find(v => v.id === wrappedData.outroVariant) || OUTRO_VARIANTS[0];
 
   const handleShare = () => {
     const encoded = encodeData(wrappedData as any);
@@ -272,13 +274,37 @@ const Preview = () => {
       id: 'outro',
       content: (
         <div className="text-center">
-          <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
-            Here's to {recipientName}
-          </h2>
-          <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
-            For being exactly who they are. For growing. For showing up.
-            For making 2025 unforgettable.
-          </p>
+          {outroVariant.id === 'summary' ? (
+            <>
+              <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                2025: The Year of
+                <br />
+                <span className="text-primary">{getEraLabel(wrappedData.mainCharacterEra || '')?.label || 'Change'}</span>
+              </h2>
+              <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
+                Defined by {getEmotionLabel(wrappedData.topEmotions?.[0] || '')?.label?.toLowerCase() || 'emotions'}, {wrappedData.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
+              </p>
+            </>
+          ) : outroVariant.id === 'dedication' ? (
+            <>
+              <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                For {recipientName}
+              </h2>
+              <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap italic">
+                "{wrappedData.outroMessage || 'You are amazing.'}"
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                Here's to {recipientName}
+              </h2>
+              <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
+                For being exactly who they are. For growing. For showing up.
+                For making 2025 unforgettable.
+              </p>
+            </>
+          )}
           <div className="opacity-0 animate-fade-up delay-400">
             <p className="text-primary text-lg font-medium mb-6">
               {creatorVariant.id === 'message' ? creatorName : `With love, ${creatorName}`}
