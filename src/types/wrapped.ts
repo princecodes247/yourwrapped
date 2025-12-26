@@ -535,28 +535,4 @@ export const CREATOR_VARIANTS: QuestionVariant[] = [
   }
 ];
 
-export const OUTRO_VARIANTS: QuestionVariant[] = [
-  {
-    id: 'default',
-    question: "Keep the classic ending?",
-    displayPrefix: "Outro Style",
-    hideInput: true,
-    options: []
-  },
-  {
-    id: 'summary',
-    question: "Show a summary of their year?",
-    displayPrefix: "Outro Style",
-    hideInput: true,
-    options: []
-  },
-  {
-    id: 'dedication',
-    question: "Write a custom dedication?",
-    displayPrefix: "Outro Style",
-    hideInput: false,
-    options: [
-      { value: 'dedication', label: 'Write your own', allowCustomInput: true }
-    ]
-  }
-];
+

@@ -7,7 +7,6 @@ import {
     FAVORITES_VARIANTS,
     IMPROVEMENT_VARIANTS,
     CREATOR_VARIANTS,
-    OUTRO_VARIANTS,
     RelationshipType
 } from "@/types/wrapped";
 
@@ -98,7 +97,6 @@ export const steps: StepConfig[] = [
         id: 'outro',
         type: 'single-select',
         dataKey: 'outroMessage',
-        variantKey: 'outroVariant',
         title: "How should we sign off?",
         staticOptions: [
             {
@@ -112,6 +110,7 @@ export const steps: StepConfig[] = [
             {
                 value: 'dedication',
                 label: "Write a custom dedication?",
+                allowCustomInput: true,
             }
         ],
     },
