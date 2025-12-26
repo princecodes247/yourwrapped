@@ -360,8 +360,10 @@ export const FAVORITES_VARIANTS: QuestionVariant[] = [
     question: "What songs defined their year?",
     displayPrefix: "Favorite Songs",
     options: [
-      { value: 'i-will', label: 'I Will', emoji: '🎤' },
-      { value: 'beat-it', label: 'Beat It', emoji: '🎸' },
+      { value: 'not-like-us', label: 'Not like us, Kendrick Lamar', emoji: '🎤' },
+      { value: 'family-matters', label: 'Family Matters, Drake', emoji: '🎸' },
+      { value: 'unavailable', label: 'Unavailable, Davido', emoji: '🎸' },
+      { value: 'beat-it', label: 'Beat It, Michael Jackson', emoji: '🎸' },
     ]
   },
   {
@@ -395,18 +397,18 @@ export const FAVORITES_VARIANTS: QuestionVariant[] = [
     ]
   },
   {
-    id: 'anime',
-    question: "What anime world were they living in?",
-    displayPrefix: "Anime World",
+    id: 'artist',
+    question: "What artist defined their year?",
+    displayPrefix: "Favorite Artist",
     options: [
-      { value: 'shonen', label: 'Shonen', emoji: '⚔️' },
-      { value: 'shojo', label: 'Shojo', emoji: '🌸' },
-      { value: 'isekai', label: 'Isekai', emoji: '🌀' },
-      { value: 'slice-of-life', label: 'Slice of Life', emoji: '🍰' },
-      { value: 'mecha', label: 'Mecha', emoji: '🤖' },
-      { value: 'sports', label: 'Sports', emoji: '🏀' },
-      { value: 'psychological', label: 'Psychological', emoji: '🧠' },
-      { value: 'fantasy', label: 'Fantasy', emoji: '🐉' },
+      { value: 'drake', label: 'Drake', emoji: '⚔️' },
+      { value: 'billie-eilish', label: 'Billie Eilish', emoji: '🌸' },
+      { value: 'davido', label: 'Davido', emoji: '🌀' },
+      { value: 'kendrick-lamar', label: 'Kendrick Lamar', emoji: '🍰' },
+      { value: 'migos', label: 'Migos', emoji: '🤖' },
+      { value: 'eminem', label: 'Eminem', emoji: '🏀' },
+      { value: 'lil-wayne', label: 'Lil Wayne', emoji: '🧠' },
+      { value: 'lil-nas-x', label: 'Lil Nas X', emoji: '🐉' },
     ]
   },
   {

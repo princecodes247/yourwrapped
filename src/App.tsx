@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Landing from "./pages/Landing";
 import Create from "./pages/Create";
 import Preview from "./pages/Preview";
+import Share from "./pages/Share";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,7 +23,7 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/create" element={<Create />} />
             <Route path="/preview" element={<Preview />} />
-            <Route path="/share" element={<Preview />} />
+            <Route path="/share" element={<Share />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
