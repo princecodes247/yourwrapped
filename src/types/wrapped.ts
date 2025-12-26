@@ -1,0 +1,419 @@
+export type RelationshipType =
+  | 'partner'
+  | 'best-friend'
+  | 'friend'
+  | 'sibling'
+  | 'parent'
+  | 'child'
+  | 'other';
+
+export interface Option {
+  value: string;
+  label: string;
+  emoji?: string;
+}
+
+export interface QuestionVariant {
+  id: string;
+  question: string;
+  displayPrefix?: string;
+  displaySuffix?: string;
+  options?: Option[];
+}
+
+export interface WrappedData {
+  recipientName: string;
+  relationship: RelationshipType;
+  creatorName?: string;
+
+  // Slide 3 - Main Character Era
+  mainCharacterEra?: string;
+  eraVariant?: string;
+
+  // Slide 4 - Top Phrase
+  topPhrase?: string;
+  phraseVariant?: string;
+
+  // Slide 5 - Most Used Emotions
+  topEmotions?: string[];
+  emotionsVariant?: string;
+
+  // Slide 6 - Top 3 Obsessions
+  obsessions?: string[];
+  obsessionsVariant?: string;
+
+  // Slide 7 - Quiet Improvement
+  quietImprovement?: string;
+  quietImprovementNote?: string;
+  improvementVariant?: string;
+
+  // Slide 8 - A Moment Worth Keeping (Premium)
+  memorableMoment?: string;
+
+  // Slide 9 - Something You Overcame
+  overcame?: string;
+
+  // Slide 10 - The You Now
+  currentTraits?: string[];
+
+  // Slide 11 - From Me to You (Premium)
+  personalMessage?: string;
+
+  // Slide 12 - Outro
+  outroMessage?: string;
+}
+
+export interface SlideConfig {
+  id: number;
+  title: string;
+  isPremium: boolean;
+  component: string;
+}
+
+export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
+  'partner': 'My Partner',
+  'best-friend': 'My Best Friend',
+  'friend': 'My Friend',
+  'sibling': 'My Sibling',
+  'parent': 'My Parent',
+  'child': 'My Child',
+  'other': 'Someone Special',
+};
+
+export const MAIN_CHARACTER_ERAS = [
+  { value: 'healing', label: 'Healing Era', emoji: '🌱' },
+  { value: 'glow-up', label: 'Glow-Up Era', emoji: '✨' },
+  { value: 'chaos', label: 'Chaos Era', emoji: '🌪️' },
+  { value: 'rebirth', label: 'Rebirth Era', emoji: '🔥' },
+  { value: 'soft-life', label: 'Soft Life Era', emoji: '☁️' },
+  { value: 'grind', label: 'Grind Era', emoji: '💪' },
+  { value: 'discovery', label: 'Discovery Era', emoji: '🔮' },
+  { value: 'peace', label: 'Peace Era', emoji: '🕊️' },
+];
+
+export const ERA_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'main-character',
+    question: "What era best describes their year?",
+    displayPrefix: "Their Main Character Era",
+    displaySuffix: "The",
+    options: MAIN_CHARACTER_ERAS
+  },
+  {
+    id: 'vibe',
+    question: "What was their overall vibe this year?",
+    displayPrefix: "2025 Vibe Check",
+    displaySuffix: "Certified",
+    options: [
+      { value: 'chill', label: 'Chill', emoji: '🧊' },
+      { value: 'chaotic-good', label: 'Chaotic Good', emoji: '🤪' },
+      { value: 'main-character', label: 'Main Character', emoji: '💅' },
+      { value: 'villain', label: 'Villain', emoji: '😈' },
+      { value: 'wholesome', label: 'Wholesome', emoji: '🥰' },
+      { value: 'feral', label: 'Feral', emoji: '🐺' },
+      { value: 'academic', label: 'Academic', emoji: '📚' },
+      { value: 'cozy', label: 'Cozy', emoji: '🧸' },
+    ]
+  },
+  {
+    id: 'chapter',
+    question: "What chapter were they living?",
+    displayPrefix: "This Year's Chapter",
+    displaySuffix: "The",
+    options: [
+      { value: 'plot-twist', label: 'Plot Twist', emoji: '😱' },
+      { value: 'redemption', label: 'Redemption Arc', emoji: '🌅' },
+      { value: 'training', label: 'Training Arc', emoji: '🏋️' },
+      { value: 'filler', label: 'Filler Episode', emoji: '🏖️' },
+      { value: 'climax', label: 'The Climax', emoji: '🌋' },
+      { value: 'prologue', label: 'The Prologue', emoji: '📖' },
+      { value: 'side-quest', label: 'Side Quest', emoji: '🗺️' },
+      { value: 'finale', label: 'Season Finale', emoji: '🎆' },
+    ]
+  },
+  {
+    id: 'energy',
+    question: "What energy did they bring to 2025?",
+    displayPrefix: "Their 2025 Energy",
+    displaySuffix: "Pure",
+    options: [
+      { value: 'golden-retriever', label: 'Golden Retriever', emoji: '🐕' },
+      { value: 'black-cat', label: 'Black Cat', emoji: '🐈‍⬛' },
+      { value: 'capybara', label: 'Capybara', emoji: '🥔' },
+      { value: 'raccoon', label: 'Raccoon', emoji: '🦝' },
+      { value: 'orange-cat', label: 'Orange Cat', emoji: '🐈' },
+      { value: 'bunny', label: 'Bunny', emoji: '🐰' },
+      { value: 'dragon', label: 'Dragon', emoji: '🐉' },
+      { value: 'sloth', label: 'Sloth', emoji: '🦥' },
+    ]
+  },
+];
+
+export const EMOTIONS = [
+  { value: 'joy', label: 'Joy', emoji: '😊' },
+  { value: 'curiosity', label: 'Curiosity', emoji: '🤔' },
+  { value: 'determination', label: 'Determination', emoji: '💪' },
+  { value: 'gratitude', label: 'Gratitude', emoji: '🙏' },
+  { value: 'excitement', label: 'Excitement', emoji: '🎉' },
+  { value: 'calm', label: 'Calm', emoji: '😌' },
+  { value: 'hope', label: 'Hope', emoji: '🌟' },
+  { value: 'love', label: 'Love', emoji: '❤️' },
+];
+
+export const EMOTIONS_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'top-emotions',
+    question: "Pick up to 2 that defined their year",
+    displayPrefix: "Top Emotions",
+    options: EMOTIONS
+  },
+  {
+    id: 'mood-board',
+    question: "What was their emotional palette?",
+    displayPrefix: "Emotional Palette",
+    options: [
+      { value: 'pastel', label: 'Pastel Soft', emoji: '🌸' },
+      { value: 'neon', label: 'Neon Chaos', emoji: '⚡' },
+      { value: 'monochrome', label: 'Monochrome Moody', emoji: '🖤' },
+      { value: 'golden-hour', label: 'Golden Hour', emoji: '🌅' },
+      { value: 'forest', label: 'Deep Forest', emoji: '🌲' },
+      { value: 'ocean', label: 'Ocean Blue', emoji: '🌊' },
+      { value: 'sunset', label: 'Sunset Fire', emoji: '🌇' },
+      { value: 'midnight', label: 'Midnight Rain', emoji: '🌧️' },
+    ]
+  },
+  {
+    id: 'feelings',
+    question: "What feelings did they carry most?",
+    displayPrefix: "Most Carried Feelings",
+    options: [
+      { value: 'nostalgia', label: 'Nostalgia', emoji: '🕰️' },
+      { value: 'anticipation', label: 'Anticipation', emoji: '👀' },
+      { value: 'wonder', label: 'Wonder', emoji: '✨' },
+      { value: 'relief', label: 'Relief', emoji: '😮‍💨' },
+      { value: 'pride', label: 'Pride', emoji: '🦁' },
+      { value: 'affection', label: 'Affection', emoji: '🥰' },
+      { value: 'melancholy', label: 'Melancholy', emoji: '🥀' },
+      { value: 'euphoria', label: 'Euphoria', emoji: '🤩' },
+    ]
+  },
+  {
+    id: 'heart',
+    question: "What lived in their heart this year?",
+    displayPrefix: "In Their Heart",
+    options: [
+      { value: 'kindness', label: 'Kindness', emoji: '🤲' },
+      { value: 'courage', label: 'Courage', emoji: '🦁' },
+      { value: 'forgiveness', label: 'Forgiveness', emoji: '🕊️' },
+      { value: 'passion', label: 'Passion', emoji: '🔥' },
+      { value: 'loyalty', label: 'Loyalty', emoji: '🤝' },
+      { value: 'generosity', label: 'Generosity', emoji: '🎁' },
+      { value: 'empathy', label: 'Empathy', emoji: '🫂' },
+      { value: 'resilience', label: 'Resilience', emoji: '🌱' },
+    ]
+  },
+];
+
+export const PHRASE_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'signature',
+    question: "What did they say all the time this year?",
+    displayPrefix: "Most Used Phrase",
+    options: [
+      { value: 'slay', label: 'Slay', emoji: '💅' },
+      { value: 'real', label: 'Real', emoji: '💯' },
+      { value: 'literally', label: 'Literally', emoji: '💀' },
+      { value: 'obsessed', label: 'Obsessed', emoji: '😍' },
+      { value: 'iconic', label: 'Iconic', emoji: '✨' },
+      { value: 'period', label: 'Period', emoji: '🛑' },
+      { value: 'vibes', label: 'Vibes', emoji: '🌊' },
+      { value: 'bet', label: 'Bet', emoji: '🤝' },
+    ]
+  },
+  {
+    id: 'catchphrase',
+    question: "What was their unofficial catchphrase?",
+    displayPrefix: "2025 Catchphrase",
+    options: [
+      { value: 'it-is-what-it-is', label: 'It is what it is', emoji: '🤷' },
+      { value: 'living-my-best-life', label: 'Living my best life', emoji: '🥂' },
+      { value: 'main-character-energy', label: 'Main character energy', emoji: '🌟' },
+      { value: 'in-my-era', label: 'In my ... era', emoji: '🕰️' },
+      { value: 'trust-the-process', label: 'Trust the process', emoji: '🔄' },
+      { value: 'let-him-cook', label: 'Let him cook', emoji: '👨‍🍳' },
+      { value: 'touch-grass', label: 'Touch grass', emoji: '🌱' },
+      { value: 'skill-issue', label: 'Skill issue', emoji: '🎮' },
+    ]
+  },
+  {
+    id: 'mantra',
+    question: "What became their accidental mantra?",
+    displayPrefix: "Accidental Mantra",
+    options: [
+      { value: 'i-can-do-hard-things', label: 'I can do hard things', emoji: '💪' },
+      { value: 'one-day-at-a-time', label: 'One day at a time', emoji: '📅' },
+      { value: 'everything-happens-for-a-reason', label: 'Everything happens for a reason', emoji: '✨' },
+      { value: 'this-too-shall-pass', label: 'This too shall pass', emoji: '🍃' },
+      { value: 'protect-your-peace', label: 'Protect your peace', emoji: '🛡️' },
+      { value: 'choose-joy', label: 'Choose joy', emoji: '😊' },
+      { value: 'be-here-now', label: 'Be here now', emoji: '🧘' },
+      { value: 'good-vibes-only', label: 'Good vibes only', emoji: '✌️' },
+    ]
+  },
+  {
+    id: 'quote',
+    question: "What's a quote that's just so them?",
+    displayPrefix: "Peak Them Energy",
+    options: [
+      { value: 'yolo', label: 'You only live once', emoji: '🎢' },
+      { value: 'live-laugh-love', label: 'Live, Laugh, Love', emoji: '💖' },
+      { value: 'work-hard-play-hard', label: 'Work hard, play hard', emoji: '🎉' },
+      { value: 'fake-it-till-you-make-it', label: 'Fake it till you make it', emoji: '🎭' },
+      { value: 'treat-yourself', label: 'Treat yourself', emoji: '🛍️' },
+      { value: 'no-regrets', label: 'No regrets', emoji: '🚫' },
+      { value: 'just-do-it', label: 'Just do it', emoji: '✔️' },
+      { value: 'stay-wild', label: 'Stay wild', emoji: '🐺' },
+    ]
+  },
+];
+
+export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'obsessions',
+    question: "What were they completely into?",
+    displayPrefix: "2025 Obsessions",
+    options: [
+      { value: 'pickleball', label: 'Pickleball', emoji: '🥒' },
+      { value: 'sourdough', label: 'Sourdough', emoji: '🍞' },
+      { value: 'running', label: 'Running', emoji: '🏃' },
+      { value: 'pilates', label: 'Pilates', emoji: '🧘' },
+      { value: 'matcha', label: 'Matcha', emoji: '🍵' },
+      { value: 'thrifting', label: 'Thrifting', emoji: '👗' },
+      { value: 'travel', label: 'Travel', emoji: '✈️' },
+      { value: 'reading', label: 'Reading', emoji: '📚' },
+    ]
+  },
+  {
+    id: 'hyperfixations',
+    question: "What consumed their attention?",
+    displayPrefix: "Hyperfixations",
+    options: [
+      { value: 'f1', label: 'Formula 1', emoji: '🏎️' },
+      { value: 'eras-tour', label: 'The Eras Tour', emoji: '🎤' },
+      { value: 'acotar', label: 'ACOTAR', emoji: '🧚' },
+      { value: 'baldurs-gate', label: 'Baldur\'s Gate 3', emoji: '🎲' },
+      { value: 'kpop', label: 'K-Pop', emoji: '🎵' },
+      { value: 'astrology', label: 'Astrology', emoji: '🔮' },
+      { value: 'coding', label: 'Coding', emoji: '💻' },
+      { value: 'chess', label: 'Chess', emoji: '♟️' },
+    ]
+  },
+  {
+    id: 'rabbit-holes',
+    question: "What rabbit holes did they fall into?",
+    displayPrefix: "Rabbit Holes Entered",
+    options: [
+      { value: 'true-crime', label: 'True Crime', emoji: '🕵️' },
+      { value: 'conspiracy-theories', label: 'Conspiracy Theories', emoji: '👽' },
+      { value: 'history', label: 'History', emoji: '📜' },
+      { value: 'space', label: 'Space', emoji: '🌌' },
+      { value: 'philosophy', label: 'Philosophy', emoji: '🤔' },
+      { value: 'wikipedia', label: 'Wikipedia Spirals', emoji: '🌐' },
+      { value: 'tiktok-trends', label: 'TikTok Trends', emoji: '📱' },
+      { value: 'lore', label: 'Deep Lore', emoji: '📖' },
+    ]
+  },
+  {
+    id: 'could-not-stop',
+    question: "What could they not stop talking about?",
+    displayPrefix: "Talked About Non-Stop",
+    options: [
+      { value: 'their-dog', label: 'Their Dog', emoji: '🐶' },
+      { value: 'their-cat', label: 'Their Cat', emoji: '🐱' },
+      { value: 'gym', label: 'The Gym', emoji: '🏋️' },
+      { value: 'work', label: 'Work', emoji: '💼' },
+      { value: 'politics', label: 'Politics', emoji: '🗳️' },
+      { value: 'movies', label: 'Movies', emoji: '🎬' },
+      { value: 'music', label: 'Music', emoji: '🎧' },
+      { value: 'food', label: 'Food', emoji: '🍕' },
+    ]
+  },
+];
+
+export const QUIET_IMPROVEMENTS = [
+  { value: 'boundaries', label: 'Setting boundaries' },
+  { value: 'self-care', label: 'Prioritizing self-care' },
+  { value: 'patience', label: 'Being more patient' },
+  { value: 'listening', label: 'Listening better' },
+  { value: 'letting-go', label: 'Letting things go' },
+  { value: 'showing-up', label: 'Showing up consistently' },
+  { value: 'asking-help', label: 'Asking for help' },
+  { value: 'saying-no', label: 'Saying no' },
+];
+
+export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'quiet',
+    question: "Something they got better at (that they might not even realize)",
+    displayPrefix: "A Quiet Improvement",
+    options: QUIET_IMPROVEMENTS
+  },
+  {
+    id: 'growth',
+    question: "Where did they quietly grow this year?",
+    displayPrefix: "Quiet Growth",
+    options: [
+      { value: 'confidence', label: 'Confidence', emoji: '🦁' },
+      { value: 'communication', label: 'Communication', emoji: '🗣️' },
+      { value: 'emotional-intelligence', label: 'Emotional Intelligence', emoji: '🧠' },
+      { value: 'cooking', label: 'Cooking', emoji: '🍳' },
+      { value: 'fitness', label: 'Fitness', emoji: '💪' },
+      { value: 'creativity', label: 'Creativity', emoji: '🎨' },
+      { value: 'leadership', label: 'Leadership', emoji: '👑' },
+      { value: 'mindfulness', label: 'Mindfulness', emoji: '🧘' },
+    ]
+  },
+  {
+    id: 'leveled-up',
+    question: "What did they level up in without noticing?",
+    displayPrefix: "Secret Level Up",
+    options: [
+      { value: 'style', label: 'Style', emoji: '👗' },
+      { value: 'humor', label: 'Humor', emoji: '😂' },
+      { value: 'adulting', label: 'Adulting', emoji: '🏠' },
+      { value: 'social-skills', label: 'Social Skills', emoji: '🤝' },
+      { value: 'knowledge', label: 'General Knowledge', emoji: '📚' },
+      { value: 'productivity', label: 'Productivity', emoji: '⚡' },
+      { value: 'tech-skills', label: 'Tech Skills', emoji: '💻' },
+      { value: 'hosting', label: 'Hosting', emoji: '🥂' },
+    ]
+  },
+  {
+    id: 'proud',
+    question: "What should they be proud of themselves for?",
+    displayPrefix: "Should Be Proud Of",
+    options: [
+      { value: 'surviving', label: 'Surviving', emoji: '❤️‍🩹' },
+      { value: 'trying', label: 'Trying Their Best', emoji: '🌟' },
+      { value: 'starting', label: 'Starting Something New', emoji: '🚀' },
+      { value: 'finishing', label: 'Finishing What They Started', emoji: '🏁' },
+      { value: 'helping', label: 'Helping Others', emoji: '🤲' },
+      { value: 'learning', label: 'Learning From Mistakes', emoji: '📝' },
+      { value: 'dreaming', label: 'Dreaming Big', emoji: '💭' },
+      { value: 'being-themselves', label: 'Just Being Themselves', emoji: '🌈' },
+    ]
+  },
+];
+
+export const CURRENT_TRAITS = [
+  { value: 'resilient', label: 'Resilient' },
+  { value: 'grounded', label: 'Grounded' },
+  { value: 'hopeful', label: 'Hopeful' },
+  { value: 'confident', label: 'Confident' },
+  { value: 'open', label: 'Open' },
+  { value: 'brave', label: 'Brave' },
+  { value: 'gentle', label: 'Gentle' },
+  { value: 'authentic', label: 'Authentic' },
+  { value: 'present', label: 'Present' },
+  { value: 'free', label: 'Free' },
+];
