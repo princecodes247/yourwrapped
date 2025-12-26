@@ -5,6 +5,7 @@ export type RelationshipType =
   | 'sibling'
   | 'parent'
   | 'child'
+  | 'enemy'
   | 'other';
 
 export interface Option {

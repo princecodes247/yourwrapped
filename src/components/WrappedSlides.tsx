@@ -346,7 +346,7 @@ const WrappedSlides = ({
                                 size="lg"
                                 onClick={onAction}
                                 disabled={isActionLoading}
-                                className="cursor-pointer absolute z-50"
+                                className="cursor-pointer relative z-50 pointer-events-auto"
                             >
                                 {isActionLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Share2 className="w-4 h-4 mr-2" />}
                                 {actionLabel}
@@ -400,7 +400,7 @@ const WrappedSlides = ({
             </div>
 
             {/* Main content */}
-            <main className="flex-1 flex items-center justify-center px-6 py-16 md:py-20 relative z-10">
+            <main className="flex-1 flex items-center justify-center px-6 py-16 md:py-20 relative z-40 pointer-events-none">
                 <div className="w-full relative max-w-2xl mx-auto">
                     <div key={currentSlide} className={cn(isAnimating && "pointer-events-none", "relative")}>
                         {slides[currentSlide].content}
