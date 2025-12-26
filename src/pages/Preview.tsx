@@ -14,6 +14,7 @@ import {
   OBSESSIONS_VARIANTS,
   IMPROVEMENT_VARIANTS,
   FAVORITES_VARIANTS,
+  CREATOR_VARIANTS,
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 import { encodeData, decodeData } from "@/lib/share";
@@ -76,6 +77,7 @@ const Preview = () => {
   const obsessionsVariant = OBSESSIONS_VARIANTS.find(v => v.id === wrappedData.obsessionsVariant) || OBSESSIONS_VARIANTS[0];
   const favoritesVariant = FAVORITES_VARIANTS.find(v => v.id === wrappedData.favoritesVariant) || FAVORITES_VARIANTS[0];
   const improvementVariant = IMPROVEMENT_VARIANTS.find(v => v.id === wrappedData.improvementVariant) || IMPROVEMENT_VARIANTS[0];
+  const creatorVariant = CREATOR_VARIANTS.find(v => v.id === wrappedData.creatorVariant) || CREATOR_VARIANTS[0];
 
   const handleShare = () => {
     const encoded = encodeData(wrappedData as any);
@@ -99,7 +101,7 @@ const Preview = () => {
             <span className="text-primary glow-text">Year in Review</span>
           </h1>
           <p className="text-muted-foreground text-lg opacity-0 animate-fade-up delay-400">
-            Curated by {creatorName}
+            {creatorVariant.id === 'message' ? creatorName : `Curated by ${creatorName}`}
           </p>
         </div>
       )
@@ -110,7 +112,7 @@ const Preview = () => {
       content: (
         <div className="text-center">
           <p className="text-muted-foreground mb-8 opacity-0 animate-fade-up">
-            As told by {creatorName}
+            {creatorVariant.id === 'message' ? "A message for you" : `As told by ${creatorName}`}
           </p>
           <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
             This year, I got to watch
@@ -279,7 +281,7 @@ const Preview = () => {
           </p>
           <div className="opacity-0 animate-fade-up delay-400">
             <p className="text-primary text-lg font-medium mb-6">
-              With love, {creatorName}
+              {creatorVariant.id === 'message' ? creatorName : `With love, ${creatorName}`}
             </p>
             <Button variant="emotional" size="lg" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-2" />

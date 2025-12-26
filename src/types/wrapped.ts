@@ -65,6 +65,7 @@ export interface WrappedData {
 
   // Slide 12 - Outro
   outroMessage?: string;
+  creatorVariant?: string;
 }
 
 export interface SlideConfig {
@@ -349,8 +350,8 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
 export const FAVORITES_VARIANTS: QuestionVariant[] = [
   {
     id: 'song',
-    question: "What song defined their year?",
-    displayPrefix: "Favorite Song",
+    question: "What songs defined their year?",
+    displayPrefix: "Favorite Songs",
     options: [
       { value: 'i-will', label: 'I Will', emoji: '🎤' },
       { value: 'beat-it', label: 'Beat It', emoji: '🎸' },
@@ -494,4 +495,32 @@ export const CURRENT_TRAITS = [
   { value: 'authentic', label: 'Authentic' },
   { value: 'present', label: 'Present' },
   { value: 'free', label: 'Free' },
+];
+
+export const CREATOR_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'name',
+    question: "What's your name?",
+    displayPrefix: "Created By",
+    options: []
+  },
+  {
+    id: 'sign-off',
+    question: "How do you want to sign off?",
+    displayPrefix: "Signed",
+    options: [
+      { value: 'your-fav', label: 'Your Favorite Child', emoji: '👶' },
+      { value: 'bestie', label: 'Your Bestie', emoji: '👯' },
+      { value: 'admirer', label: 'Secret Admirer', emoji: '🫣' },
+    ]
+  },
+  {
+    id: 'message',
+    question: "Leave a short dedication",
+    displayPrefix: "Dedication",
+    options: [
+      { value: 'love', label: 'With all my love', emoji: '❤️' },
+      { value: 'proud', label: 'So proud of you', emoji: '🌟' },
+    ]
+  }
 ];

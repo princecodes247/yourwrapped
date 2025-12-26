@@ -1,28 +1,10 @@
 import { useWrappedStore } from "@/store/wrappedStore";
-import StepName from "@/components/create/StepName";
-import StepRelationship from "@/components/create/StepRelationship";
-import StepMainCharacterEra from "@/components/create/StepMainCharacterEra";
-import StepTopPhrase from "@/components/create/StepTopPhrase";
-import StepEmotions from "@/components/create/StepEmotions";
-import StepObsessions from "@/components/create/StepObsessions";
-import StepFavorites from "@/components/create/StepFavorites";
-import StepQuietImprovement from "@/components/create/StepQuietImprovement";
-import StepCreatorName from "@/components/create/StepCreatorName";
+import GenericStep from "@/components/create/GenericStep";
+import { steps } from "@/config/steps";
 
 const Create = () => {
-  const { currentStep } = useWrappedStore();
-
-  const steps = [
-    <StepName key="name" />,
-    <StepRelationship key="relationship" />,
-    <StepMainCharacterEra key="era" />,
-    <StepTopPhrase key="phrase" />,
-    <StepEmotions key="emotions" />,
-    <StepObsessions key="obsessions" />,
-    <StepFavorites key="favorites" />,
-    <StepQuietImprovement key="improvement" />,
-    <StepCreatorName key="creator" />,
-  ];
+  const { currentStep, nextStep, prevStep } = useWrappedStore();
+  const currentConfig = steps[currentStep] || steps[0];
 
   return (
     <>
@@ -34,7 +16,14 @@ const Create = () => {
           />
         </div>
       </div>
-      {steps[currentStep] || steps[0]}
+      <GenericStep
+        key={currentConfig.id}
+        config={currentConfig}
+        stepNumber={currentStep + 1}
+        totalSteps={steps.length}
+        onNext={nextStep}
+        onBack={prevStep}
+      />
     </>
   );
 };
