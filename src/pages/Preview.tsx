@@ -291,6 +291,53 @@ const Preview = () => {
     }
   ];
 
+  const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const SLIDE_DURATION = 5000; // 5 seconds per slide
+
+  useEffect(() => {
+    if (location.pathname === '/share') {
+      setIsSharedView(true);
+      const searchParams = new URLSearchParams(location.search);
+      const id = searchParams.get('id');
+      if (id) {
+        const decoded = decodeData(id);
+        if (decoded) {
+          updateWrappedData(decoded);
+        }
+      }
+    }
+  }, [location, updateWrappedData]);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    setProgress(0);
+    const timer = setTimeout(() => setIsAnimating(false), 600);
+    return () => clearTimeout(timer);
+  }, [currentSlide]);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          if (currentSlide < slides.length - 1) {
+            setCurrentSlide((curr) => curr + 1);
+            return 0;
+          } else {
+            // Stop at the end
+            return 100;
+          }
+        }
+        return prev + (100 / (SLIDE_DURATION / 100)); // Update every 100ms
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [currentSlide, isPaused, slides.length]);
+
+
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
@@ -300,6 +347,17 @@ const Preview = () => {
   const prevSlide = () => {
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
+    }
+  };
+
+  const handleTap = (e: React.MouseEvent<HTMLDivElement>) => {
+    const width = e.currentTarget.offsetWidth;
+    const x = e.clientX;
+
+    if (x < width / 3) {
+      prevSlide();
+    } else if (x > (width * 2) / 3) {
+      nextSlide();
     }
   };
 
@@ -326,40 +384,39 @@ const Preview = () => {
           />
         </div>
 
-        {/* Progress dots */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 flex gap-2">
+        {/* Progress Bars (Story Style) */}
+        <div className="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-2">
           {slides.map((_, index) => (
-            <button
+            <div
               key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
-                index === currentSlide
-                  ? "bg-primary w-6"
-                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-              )}
-            />
+              className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden"
+            >
+              <div
+                className="h-full bg-white transition-all duration-100 ease-linear"
+                style={{
+                  width: index < currentSlide ? '100%' :
+                    index === currentSlide ? `${progress}%` : '0%'
+                }}
+              />
+            </div>
           ))}
         </div>
 
-        {/* Navigation buttons */}
-        {currentSlide > 0 && (
-          <button
-            onClick={prevSlide}
-            className="fixed left-6 top-1/2 -translate-y-1/2 z-40 p-3 rounded-full bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-        )}
+        {/* Tap Zones */}
+        <div
+          className="absolute inset-0 z-30 flex"
+          onClick={handleTap}
+          onMouseDown={() => setIsPaused(true)}
+          onMouseUp={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
+          {/* Left Zone (Implicit) */}
+          {/* Center Zone (Implicit) */}
+          {/* Right Zone (Implicit) */}
+        </div>
 
-        {currentSlide < slides.length - 1 && (
-          <button
-            onClick={nextSlide}
-            className="fixed right-6 top-1/2 -translate-y-1/2 z-40 p-3 rounded-full bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
-          >
-            <ArrowRight className="w-5 h-5" />
-          </button>
-        )}
+
 
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-6 py-20 relative z-10">
