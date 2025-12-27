@@ -130,7 +130,7 @@ export const steps: StepConfig[] = [
         variantKey: 'creatorVariant',
         title: "One last thing...",
         subtitle: (data) => `So ${data.recipientName} knows who made this for them`,
-        variants: CREATOR_VARIANTS,
+        // variants: CREATOR_VARIANTS,
         placeholder: 'Your name or sign-off',
         nextLabel: 'Preview Wrapped',
         customNextAction: (data, navigate) => {
