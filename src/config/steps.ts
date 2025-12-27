@@ -63,7 +63,7 @@ export const steps: StepConfig[] = [
         variantKey: 'emotionsVariant',
         title: (data) => `${data.recipientName}'s top emotions`,
         variants: EMOTIONS_VARIANTS,
-        maxSelections: 2,
+        maxSelections: 3,
     },
     {
         id: 'obsessions',

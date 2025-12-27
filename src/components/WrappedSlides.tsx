@@ -303,7 +303,7 @@ const WrappedSlides = ({
                     <div className="space-y-4 max-w-sm mx-auto">
                         {data.topEmotions?.map((emotion, index) => {
                             const emotionData = getEmotionLabel(emotion);
-                            const width = index === 0 ? 95 : 75;
+                            const width = index === 0 ? 95 : index === 1 ? 75 : 50;
                             return (
                                 <div
                                     key={emotion}
