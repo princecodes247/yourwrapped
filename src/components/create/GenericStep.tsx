@@ -162,6 +162,7 @@ const GenericStep = ({
             [config.dataKey]: value as any,
         };
         if (config.variantKey && variantId) {
+            // @ts-ignore
             updates[config.variantKey] = variantId as any;
         }
 
