@@ -1,4 +1,5 @@
 import { useWrappedStore } from "@/store/wrappedStore";
+import { THEMES } from "@/types/wrapped";
 import GenericStep from "@/components/create/GenericStep";
 import { steps } from "@/config/steps";
 
@@ -13,8 +14,15 @@ const Create = () => {
       : wrappedData[nextConfig.dataKey]
   ));
 
+  const currentTheme = wrappedData.theme ? THEMES.find(t => t.id === wrappedData.theme) : undefined;
+
   return (
-    <>
+    <div style={currentTheme ? {
+      '--primary': currentTheme.color,
+      '--accent': currentTheme.color,
+      '--glow': currentTheme.color,
+      '--ring': currentTheme.color,
+    } as React.CSSProperties : undefined}>
       <div className="fixed top-0 left-0 right-0 z-50">
         <div className="h-1 bg-secondary">
           <div
@@ -32,7 +40,7 @@ const Create = () => {
         onBack={prevStep}
         hasNextValue={hasNextValue}
       />
-    </>
+    </div>
   );
 };
 

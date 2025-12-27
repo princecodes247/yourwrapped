@@ -8,6 +8,8 @@ export type RelationshipType =
   | 'enemy'
   | 'other';
 
+export type Theme = 'gold' | 'blue' | 'purple' | 'green' | 'pink';
+
 export interface Option {
   value: string;
   label: string;
@@ -28,6 +30,7 @@ export interface WrappedData {
   recipientName: string;
   relationship: RelationshipType;
   creatorName?: string;
+  theme?: Theme;
 
   // Slide 3 - Main Character Era
   mainCharacterEra?: string;
@@ -536,6 +539,14 @@ export const CREATOR_VARIANTS: QuestionVariant[] = [
       { value: 'proud', label: 'So proud of you', emoji: '🌟' },
     ]
   }
+];
+
+export const THEMES: { id: Theme; label: string; color: string; emoji: string }[] = [
+  { id: 'gold', label: 'Golden Hour', color: '38 92% 60%', emoji: '✨' },
+  { id: 'blue', label: 'Ocean Eyes', color: '217 91% 60%', emoji: '🌊' },
+  { id: 'purple', label: 'Lavender Haze', color: '270 95% 60%', emoji: '💜' },
+  { id: 'green', label: 'Brat Green', color: '142 71% 45%', emoji: '💚' },
+  { id: 'pink', label: 'Hot Pink', color: '330 81% 60%', emoji: '💖' },
 ];
 
 

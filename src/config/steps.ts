@@ -7,6 +7,7 @@ import {
     FAVORITES_VARIANTS,
     IMPROVEMENT_VARIANTS,
     CREATOR_VARIANTS,
+    THEMES,
     RelationshipType
 } from "@/types/wrapped";
 
@@ -38,6 +39,14 @@ export const steps: StepConfig[] = [
         title: (data) => `${data.recipientName} is your...`,
         subtitle: 'This helps us personalize the experience',
         staticOptions: RELATIONSHIP_OPTIONS,
+    },
+    {
+        id: 'theme',
+        type: 'single-select',
+        dataKey: 'theme',
+        title: 'Choose a vibe',
+        subtitle: 'Select a color theme for the experience',
+        staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),
     },
     {
         id: 'era',

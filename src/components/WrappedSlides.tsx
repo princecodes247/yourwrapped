@@ -16,6 +16,7 @@ import {
     IMPROVEMENT_VARIANTS,
     FAVORITES_VARIANTS,
     CREATOR_VARIANTS,
+    THEMES,
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 
@@ -453,9 +454,21 @@ const WrappedSlides = ({
         }
     ];
 
+    const currentTheme = THEMES.find(t => t.id === data.theme) || THEMES[0];
+
     return (
         <div>
-            <div ref={slideRef} data-capture="off" className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden">
+            <div
+                ref={slideRef}
+                data-capture="off"
+                className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden"
+                style={{
+                    '--primary': currentTheme.color,
+                    '--accent': currentTheme.color,
+                    '--glow': currentTheme.color,
+                    '--ring': currentTheme.color,
+                } as React.CSSProperties}
+            >
                 {/* Noise Texture */}
                 <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
                     style={{
