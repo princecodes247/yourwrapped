@@ -519,10 +519,12 @@ const WrappedSlides = ({
                     {slides.map((_, index) => (
                         <div
                             key={index}
-                            className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden"
+                            className="h-1 flex-1 bg-[hsl(var(--progress-track))] rounded-full overflow-hidden"
                         >
+
+
                             <div
-                                className="h-full bg-white transition-all duration-100 ease-linear"
+                                className="h-full bg-primary transition-all duration-100 ease-linear"
                                 style={{
                                     width: index < currentSlide ? '100%' :
                                         index === currentSlide ? `${progress}%` : '0%'

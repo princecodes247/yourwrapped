@@ -41,6 +41,7 @@
     --glow: 240 10% 3.9%;
     --surface-elevated: 0 0% 100%;
     --text-subtle: 240 3.8% 46.1%;
+    --progress-track: 240 5.9% 80%; /* Darker than secondary for visibility on light bg */
   }
 
   .dark {
@@ -71,6 +72,8 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    
+    --progress-track: 240 3.7% 25%; /* Visible on dark bg */
   }
 }
 

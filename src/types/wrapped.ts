@@ -587,7 +587,7 @@ export const THEMES: ThemeConfig[] = [
       '--glow': '221 83% 53%',
       '--ring': '221 83% 53%',
     },
-    gradient: 'linear-gradient(180deg, hsl(210 40% 98% / 0) 0%, hsl(221 83% 53% / 0.05) 100%)'
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(221 83% 53% / 0.35), transparent 70%)'
   },
   {
     id: 'purple',
@@ -602,7 +602,7 @@ export const THEMES: ThemeConfig[] = [
       '--glow': '263 70% 50%',
       '--ring': '263 70% 50%',
     },
-    gradient: 'conic-gradient(from 0deg at 50% 50%, hsl(265 48% 5%), hsl(263 70% 50% / 0.1), hsl(265 48% 5%))'
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(263 70% 50% / 0.2), transparent 70%)'
   },
   {
     id: 'green',
@@ -617,7 +617,7 @@ export const THEMES: ThemeConfig[] = [
       '--glow': '142 71% 45%',
       '--ring': '142 71% 45%',
     },
-    gradient: 'radial-gradient(circle at 100% 100%, hsl(142 71% 45% / 0.1), transparent 50%)'
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(142 71% 45% / 0.25), transparent 70%)'
   },
   {
     id: 'pink',
@@ -632,7 +632,7 @@ export const THEMES: ThemeConfig[] = [
       '--glow': '330 81% 60%',
       '--ring': '330 81% 60%',
     },
-    gradient: 'linear-gradient(45deg, hsl(330 81% 60% / 0.05), transparent)'
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(330 81% 60% / 0.25), transparent 70%)'
   },
 ];
 
