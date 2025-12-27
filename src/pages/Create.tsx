@@ -3,8 +3,15 @@ import GenericStep from "@/components/create/GenericStep";
 import { steps } from "@/config/steps";
 
 const Create = () => {
-  const { currentStep, nextStep, prevStep } = useWrappedStore();
+  const { currentStep, nextStep, prevStep, wrappedData } = useWrappedStore();
   const currentConfig = steps[currentStep] || steps[0];
+  const nextConfig = steps[currentStep + 1];
+
+  const hasNextValue = !!(nextConfig && (
+    Array.isArray(wrappedData[nextConfig.dataKey])
+      ? (wrappedData[nextConfig.dataKey] as any[]).length > 0
+      : wrappedData[nextConfig.dataKey]
+  ));
 
   return (
     <>
@@ -23,6 +30,7 @@ const Create = () => {
         totalSteps={steps.length}
         onNext={nextStep}
         onBack={prevStep}
+        hasNextValue={hasNextValue}
       />
     </>
   );

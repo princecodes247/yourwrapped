@@ -11,6 +11,7 @@ interface StepLayoutProps {
   canProgress?: boolean;
   nextLabel?: string;
   showBack?: boolean;
+  onForward?: () => void;
 }
 
 const StepLayout = ({
@@ -22,6 +23,7 @@ const StepLayout = ({
   canProgress = true,
   nextLabel = "Continue",
   showBack = true,
+  onForward,
 }: StepLayoutProps) => {
   return (
     <div className="min-h-[100svh] bg-background flex flex-col supports-[min-height:100svh]:min-h-[100svh]">
@@ -43,10 +45,22 @@ const StepLayout = ({
       )}
 
       {/* Step indicator */}
-      <div className="fixed top-6 right-6 z-40">
-        <span className="text-sm text-muted-foreground">
+      <div className="fixed top-6 right-6 z-40 flex items-center gap-4">
+        <span className="text-sm text-muted-foreground py-2">
           {stepNumber} / {totalSteps}
         </span>
+        {onForward && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onForward}
+            disabled={!canProgress}
+            className="text-muted-foreground hover:text-foreground disabled:opacity-50"
+          >
+            Next
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        )}
       </div>
 
       {/* Main content */}

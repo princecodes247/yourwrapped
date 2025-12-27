@@ -15,6 +15,7 @@ interface GenericStepProps {
     totalSteps: number;
     onNext: () => void;
     onBack: () => void;
+    hasNextValue?: boolean;
 }
 
 const GenericStep = ({
@@ -23,12 +24,21 @@ const GenericStep = ({
     totalSteps,
     onNext,
     onBack,
+    hasNextValue,
 }: GenericStepProps) => {
     const navigate = useNavigate();
     const { wrappedData, updateWrappedData } = useWrappedStore();
 
     // State for value and variant
-    const [value, setValue] = useState<any>(wrappedData[config.dataKey]);
+    const [value, setValue] = useState<any>(() => {
+        if (wrappedData[config.dataKey] !== undefined) {
+            return wrappedData[config.dataKey];
+        }
+        // Default values based on type
+        if (config.type === 'text' || config.type === 'text-with-suggestions') return '';
+        if (config.type === 'list-builder' || config.type === 'multi-select') return [];
+        return undefined;
+    });
     const [variantId, setVariantId] = useState<string | undefined>(
         config.variantKey ? (wrappedData[config.variantKey] as string) : undefined
     );
@@ -41,10 +51,6 @@ const GenericStep = ({
             setVariantId(config.variants[0].id);
         }
     }, [config.variants, variantId]);
-
-    useEffect(() => {
-        setValue(config.type === 'text' || config.type === 'text-with-suggestions' ? '' : config.type === "list-builder" || config.type === "multi-select" ? [] : undefined);
-    }, [config.type]);
 
     // Get current variant and options
     const currentVariant = config.variants?.length ? (config.variants.find(v => v.id === variantId) || config.variants[0]) : undefined;
@@ -392,6 +398,7 @@ const GenericStep = ({
             canProgress={isValid()}
             showBack={config.showBack ?? true}
             nextLabel={config.nextLabel}
+            onForward={hasNextValue ? handleNextStep : undefined}
         >
             <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-light text-foreground mb-2 opacity-0 animate-fade-up">
