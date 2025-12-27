@@ -19,20 +19,40 @@ import { cn } from "@/lib/utils";
 
 const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) => {
     const [count, setCount] = useState(0);
+    const [blur, setBlur] = useState(0);
 
     useEffect(() => {
         let startTime: number;
         let animationFrame: number;
+
+        // Start closer to the end number (e.g., 20% less)
+        const start = Math.floor(end * 0.9);
+        const range = end - start;
 
         const animate = (timestamp: number) => {
             if (!startTime) startTime = timestamp;
             const progress = timestamp - startTime;
             const percentage = Math.min(progress / duration, 1);
 
-            // Ease out quart
-            const ease = 1 - Math.pow(1 - percentage, 4);
+            // Elastic ease out
+            // Simplified elastic/bounce feel:
+            const c4 = (2 * Math.PI) / 3;
+            const ease = percentage === 0
+                ? 0
+                : percentage === 1
+                    ? 1
+                    : Math.pow(2, -10 * percentage) * Math.sin((percentage * 10 - 0.75) * c4) + 1;
 
-            setCount(Math.floor(ease * end));
+            const currentCount = Math.floor(start + (range * ease));
+            setCount(currentCount);
+
+            // // Calculate blur based on speed (derivative of ease)
+            // // Simple approximation: high blur in middle, low at ends
+            // if (percentage < 0.8) {
+            //     setBlur(1);
+            // } else {
+            //     setBlur(0);
+            // }
 
             if (progress < duration) {
                 animationFrame = requestAnimationFrame(animate);
@@ -44,7 +64,11 @@ const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) =
         return () => cancelAnimationFrame(animationFrame);
     }, [end, duration]);
 
-    return <>{count}</>;
+    return (
+        <span style={{ filter: `blur(${blur}px)`, transition: 'filter 0.1s' }}>
+            {count}
+        </span>
+    );
 };
 
 interface WrappedSlidesProps {
@@ -226,7 +250,7 @@ const WrappedSlides = ({
                         "{data.topPhrase}"
                     </h2>
                     <p className="text-muted-foreground text-lg opacity-0 animate-fade-up delay-400 counter-reveal">
-                        Used approximately <span className="text-primary font-medium"><CountUp end={phraseCount} duration={5000} /></span> times
+                        Used approximately <span className="text-primary font-medium"><CountUp end={phraseCount} duration={3000} /></span> times
                     </p>
                 </div>
             )
