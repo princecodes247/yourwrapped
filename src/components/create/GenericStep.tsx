@@ -228,10 +228,10 @@ const GenericStep = ({
                                     key={option.value}
                                     onClick={() => handleSingleSelect(option)}
                                     className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98]",
+                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98] backdrop-blur-sm",
                                         isSelected || isCustomSelected
-                                            ? "border-primary bg-primary/10 text-foreground"
-                                            : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
+                                            ? "border-primary bg-primary/10 text-foreground shadow-sm"
+                                            : "border-border/50 bg-card/40 text-foreground hover:border-primary/50 hover:bg-card/60"
                                     )}
                                     style={{ animationDelay: `${200 + index * 50}ms` }}
                                 >
@@ -282,10 +282,10 @@ const GenericStep = ({
                                     key={option.value}
                                     onClick={() => handleMultiSelect(option)}
                                     className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98]",
+                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
                                         (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
-                                            ? "border-primary bg-primary/10 text-foreground"
-                                            : "border-border bg-secondary/30 text-muted-foreground hover:border-muted-foreground/50 hover:bg-secondary/50"
+                                            ? "border-primary bg-primary/10 text-foreground shadow-lg"
+                                            : "border-border/50 bg-card/40 text-foreground hover:border-primary/50 hover:bg-card/60"
                                     )}
                                 >
                                     {option.emoji && <span className="text-xl">{option.emoji}</span>}
@@ -407,7 +407,7 @@ const GenericStep = ({
             onForward={hasNextValue ? handleNextStep : undefined}
         >
             <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-light text-foreground mb-2 opacity-0 animate-fade-up">
+                <h2 className="text-3xl md:text-4xl font-light text-foreground mb-4 opacity-0 animate-fade-up">
                     {title}
                 </h2>
 

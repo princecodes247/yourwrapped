@@ -267,8 +267,8 @@ const WrappedSlides = ({
                             {getEraLabel(data.mainCharacterEra || '')?.emoji}
                         </span>
                         <h2 className="text-4xl md:text-5xl font-light text-foreground">
-                            {eraVariant.displaySuffix}{" "}
                             <span className="text-primary">
+                                {eraVariant.displaySuffix}{" "}
                                 {getEraLabel(data.mainCharacterEra || '')?.label || 'Unknown Era'}
                             </span>
                         </h2>
@@ -461,13 +461,14 @@ const WrappedSlides = ({
             <div
                 ref={slideRef}
                 data-capture="off"
-                className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden"
+                className={cn(
+                    "min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden transition-colors duration-500",
+                    currentTheme.isDark ? "dark" : ""
+                )}
                 style={{
-                    '--primary': currentTheme.color,
-                    '--accent': currentTheme.color,
-                    '--glow': currentTheme.color,
-                    '--ring': currentTheme.color,
-                } as React.CSSProperties}
+                    ...(currentTheme.styles as React.CSSProperties),
+                    backgroundImage: currentTheme.gradient
+                }}
             >
                 {/* Noise Texture */}
                 <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
