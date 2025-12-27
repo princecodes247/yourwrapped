@@ -108,7 +108,7 @@ export const ERA_VARIANTS: QuestionVariant[] = [
   {
     id: 'main-character',
     question: "What era best describes their year?",
-    displayPrefix: "Their Main Character Era",
+    displayPrefix: "Their Era",
     displaySuffix: "The",
     options: MAIN_CHARACTER_ERAS
   },
@@ -568,7 +568,7 @@ export const THEMES: ThemeConfig[] = [
       '--background': '20 14% 4%',
       '--foreground': '60 9% 96%',
       '--primary': '45 93% 47%',
-      '--accent': '45 93% 47%',
+      '--accent': '40 100% 60%',
       '--glow': '45 93% 47%',
       '--ring': '45 93% 47%',
     },
