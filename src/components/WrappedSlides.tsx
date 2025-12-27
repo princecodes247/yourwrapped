@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Share2, Loader2 } from "lucide-react";
+import { Share2, Loader2, Download } from "lucide-react";
+import { toPng } from 'html-to-image';
+import { useRef } from "react";
 import {
     WrappedData,
     MAIN_CHARACTER_ERAS,
@@ -90,6 +92,36 @@ const WrappedSlides = ({
     const [isAnimating, setIsAnimating] = useState(true);
     const [progress, setProgress] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
+    const slideRef = useRef<HTMLDivElement>(null);
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSaveSlide = async () => {
+        if (!slideRef.current) return;
+
+        setIsSaving(true);
+        try {
+            const dataUrl = await toPng(slideRef.current, {
+                cacheBust: true,
+                pixelRatio: 2, // Higher quality
+                filter: (node) => {
+                    // Exclude elements with the 'no-capture' class
+                    if (node instanceof HTMLElement && node.classList.contains('no-capture')) {
+                        return false;
+                    }
+                    return true;
+                }
+            });
+
+            const link = document.createElement('a');
+            link.download = `wrapped-slide-${currentSlide + 1}.png`;
+            link.href = dataUrl;
+            link.click();
+        } catch (err) {
+            console.error('Failed to save slide:', err);
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const SLIDE_DURATION = 5000;
 
@@ -404,7 +436,7 @@ const WrappedSlides = ({
                                 size="lg"
                                 onClick={onAction}
                                 disabled={isActionLoading}
-                                className="cursor-pointer relative z-50 pointer-events-auto"
+                                className="cursor-pointer relative z-50 pointer-events-auto no-capture"
                             >
                                 {isActionLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Share2 className="w-4 h-4 mr-2" />}
                                 {actionLabel}
@@ -417,7 +449,7 @@ const WrappedSlides = ({
     ];
 
     return (
-        <div className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh]">
+        <div ref={slideRef} className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh]">
             {/* Ambient glow */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div
@@ -426,7 +458,7 @@ const WrappedSlides = ({
             </div>
 
             {/* Progress Bars (Story Style) */}
-            <div className="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-2">
+            <div className="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-2 no-capture">
                 {slides.map((_, index) => (
                     <div
                         key={index}
@@ -443,9 +475,29 @@ const WrappedSlides = ({
                 ))}
             </div>
 
+            {/* Save Button */}
+            <div className="absolute top-8 right-4 z-50 no-capture">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent slide navigation
+                        handleSaveSlide();
+                    }}
+                    disabled={isSaving}
+                >
+                    {isSaving ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                        <Download className="w-5 h-5" />
+                    )}
+                </Button>
+            </div>
+
             {/* Tap Zones */}
             <div
-                className="absolute inset-0 z-30 flex"
+                className="absolute inset-0 z-30 flex no-capture"
                 onClick={handleTap}
                 onMouseDown={() => setIsPaused(true)}
                 onMouseUp={() => setIsPaused(false)}
@@ -467,7 +519,7 @@ const WrappedSlides = ({
             </main>
 
             {/* Keyboard navigation hint */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/40">
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/40 no-capture">
                 Use ← → arrows or tap sides to navigate
             </div>
         </div>
