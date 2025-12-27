@@ -17,6 +17,36 @@ import {
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 
+const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        let startTime: number;
+        let animationFrame: number;
+
+        const animate = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / duration, 1);
+
+            // Ease out quart
+            const ease = 1 - Math.pow(1 - percentage, 4);
+
+            setCount(Math.floor(ease * end));
+
+            if (progress < duration) {
+                animationFrame = requestAnimationFrame(animate);
+            }
+        };
+
+        animationFrame = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationFrame);
+    }, [end, duration]);
+
+    return <>{count}</>;
+};
+
 interface WrappedSlidesProps {
     data: Partial<WrappedData>;
     isSharedView: boolean;
@@ -36,7 +66,11 @@ const WrappedSlides = ({
     const [isAnimating, setIsAnimating] = useState(true);
     const [progress, setProgress] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
+
     const SLIDE_DURATION = 5000;
+
+    // Memoize the random number so it doesn't change on re-renders
+    const phraseCount = useState(() => Math.floor(Math.random() * 500 + 200))[0];
 
     useEffect(() => {
         setIsAnimating(true);
@@ -192,7 +226,7 @@ const WrappedSlides = ({
                         "{data.topPhrase}"
                     </h2>
                     <p className="text-muted-foreground text-lg opacity-0 animate-fade-up delay-400 counter-reveal">
-                        Used approximately <span className="text-primary font-medium">{Math.floor(Math.random() * 500 + 200)}</span> times
+                        Used approximately <span className="text-primary font-medium"><CountUp end={phraseCount} duration={5000} /></span> times
                     </p>
                 </div>
             )
