@@ -193,3 +193,13 @@
 .delay-600 { animation-delay: 600ms; }
 .delay-700 { animation-delay: 700ms; }
 .delay-800 { animation-delay: 800ms; }
+
+.only-capture {
+    opacity: 1;
+}
+
+div[data-capture="off"] .only-capture {
+    opacity: 0;
+}
+
+

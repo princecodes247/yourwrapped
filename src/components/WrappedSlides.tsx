@@ -93,6 +93,7 @@ const WrappedSlides = ({
     const [progress, setProgress] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const slideRef = useRef<HTMLDivElement>(null);
+    const slideRef2 = useRef<HTMLDivElement>(null);
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSaveSlide = async () => {
@@ -100,7 +101,10 @@ const WrappedSlides = ({
 
         setIsSaving(true);
         try {
-            const dataUrl = await toPng(slideRef.current, {
+            const cloneRef = slideRef.current
+            // const cloneRef = slideRef.current.cloneNode(true) as HTMLDivElement;
+            cloneRef.setAttribute('data-capture', 'on');
+            const dataUrl = await toPng(cloneRef, {
                 cacheBust: true,
                 pixelRatio: 2, // Higher quality
                 filter: (node) => {
@@ -109,8 +113,9 @@ const WrappedSlides = ({
                         return false;
                     }
                     return true;
-                }
-            });
+                },
+            } as any); // Cast to any to avoid type error with onClone which might be missing in the types
+            cloneRef.setAttribute('data-capture', 'off');
 
             const link = document.createElement('a');
             link.download = `wrapped-slide-${currentSlide + 1}.png`;
@@ -449,80 +454,129 @@ const WrappedSlides = ({
     ];
 
     return (
-        <div ref={slideRef} className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh]">
-            {/* Ambient glow */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div
-                    className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse-glow"
-                />
-            </div>
-
-            {/* Progress Bars (Story Style) */}
-            <div className="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-2 no-capture">
-                {slides.map((_, index) => (
-                    <div
-                        key={index}
-                        className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden"
-                    >
-                        <div
-                            className="h-full bg-white transition-all duration-100 ease-linear"
-                            style={{
-                                width: index < currentSlide ? '100%' :
-                                    index === currentSlide ? `${progress}%` : '0%'
-                            }}
-                        />
-                    </div>
-                ))}
-            </div>
-
-            {/* Save Button */}
-            <div className="absolute top-8 right-4 z-50 no-capture">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent slide navigation
-                        handleSaveSlide();
+        <div>
+            <div ref={slideRef} data-capture="off" className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden">
+                {/* Noise Texture */}
+                <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
                     }}
-                    disabled={isSaving}
-                >
-                    {isSaving ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                        <Download className="w-5 h-5" />
-                    )}
-                </Button>
-            </div>
+                />
 
-            {/* Tap Zones */}
-            <div
-                className="absolute inset-0 z-30 flex no-capture"
-                onClick={handleTap}
-                onMouseDown={() => setIsPaused(true)}
-                onMouseUp={() => setIsPaused(false)}
-                onTouchStart={() => setIsPaused(true)}
-                onTouchEnd={() => setIsPaused(false)}
-            >
-                {/* Left Zone (Implicit) */}
-                {/* Center Zone (Implicit) */}
-                {/* Right Zone (Implicit) */}
-            </div>
+                {/* Creative Elements (Capture Only) */}
+                <div className="absolute inset-0 z-10 pointer-events-none only-capture">
+                    {/* Corner Accents */}
+                    {/* <div className="absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-white/20 rounded-tl-3xl" />
+                    <div className="absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-white/20 rounded-tr-3xl" />
+                    <div className="absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-white/20 rounded-bl-3xl" />
+                    <div className="absolute bottom-8 right-8 w-16 h-16 border-b-2 border-r-2 border-white/20 rounded-br-3xl" /> */}
 
-            {/* Main content */}
-            <main className="flex-1 flex items-center justify-center px-6 py-16 md:py-20 relative z-40 pointer-events-none">
-                <div className="w-full relative max-w-2xl mx-auto">
-                    <div key={currentSlide} className={cn(isAnimating && "pointer-events-none", "relative")}>
-                        {slides[currentSlide].content}
-                    </div>
+                    {/* Decorative Grid */}
+                    {/* <div className="absolute inset-0 opacity-[0.03]"
+                        style={{
+                            backgroundImage: `linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)`,
+                            backgroundSize: '100px 100px'
+                        }}
+                    /> */}
+
+                    {/* Barcode / ID */}
+                    {/* <div className="absolute bottom-12 left-12 flex flex-col gap-1">
+                        <div className="flex gap-1 h-8 items-end opacity-50">
+                            {[...Array(20)].map((_, i) => (
+                                <div key={i} className="bg-white w-1" style={{ height: `${Math.random() * 100}%` }} />
+                            ))}
+                        </div>
+                        <div className="text-[10px] font-mono text-white/40 tracking-widest">
+                            ID: 2025-WRAPPED-{Math.floor(Math.random() * 10000)}
+                        </div>
+                    </div> */}
+
                 </div>
-            </main>
 
-            {/* Keyboard navigation hint */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/40 no-capture">
-                Use ← → arrows or tap sides to navigate
+                {/* Ambient glow */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    <div
+                        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse-glow"
+                    />
+                </div>
+
+                {/* Progress Bars (Story Style) */}
+                <div className="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-2 no-capture">
+                    {slides.map((_, index) => (
+                        <div
+                            key={index}
+                            className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden"
+                        >
+                            <div
+                                className="h-full bg-white transition-all duration-100 ease-linear"
+                                style={{
+                                    width: index < currentSlide ? '100%' :
+                                        index === currentSlide ? `${progress}%` : '0%'
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                {/* Save Button */}
+                <div className="absolute top-8 right-4 z-50 no-capture">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent slide navigation
+                            handleSaveSlide();
+                        }}
+                        disabled={isSaving}
+                    >
+                        {isSaving ? (
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                            <Download className="w-5 h-5" />
+                        )}
+                    </Button>
+                </div>
+
+                {/* Tap Zones */}
+                <div
+                    className="absolute inset-0 z-30 flex no-capture"
+                    onClick={handleTap}
+                    onMouseDown={() => setIsPaused(true)}
+                    onMouseUp={() => setIsPaused(false)}
+                    onTouchStart={() => setIsPaused(true)}
+                    onTouchEnd={() => setIsPaused(false)}
+                >
+                    {/* Left Zone (Implicit) */}
+                    {/* Center Zone (Implicit) */}
+                    {/* Right Zone (Implicit) */}
+                </div>
+
+                {/* Main content */}
+                <main className="flex-1 flex items-center justify-center px-6 py-16 md:py-20 relative z-40 pointer-events-none">
+                    <div className="w-full relative max-w-2xl mx-auto">
+                        <div key={currentSlide} className={cn(isAnimating && "pointer-events-none", "relative")}>
+                            {slides[currentSlide].content}
+                        </div>
+                    </div>
+                </main>
+
+                {/* Branding Footer */}
+                <div className="absolute bottom-6 left-0 right-0 text-center z-40 pointer-events-none">
+                    <p className="text-[12px] uppercase tracking-[0.3em] text-white/40 font-medium">
+                        yourwrapped.com
+                    </p>
+                    {/* <p className="text-[8px] text-white/20 mt-1">
+                        Generated on {new Date().toLocaleDateString()}
+                    </p> */}
+                </div>
+                {/* Keyboard navigation hint */}
+                <div className="fixed text-center bottom-16 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/40 no-capture">
+                    Tap sides to navigate
+                </div>
             </div>
         </div>
+
     );
 };
 
