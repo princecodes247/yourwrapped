@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface WrappedSlidesProps {
-    data: WrappedData;
+    data: Partial<WrappedData>;
     isSharedView: boolean;
     onAction?: () => void;
     actionLabel?: string;

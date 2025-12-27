@@ -37,7 +37,7 @@ export const getWrapped = async (id: string): Promise<WrappedData> => {
 };
 
 export const createWrapped = async (data: WrappedData): Promise<string> => {
-    const response = await apiClient.post<{ id: string }>('/wrapped', data);
+    const response = await apiClient.post<{ slug: string }>('/wrapped', data);
     console.log({ response })
     return response.slug;
 };
