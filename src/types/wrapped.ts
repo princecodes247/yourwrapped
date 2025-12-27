@@ -30,7 +30,7 @@ export interface WrappedData {
   recipientName: string;
   relationship: RelationshipType;
   creatorName?: string;
-  theme?: Theme;
+  accentTheme?: Theme;
 
   // Slide 3 - Main Character Era
   mainCharacterEra?: string;

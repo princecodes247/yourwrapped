@@ -41,9 +41,9 @@ export const steps: StepConfig[] = [
         staticOptions: RELATIONSHIP_OPTIONS,
     },
     {
-        id: 'theme',
+        id: 'accentTheme',
         type: 'single-select',
-        dataKey: 'theme',
+        dataKey: 'accentTheme',
         title: 'Choose a vibe',
         subtitle: 'Select a color theme for the experience',
         staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),

@@ -454,7 +454,7 @@ const WrappedSlides = ({
         }
     ];
 
-    const currentTheme = THEMES.find(t => t.id === data.theme) || THEMES[0];
+    const currentTheme = THEMES.find(t => t.id === data.accentTheme) || THEMES[0];
 
     return (
         <div>

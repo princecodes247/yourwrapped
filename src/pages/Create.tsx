@@ -14,7 +14,7 @@ const Create = () => {
       : wrappedData[nextConfig.dataKey]
   ));
 
-  const currentTheme = wrappedData.theme ? THEMES.find(t => t.id === wrappedData.theme) : undefined;
+  const currentTheme = wrappedData.accentTheme ? THEMES.find(t => t.id === wrappedData.accentTheme) : undefined;
 
   return (
     <div style={currentTheme ? {

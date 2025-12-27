@@ -81,6 +81,11 @@ const GenericStep = ({
         } else {
             setIsCustomInputActive(false);
             setValue(option.value);
+
+            // Immediate update for theme to show color change instantly
+            if (config.dataKey === 'accentTheme') {
+                updateWrappedData({ [config.dataKey]: option.value });
+            }
         }
     };
 
