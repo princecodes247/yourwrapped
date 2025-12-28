@@ -31,7 +31,7 @@ const WrappedSlides = ({
     previewId
 }: WrappedSlidesProps) => {
     const slideRef = useRef<HTMLDivElement>(null);
-    const [showGuide, setShowGuide] = useState(true);
+    const [showGuide, setShowGuide] = useState(isSharedView);
 
     const { isAnimating, progress, setIsPaused, handleTap } = useSlideNavigation({
         totalSlides: 9, // Total number of slides
