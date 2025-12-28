@@ -8,6 +8,7 @@ export const WrappedDataSchema = z.object({
     recipientName: z.string(),
     relationship: z.enum(['partner', 'other', 'best-friend', 'friend', 'sibling', 'parent', 'child', 'enemy']),
     accentTheme: z.string().optional(),
+    bgMusic: z.string().optional(),
     mainCharacterEra: z.string().optional(),
     eraVariant: z.string().optional(),
     topPhrase: z.string().optional(),
