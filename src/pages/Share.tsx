@@ -48,6 +48,7 @@ const Share = () => {
             actionLabel="Create your own Wrapped"
             currentSlide={currentSlide}
             setCurrentSlide={setCurrentSlide}
+            wrappedId={id || undefined}
         />
     );
 };

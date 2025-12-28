@@ -105,6 +105,7 @@ const Preview = () => {
         isActionLoading={isCreating}
         currentSlide={currentSlide}
         setCurrentSlide={setCurrentSlide}
+        wrappedId={createdId || undefined}
       />
 
       <ShareDialog

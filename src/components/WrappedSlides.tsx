@@ -83,6 +83,7 @@ interface WrappedSlidesProps {
     isActionLoading?: boolean;
     currentSlide: number;
     setCurrentSlide: (slide: number | SetStateAction<number>) => void;
+    wrappedId?: string;
 }
 
 const WrappedSlides = ({
@@ -91,7 +92,8 @@ const WrappedSlides = ({
     onAction,
     actionLabel = "Share this Wrapped",
     isActionLoading = false,
-    currentSlide, setCurrentSlide
+    currentSlide, setCurrentSlide,
+    wrappedId
 }: WrappedSlidesProps) => {
     const [isAnimating, setIsAnimating] = useState(true);
     const [progress, setProgress] = useState(0);
@@ -217,8 +219,7 @@ const WrappedSlides = ({
 
     const SLIDE_DURATION = 5000;
 
-    // Memoize the random number so it doesn't change on re-renders
-    const phraseCount = useState(() => Math.floor(Math.random() * 500 + 200))[0];
+
 
     useEffect(() => {
         setIsAnimating(true);
@@ -301,6 +302,70 @@ const WrappedSlides = ({
     const improvementVariant = IMPROVEMENT_VARIANTS.find(v => v.id === data.improvementVariant) || IMPROVEMENT_VARIANTS[0];
     const creatorVariant = CREATOR_VARIANTS.find(v => v.id === data.creatorVariant) || CREATOR_VARIANTS[0];
 
+    // Deterministic Helpers
+    const getSeed = (id?: string, data?: Partial<WrappedData>): number => {
+        const str = id || JSON.stringify(data) || 'default-seed';
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash);
+    };
+
+    const getDeterministicIndex = (seed: number, length: number, offset: number = 0): number => {
+        return (seed + offset) % length;
+    };
+
+    const getDeterministicNumber = (seed: number, min: number, max: number, offset: number = 0): number => {
+        const random = Math.sin(seed + offset) * 10000;
+        const normalized = random - Math.floor(random);
+        return Math.floor(normalized * (max - min + 1)) + min;
+    };
+
+    const seed = getSeed(wrappedId, data);
+
+    // Alternate Texts
+    const INTRO_ALTERNATES = [
+        "This year, I got to watch",
+        "This year, I witnessed",
+        "2025 was the year I saw",
+        "I had the front row seat to watch"
+    ];
+
+    const PHRASE_COUNT_ALTERNATES = [
+        "Used approximately",
+        "Said about",
+        "Dropped",
+        "Heard",
+        "Repeated"
+    ];
+
+    const IMPROVEMENT_INTRO_ALTERNATES = [
+        `This year, ${recipientName} got better at`,
+        `In 2025, ${recipientName} mastered`,
+        `${recipientName} quietly improved at`,
+        `I watched ${recipientName} grow in`
+    ];
+
+    const IMPROVEMENT_OUTRO_ALTERNATES = [
+        "And it didn't go unnoticed.",
+        "And I saw every bit of it.",
+        "And it made all the difference.",
+        "And it was beautiful to see."
+    ];
+
+    const OUTRO_DEFAULT_ALTERNATES = [
+        "For being exactly who they are. For growing. For showing up.\nFor making 2025 unforgettable.",
+        "For the laughs, the growth, and the memories.\nHere's to you.",
+        "For simply existing and making the world brighter.\nThank you.",
+        "For every moment, big and small.\nYou made 2025 yours."
+    ];
+
+    // Memoize the random number so it doesn't change on re-renders
+    const phraseCount = useState(() => getDeterministicNumber(seed, 200, 700, 1))[0];
+
     const slides = [
         // Slide 1: Cover
         {
@@ -330,7 +395,7 @@ const WrappedSlides = ({
                         {creatorVariant.id === 'message' ? "A message for you" : `As told by ${creatorName}`}
                     </p>
                     <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
-                        This year, I got to watch
+                        {INTRO_ALTERNATES[getDeterministicIndex(seed, INTRO_ALTERNATES.length, 2)]}
                         <br />
                         <span className="text-primary">{data.relationship ? RELATIONSHIP_LABELS[data.relationship].toLowerCase() : 'someone special'}</span>
                     </h2>
@@ -374,7 +439,7 @@ const WrappedSlides = ({
                         "{data.topPhrase}"
                     </h2>
                     <p className="text-muted-foreground text-lg opacity-0 animate-fade-up delay-400 counter-reveal">
-                        Used approximately <span className="text-primary font-medium"><CountUp end={phraseCount} duration={3000} /></span> times
+                        {PHRASE_COUNT_ALTERNATES[getDeterministicIndex(seed, PHRASE_COUNT_ALTERNATES.length, 3)]} <span className="text-primary font-medium"><CountUp end={phraseCount} duration={3000} /></span> times
                     </p>
                 </div>
             )
@@ -471,13 +536,13 @@ const WrappedSlides = ({
                         {improvementVariant.displayPrefix}
                     </p>
                     <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 opacity-0 animate-fade-up delay-200">
-                        This year, {recipientName} got better at
+                        {IMPROVEMENT_INTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_INTRO_ALTERNATES.length, 4)]}
                     </h2>
                     <p className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up delay-400">
                         {getImprovementLabel(data.quietImprovement || '')}
                     </p>
                     <p className="text-muted-foreground mt-8 text-lg opacity-0 animate-fade-up delay-600">
-                        And it didn't go unnoticed.
+                        {IMPROVEMENT_OUTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_OUTRO_ALTERNATES.length, 5)]}
                     </p>
                 </div>
             )
@@ -503,9 +568,8 @@ const WrappedSlides = ({
                             <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
                                 Here's to {recipientName}
                             </h2>
-                            <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
-                                For being exactly who they are. For growing. For showing up.
-                                For making 2025 unforgettable.
+                            <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap">
+                                {OUTRO_DEFAULT_ALTERNATES[getDeterministicIndex(seed, OUTRO_DEFAULT_ALTERNATES.length, 6)]}
                             </p>
                         </>
                     ) : (
