@@ -267,8 +267,8 @@ const WrappedSlides = ({
                             {getEraLabel(data.mainCharacterEra || '')?.emoji}
                         </span>
                         <h2 className="text-4xl md:text-5xl font-light text-foreground">
-                            {eraVariant.displaySuffix}{" "}
                             <span className="text-primary">
+                                {eraVariant.displaySuffix}{" "}
                                 {getEraLabel(data.mainCharacterEra || '')?.label || 'Unknown Era'}
                             </span>
                         </h2>
@@ -438,7 +438,7 @@ const WrappedSlides = ({
                         </p>
                         {onAction && (
                             <Button
-                                variant="emotional"
+                                variant="glossy"
                                 size="lg"
                                 onClick={onAction}
                                 disabled={isActionLoading}
@@ -461,13 +461,14 @@ const WrappedSlides = ({
             <div
                 ref={slideRef}
                 data-capture="off"
-                className="min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden"
+                className={cn(
+                    "min-h-[100dvh] relative bg-background flex flex-col supports-[min-height:100dvh]:min-h-[100dvh] overflow-hidden transition-colors duration-500",
+                    currentTheme.isDark ? "dark" : ""
+                )}
                 style={{
-                    '--primary': currentTheme.color,
-                    '--accent': currentTheme.color,
-                    '--glow': currentTheme.color,
-                    '--ring': currentTheme.color,
-                } as React.CSSProperties}
+                    ...(currentTheme.styles as React.CSSProperties),
+                    backgroundImage: currentTheme.gradient
+                }}
             >
                 {/* Noise Texture */}
                 <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none mix-blend-overlay"
@@ -518,10 +519,12 @@ const WrappedSlides = ({
                     {slides.map((_, index) => (
                         <div
                             key={index}
-                            className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden"
+                            className="h-1 flex-1 bg-[hsl(var(--progress-track))] rounded-full overflow-hidden"
                         >
+
+
                             <div
-                                className="h-full bg-white transition-all duration-100 ease-linear"
+                                className="h-full bg-primary transition-all duration-100 ease-linear"
                                 style={{
                                     width: index < currentSlide ? '100%' :
                                         index === currentSlide ? `${progress}%` : '0%'
@@ -576,7 +579,7 @@ const WrappedSlides = ({
 
                 {/* Branding Footer */}
                 <div className="absolute bottom-6 left-0 right-0 text-center z-40 pointer-events-none">
-                    <p className="text-[12px] uppercase tracking-[0.3em] text-white/40 font-medium">
+                    <p className="text-[12px] uppercase tracking-[0.3em] text-primary/40 font-medium">
                         yourwrapped.com
                     </p>
                     {/* <p className="text-[8px] text-white/20 mt-1">

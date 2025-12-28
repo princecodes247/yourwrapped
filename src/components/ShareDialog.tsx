@@ -74,7 +74,8 @@ export function ShareDialog({ open, onOpenChange, wrappedId }: ShareDialogProps)
                             className="h-9"
                         />
                     </div>
-                    <Button type="submit" size="sm" className="px-3" onClick={handleCopy}>
+                    <Button
+                        variant="glossy" type="submit" size="sm" className="px-3" onClick={handleCopy}>
                         <span className="sr-only">Copy</span>
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
