@@ -57,6 +57,21 @@ export const useAudioPlayer = (bgMusic?: string) => {
                     await audioRef.current.play();
                 } catch (err) {
                     console.log("Auto-play prevented:", err);
+                    // Add one-time click listener to start audio
+                    const handleInteraction = async () => {
+                        if (audioRef.current) {
+                            try {
+                                await audioRef.current.play();
+                                document.removeEventListener('click', handleInteraction);
+                                document.removeEventListener('touchstart', handleInteraction);
+                            } catch (e) {
+                                console.log("Interaction play failed:", e);
+                            }
+                        }
+                    };
+
+                    document.addEventListener('click', handleInteraction);
+                    document.addEventListener('touchstart', handleInteraction);
                 }
             }
         };
