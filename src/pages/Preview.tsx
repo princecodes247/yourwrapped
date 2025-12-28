@@ -7,10 +7,19 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import confetti from "canvas-confetti";
 import { ShareDialog } from "@/components/ShareDialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MUSIC_OPTIONS } from "@/types/wrapped";
+import { Music } from "lucide-react";
 
 const Preview = () => {
   const navigate = useNavigate();
-  const { wrappedData } = useWrappedStore();
+  const { wrappedData, updateWrappedData } = useWrappedStore();
   const [isCreating, setIsCreating] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [createdId, setCreatedId] = useState<string>("");
@@ -53,8 +62,30 @@ const Preview = () => {
 
   return (
     <div>
-      <div className="bg-primary/10 text-primary text-center py-2 px-4 text-sm font-medium z-50">
-        Previewing your Wrapped. <button onClick={() => navigate('/create')} className="underline hover:text-primary/80">Back to Editing</button>
+      <div className="bg-primary/10 text-primary py-2 px-4 text-sm font-medium z-50 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-2">
+          <span>Previewing your Wrapped.</span>
+          <button onClick={() => navigate('/create')} className="underline hover:text-primary/80">Back to Editing</button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Music className="w-4 h-4" />
+          <Select
+            value={wrappedData.bgMusic || 'none'}
+            onValueChange={(value) => updateWrappedData({ bgMusic: value })}
+          >
+            <SelectTrigger className="w-[180px] h-8 text-xs bg-background/50 border-primary/20">
+              <SelectValue placeholder="Select Music" />
+            </SelectTrigger>
+            <SelectContent>
+              {MUSIC_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.emoji} {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <WrappedSlides

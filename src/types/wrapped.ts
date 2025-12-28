@@ -73,6 +73,9 @@ export interface WrappedData {
   outroMessage?: string;
   outroVariant?: string;
   creatorVariant?: string;
+
+  // Background Music
+  bgMusic?: string;
 }
 
 export interface SlideConfig {
@@ -92,6 +95,14 @@ export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
   'enemy': 'My Enemy',
   'other': 'Someone Special',
 };
+
+export const MUSIC_OPTIONS: Option[] = [
+  { value: 'upbeat', label: 'Upbeat', emoji: '🎵' },
+  { value: 'chill', label: 'Lo-Fi Chill', emoji: '☕' },
+  { value: 'calm', label: 'Calm', emoji: '🧘' },
+  { value: 'emotional', label: 'Emotional', emoji: '🎸' },
+  { value: 'none', label: 'No Music', emoji: '🔇' },
+];
 
 export const MAIN_CHARACTER_ERAS = [
   { value: 'healing', label: 'Healing Era', emoji: '🌱' },

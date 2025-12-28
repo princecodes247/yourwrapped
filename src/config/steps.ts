@@ -8,6 +8,7 @@ import {
     IMPROVEMENT_VARIANTS,
     CREATOR_VARIANTS,
     THEMES,
+    MUSIC_OPTIONS,
     RelationshipType
 } from "@/types/wrapped";
 

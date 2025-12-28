@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Share2, Loader2, Download } from "lucide-react";
+import { Share2, Loader2, Download, Volume2, VolumeX } from "lucide-react";
 import { toPng } from 'html-to-image';
 import { useRef } from "react";
 import {
@@ -17,6 +17,7 @@ import {
     FAVORITES_VARIANTS,
     CREATOR_VARIANTS,
     THEMES,
+    MUSIC_OPTIONS,
 } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 
@@ -96,6 +97,89 @@ const WrappedSlides = ({
     const slideRef = useRef<HTMLDivElement>(null);
     const slideRef2 = useRef<HTMLDivElement>(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isAudioLoading, setIsAudioLoading] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    // Handle background music
+    useEffect(() => {
+        if (!data.bgMusic || data.bgMusic === 'none') return;
+
+        const musicOption = MUSIC_OPTIONS.find(m => m.value === data.bgMusic);
+        if (!musicOption) return;
+
+        // Create audio element if it doesn't exist
+        if (!audioRef.current) {
+            audioRef.current = new Audio();
+            audioRef.current.loop = true;
+            audioRef.current.volume = 0.5;
+        }
+
+        let src = '';
+        switch (data.bgMusic) {
+            case 'upbeat':
+                src = '/evening-sky.mp3';
+                break;
+            case 'chill':
+                src = '/lofi.mp3';
+                break;
+            case 'calm':
+                src = '/cine-guitar.mp3';
+                break;
+            case 'emotional':
+                src = '/acoustic-guitar.mp3'; // Placeholder
+                break;
+        }
+
+        if (src && audioRef.current.src !== src) {
+            audioRef.current.src = src;
+            setIsAudioLoading(true);
+        }
+
+        // Add event listeners for loading state
+        const handleCanPlay = () => setIsAudioLoading(false);
+        const handleWaiting = () => setIsAudioLoading(true);
+        const handlePlaying = () => setIsAudioLoading(false);
+
+        audioRef.current.addEventListener('canplay', handleCanPlay);
+        audioRef.current.addEventListener('waiting', handleWaiting);
+        audioRef.current.addEventListener('playing', handlePlaying);
+
+        // Attempt to play
+        const playAudio = async () => {
+            if (audioRef.current) {
+                try {
+                    if (isMuted) {
+                        audioRef.current.muted = true;
+                    } else {
+                        audioRef.current.muted = false;
+                    }
+                    await audioRef.current.play();
+                } catch (err) {
+                    console.log("Auto-play prevented:", err);
+                    // User interaction will be needed
+                }
+            }
+        };
+
+        playAudio();
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.removeEventListener('canplay', handleCanPlay);
+                audioRef.current.removeEventListener('waiting', handleWaiting);
+                audioRef.current.removeEventListener('playing', handlePlaying);
+            }
+        };
+    }, [data.bgMusic]);
+
+    // Handle mute toggle
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.muted = isMuted;
+        }
+    }, [isMuted]);
 
     const handleSaveSlide = async () => {
         if (!slideRef.current) return;
@@ -532,7 +616,29 @@ const WrappedSlides = ({
                 </div>
 
                 {/* Save Button */}
-                <div className="absolute top-8 right-4 z-50 no-capture">
+                <div className="absolute top-8 right-4 z-50 no-capture flex gap-2">
+                    {data.bgMusic && data.bgMusic !== 'none' && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMuted(!isMuted);
+                            }}
+                        >
+                            {isMuted ? (
+                                <VolumeX className="w-5 h-5" />
+                            ) : (
+                                <Volume2 className="w-5 h-5" />
+                            )}
+                        </Button>
+                    )}
+                    {isAudioLoading && (
+                        <div className="flex items-center justify-center w-10 h-10">
+                            <Loader2 className="w-4 h-4 text-white/50 animate-spin" />
+                        </div>
+                    )}
                     <Button
                         variant="ghost"
                         size="icon"
