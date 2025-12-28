@@ -62,7 +62,7 @@ const Preview = () => {
 
   return (
     <div>
-      <div className="bg-primary/10 text-primary py-2 px-4 text-sm font-medium z-50 flex items-center justify-between gap-4 flex-wrap">
+      <div className="bg-white/10 text-primary py-2 px-4 text-sm font-medium z-50 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2">
           <span>Previewing your Wrapped.</span>
           <button onClick={() => navigate('/create')} className="underline hover:text-primary/80">Back to Editing</button>

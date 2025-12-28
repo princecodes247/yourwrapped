@@ -74,7 +74,7 @@ const StepLayout = ({
       {onNext && (
         <div className="fixed bottom-0 left-0 right-0 flex justify-center px-6 pb-8 pt-4 bg-gradient-to-t from-background via-background to-transparent z-30 safe-area-bottom">
           <Button
-            variant="hero"
+            variant="glossy"
             size="lg"
             onClick={onNext}
             disabled={!canProgress}

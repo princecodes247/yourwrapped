@@ -56,7 +56,7 @@ const Landing = () => {
               style={{ animationDelay: '400ms' }}
             >
               <Button
-                variant="hero"
+                variant="glossy"
                 size="xl"
                 onClick={() => navigate('/create')}
                 onMouseEnter={() => setIsHovered(true)}

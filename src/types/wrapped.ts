@@ -8,7 +8,7 @@ export type RelationshipType =
   | 'enemy'
   | 'other';
 
-export type Theme = 'gold' | 'blue' | 'purple' | 'green' | 'pink';
+export type Theme = 'gold' | 'blue' | 'purple' | 'green' | 'pink' | 'orange';
 
 export interface Option {
   value: string;
@@ -119,7 +119,7 @@ export const ERA_VARIANTS: QuestionVariant[] = [
   {
     id: 'main-character',
     question: "What era best describes their year?",
-    displayPrefix: "Their Main Character Era",
+    displayPrefix: "Their Era",
     displaySuffix: "The",
     options: MAIN_CHARACTER_ERAS
   },
@@ -552,12 +552,114 @@ export const CREATOR_VARIANTS: QuestionVariant[] = [
   }
 ];
 
-export const THEMES: { id: Theme; label: string; color: string; emoji: string }[] = [
-  { id: 'gold', label: 'Golden Hour', color: '38 92% 60%', emoji: '✨' },
-  { id: 'blue', label: 'Ocean Eyes', color: '217 91% 60%', emoji: '🌊' },
-  { id: 'purple', label: 'Lavender Haze', color: '270 95% 60%', emoji: '💜' },
-  { id: 'green', label: 'Brat Green', color: '142 71% 45%', emoji: '💚' },
-  { id: 'pink', label: 'Hot Pink', color: '330 81% 60%', emoji: '💖' },
+export interface ThemeConfig {
+  id: Theme;
+  label: string;
+  emoji: string;
+  isDark?: boolean;
+  styles: {
+    '--background': string;
+    '--foreground': string;
+    '--primary': string;
+    '--accent': string;
+    '--glow': string;
+    '--ring': string;
+    [key: string]: string;
+  };
+  gradient?: string;
+}
+
+export const THEMES: ThemeConfig[] = [
+  {
+    id: 'blue',
+    label: 'Ocean Eyes',
+    emoji: '🌊',
+    isDark: false,
+    styles: {
+      '--background': '210 40% 98%',
+      '--foreground': '222 47% 11%',
+      '--primary': '221 83% 53%',
+      '--accent': '199 89% 48%',
+      '--glow': '221 83% 53%',
+      '--ring': '221 83% 53%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(221 83% 53% / 0.35), transparent 70%)'
+  },
+  {
+    id: 'gold',
+    label: 'Golden Hour',
+    emoji: '✨',
+    isDark: true,
+    styles: {
+      '--background': '20 14% 4%',
+      '--foreground': '60 9% 96%',
+      '--primary': '45 93% 47%',
+      '--accent': '40 100% 60%',
+      '--glow': '45 93% 47%',
+      '--ring': '45 93% 47%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(45 93% 47% / 0.15), transparent 70%)'
+  },
+  {
+    id: 'purple',
+    label: 'Lavender Haze',
+    emoji: '💜',
+    isDark: true,
+    styles: {
+      '--background': '265 48% 5%',
+      '--foreground': '210 40% 98%',
+      '--primary': '263 70% 50%',
+      '--accent': '280 65% 60%',
+      '--glow': '263 70% 50%',
+      '--ring': '263 70% 50%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(263 70% 50% / 0.2), transparent 70%)'
+  },
+  {
+    id: 'pink',
+    label: 'Hot Pink',
+    emoji: '💖',
+    isDark: false,
+    styles: {
+      '--background': '330 30% 98%',
+      '--foreground': '330 60% 10%',
+      '--primary': '330 81% 60%',
+      '--accent': '320 70% 55%',
+      '--glow': '330 81% 60%',
+      '--ring': '330 81% 60%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(330 81% 60% / 0.25), transparent 70%)'
+  },
+  {
+    id: 'orange',
+    label: 'Burnt Orange',
+    emoji: '🧡',
+    isDark: true,
+    styles: {
+      '--background': '20 30% 10%',
+      '--foreground': '25 20% 95%',
+      '--primary': '25 95% 50%',
+      '--accent': '35 100% 60%',
+      '--glow': '25 95% 50%',
+      '--ring': '25 95% 50%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(25 95% 50% / 0.25), transparent 70%)'
+  },
+  {
+    id: 'green',
+    label: 'Brat Green',
+    emoji: '💚',
+    isDark: false,
+    styles: {
+      '--background': '140 20% 97%',
+      '--foreground': '145 60% 10%',
+      '--primary': '142 71% 45%',
+      '--accent': '150 60% 40%',
+      '--glow': '142 71% 45%',
+      '--ring': '142 71% 45%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(142 71% 45% / 0.25), transparent 70%)'
+  },
 ];
 
 
