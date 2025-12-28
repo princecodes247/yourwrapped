@@ -8,7 +8,7 @@ export type RelationshipType =
   | 'enemy'
   | 'other';
 
-export type Theme = 'gold' | 'blue' | 'purple' | 'green' | 'pink';
+export type Theme = 'gold' | 'blue' | 'purple' | 'green' | 'pink' | 'orange';
 
 export interface Option {
   value: string;
@@ -560,21 +560,6 @@ export interface ThemeConfig {
 
 export const THEMES: ThemeConfig[] = [
   {
-    id: 'gold',
-    label: 'Golden Hour',
-    emoji: '✨',
-    isDark: true,
-    styles: {
-      '--background': '20 14% 4%',
-      '--foreground': '60 9% 96%',
-      '--primary': '45 93% 47%',
-      '--accent': '40 100% 60%',
-      '--glow': '45 93% 47%',
-      '--ring': '45 93% 47%',
-    },
-    gradient: 'radial-gradient(circle at 50% 0%, hsl(45 93% 47% / 0.15), transparent 70%)'
-  },
-  {
     id: 'blue',
     label: 'Ocean Eyes',
     emoji: '🌊',
@@ -588,6 +573,21 @@ export const THEMES: ThemeConfig[] = [
       '--ring': '221 83% 53%',
     },
     gradient: 'radial-gradient(circle at 50% 0%, hsl(221 83% 53% / 0.35), transparent 70%)'
+  },
+  {
+    id: 'gold',
+    label: 'Golden Hour',
+    emoji: '✨',
+    isDark: true,
+    styles: {
+      '--background': '20 14% 4%',
+      '--foreground': '60 9% 96%',
+      '--primary': '45 93% 47%',
+      '--accent': '40 100% 60%',
+      '--glow': '45 93% 47%',
+      '--ring': '45 93% 47%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(45 93% 47% / 0.15), transparent 70%)'
   },
   {
     id: 'purple',
@@ -605,21 +605,6 @@ export const THEMES: ThemeConfig[] = [
     gradient: 'radial-gradient(circle at 50% 0%, hsl(263 70% 50% / 0.2), transparent 70%)'
   },
   {
-    id: 'green',
-    label: 'Brat Green',
-    emoji: '💚',
-    isDark: false,
-    styles: {
-      '--background': '140 20% 97%',
-      '--foreground': '145 60% 10%',
-      '--primary': '142 71% 45%',
-      '--accent': '150 60% 40%',
-      '--glow': '142 71% 45%',
-      '--ring': '142 71% 45%',
-    },
-    gradient: 'radial-gradient(circle at 50% 0%, hsl(142 71% 45% / 0.25), transparent 70%)'
-  },
-  {
     id: 'pink',
     label: 'Hot Pink',
     emoji: '💖',
@@ -633,6 +618,36 @@ export const THEMES: ThemeConfig[] = [
       '--ring': '330 81% 60%',
     },
     gradient: 'radial-gradient(circle at 50% 0%, hsl(330 81% 60% / 0.25), transparent 70%)'
+  },
+  {
+    id: 'orange',
+    label: 'Burnt Orange',
+    emoji: '🧡',
+    isDark: true,
+    styles: {
+      '--background': '20 30% 10%',
+      '--foreground': '25 20% 95%',
+      '--primary': '25 95% 50%',
+      '--accent': '35 100% 60%',
+      '--glow': '25 95% 50%',
+      '--ring': '25 95% 50%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(25 95% 50% / 0.25), transparent 70%)'
+  },
+  {
+    id: 'green',
+    label: 'Brat Green',
+    emoji: '💚',
+    isDark: false,
+    styles: {
+      '--background': '140 20% 97%',
+      '--foreground': '145 60% 10%',
+      '--primary': '142 71% 45%',
+      '--accent': '150 60% 40%',
+      '--glow': '142 71% 45%',
+      '--ring': '142 71% 45%',
+    },
+    gradient: 'radial-gradient(circle at 50% 0%, hsl(142 71% 45% / 0.25), transparent 70%)'
   },
 ];
 
