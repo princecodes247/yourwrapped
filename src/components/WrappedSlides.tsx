@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, Loader2, Download, Volume2, VolumeX } from "lucide-react";
 import { toPng } from 'html-to-image';
@@ -81,6 +81,8 @@ interface WrappedSlidesProps {
     onAction?: () => void;
     actionLabel?: string;
     isActionLoading?: boolean;
+    currentSlide: number;
+    setCurrentSlide: (slide: number | SetStateAction<number>) => void;
 }
 
 const WrappedSlides = ({
@@ -88,9 +90,9 @@ const WrappedSlides = ({
     isSharedView,
     onAction,
     actionLabel = "Share this Wrapped",
-    isActionLoading = false
+    isActionLoading = false,
+    currentSlide, setCurrentSlide
 }: WrappedSlidesProps) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
     const [isAnimating, setIsAnimating] = useState(true);
     const [progress, setProgress] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -624,7 +626,7 @@ const WrappedSlides = ({
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                            className="text-primary/80 hover:text-primary hover:bg-primary/10 transition-colors"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsMuted(!isMuted);
@@ -639,13 +641,13 @@ const WrappedSlides = ({
                     )}
                     {isAudioLoading && (
                         <div className="flex items-center justify-center w-10 h-10">
-                            <Loader2 className="w-4 h-4 text-white/50 animate-spin" />
+                            <Loader2 className="w-4 h-4 text-primary/50 animate-spin" />
                         </div>
                     )}
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                        className="text-primary/50 hover:text-primary hover:bg-primary/10 transition-colors"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent slide navigation
                             handleSaveSlide();
