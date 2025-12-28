@@ -45,6 +45,15 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
 };
 
 export const getAllWrapped = async () => {
-    const data = await apiClient.get<{ totalWraps: number; wraps: WrappedData[] }>("/wrapped");
+    const data = await apiClient.get<{
+        totalWraps: number;
+        topTheme: { _id: string };
+        topEra: { _id: string };
+        topMusic: { _id: string }
+        wrapsOverTime: { year: number; count: number }[];
+        themeDistribution: { theme: string; count: number }[];
+        topEras: { era: string; count: number }[];
+        wraps: WrappedData[]
+    }>("/wrapped");
     return data
 };
