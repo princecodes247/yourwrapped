@@ -27,7 +27,7 @@ interface SlideContentProps {
     data: Partial<WrappedData>;
     recipientName: string;
     creatorName: string;
-    wrappedId?: string;
+    previewId?: string;
     onAction?: () => void;
     actionLabel?: string;
     isActionLoading?: boolean;
@@ -38,13 +38,13 @@ export const SlideContent = ({
     data,
     recipientName,
     creatorName,
-    wrappedId,
+    previewId,
     onAction,
     actionLabel,
     isActionLoading
 }: SlideContentProps) => {
     // Deterministic Logic
-    const seed = getSeed(wrappedId, data);
+    const seed = getSeed(previewId, data);
 
     // Alternate Texts
     const INTRO_ALTERNATES = [

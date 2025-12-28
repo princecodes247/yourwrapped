@@ -37,8 +37,9 @@ export const getWrapped = async (id: string): Promise<WrappedData> => {
     return WrappedDataSchema.parse(data) as WrappedData;
 };
 
-export const createWrapped = async (data: WrappedData): Promise<string> => {
-    const response = await apiClient.post<{ slug: string }>('/wrapped', data);
+export const createWrapped = async (data: WrappedData, previewId?: string): Promise<string> => {
+    const payload = previewId ? { ...data, previewId } : data;
+    const response = await apiClient.post<{ slug: string }>('/wrapped', payload);
     console.log({ response })
     return response.slug;
 };

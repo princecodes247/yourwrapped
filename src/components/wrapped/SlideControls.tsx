@@ -8,6 +8,7 @@ interface SlideControlsProps {
     isAudioLoading: boolean;
     isSaving: boolean;
     onSave: () => void;
+    isSharedView?: boolean;
 }
 
 export const SlideControls = ({
@@ -16,7 +17,8 @@ export const SlideControls = ({
     toggleMute,
     isAudioLoading,
     isSaving,
-    onSave
+    onSave,
+    isSharedView
 }: SlideControlsProps) => {
     return (
         <div className="absolute top-8 right-4 z-50 no-capture flex gap-2">
@@ -42,7 +44,7 @@ export const SlideControls = ({
                     <Loader2 className="w-4 h-4 text-primary/50 animate-spin" />
                 </div>
             )}
-            <Button
+            {isSharedView && <Button
                 variant="ghost"
                 size="icon"
                 className="text-primary/50 hover:text-primary hover:bg-primary/10 transition-colors"
@@ -57,7 +59,7 @@ export const SlideControls = ({
                 ) : (
                     <Download className="w-5 h-5" />
                 )}
-            </Button>
+            </Button>}
         </div>
     );
 };

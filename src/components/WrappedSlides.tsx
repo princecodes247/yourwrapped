@@ -17,7 +17,7 @@ interface WrappedSlidesProps {
     isActionLoading?: boolean;
     currentSlide: number;
     setCurrentSlide: (slide: number | SetStateAction<number>) => void;
-    wrappedId?: string;
+    previewId?: string;
 }
 
 const WrappedSlides = ({
@@ -28,7 +28,7 @@ const WrappedSlides = ({
     isActionLoading = false,
     currentSlide,
     setCurrentSlide,
-    wrappedId
+    previewId
 }: WrappedSlidesProps) => {
     const slideRef = useRef<HTMLDivElement>(null);
 
@@ -81,6 +81,7 @@ const WrappedSlides = ({
                     isAudioLoading={isAudioLoading}
                     isSaving={isSaving}
                     onSave={handleSaveSlide}
+                    isSharedView={isSharedView}
                 />
 
                 {/* Main content */}
@@ -92,7 +93,7 @@ const WrappedSlides = ({
                                 data={data}
                                 recipientName={recipientName}
                                 creatorName={creatorName}
-                                wrappedId={wrappedId}
+                                previewId={previewId}
                                 onAction={onAction}
                                 actionLabel={actionLabel}
                                 isActionLoading={isActionLoading}
