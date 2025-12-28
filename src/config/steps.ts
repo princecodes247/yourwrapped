@@ -9,7 +9,8 @@ import {
     CREATOR_VARIANTS,
     THEMES,
     MUSIC_OPTIONS,
-    RelationshipType
+    RelationshipType,
+    EMOTIONS
 } from "@/types/wrapped";
 
 const RELATIONSHIP_OPTIONS = [
@@ -42,14 +43,6 @@ export const steps: StepConfig[] = [
         staticOptions: RELATIONSHIP_OPTIONS,
     },
     {
-        id: 'accentTheme',
-        type: 'single-select',
-        dataKey: 'accentTheme',
-        title: 'Choose a vibe',
-        subtitle: 'Select a color theme for the experience',
-        staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),
-    },
-    {
         id: 'era',
         type: 'single-select',
         dataKey: 'mainCharacterEra',
@@ -72,7 +65,7 @@ export const steps: StepConfig[] = [
         dataKey: 'topEmotions',
         variantKey: 'emotionsVariant',
         title: (data) => `${data.recipientName}'s top emotions`,
-        variants: EMOTIONS_VARIANTS,
+        variants: [EMOTIONS_VARIANTS[0]],
         maxSelections: 3,
     },
     {
@@ -91,7 +84,7 @@ export const steps: StepConfig[] = [
         dataKey: 'favorites',
         variantKey: 'favoritesVariant',
         title: (data) => `${data.recipientName}'s favorites`,
-        variants: FAVORITES_VARIANTS,
+        variants: [FAVORITES_VARIANTS[0]],
         maxSelections: 3,
         placeholder: "e.g. Pop, Horror, Shonen",
     },
@@ -121,8 +114,17 @@ export const steps: StepConfig[] = [
                 value: 'dedication',
                 label: "Write a custom dedication?",
                 allowCustomInput: true,
+                inputType: 'textarea'
             }
         ],
+    },
+    {
+        id: 'accentTheme',
+        type: 'single-select',
+        dataKey: 'accentTheme',
+        title: 'Choose a vibe',
+        subtitle: 'Select a color theme for the experience',
+        staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),
     },
     {
         id: 'creator',

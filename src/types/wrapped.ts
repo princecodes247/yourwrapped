@@ -15,6 +15,7 @@ export interface Option {
   label: string;
   emoji?: string;
   allowCustomInput?: boolean;
+  inputType?: 'text' | 'textarea';
 }
 
 export interface QuestionVariant {

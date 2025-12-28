@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useWrappedStore } from "@/store/wrappedStore";
 import StepLayout from "./StepLayout";
 import VariantSelector from "./VariantSelector";
@@ -272,14 +273,32 @@ const GenericStep = ({
                         })}
                         {isCustomInputActive && (
                             <div className={cn("col-span-full animate-fade-up")}>
-                                <Input
-                                    type="text"
-                                    placeholder="Type your answer..."
-                                    value={customInputValue}
-                                    onChange={(e) => handleCustomInputChange(e.target.value)}
-                                    className="text-center text-lg h-14"
-                                    autoFocus
-                                />
+                                {(() => {
+                                    // Find the option that triggered the custom input
+                                    // Since we are in the map loop, we don't have access to 'option' here if it's outside the map
+                                    // But wait, the previous code was inside the map? No, it was after the map.
+                                    // I need to find the option that allows custom input.
+                                    const customOption = currentOptions.find(o => o.allowCustomInput);
+
+                                    return customOption?.inputType === 'textarea' ? (
+                                        <Textarea
+                                            placeholder="Type your dedication..."
+                                            value={customInputValue}
+                                            onChange={(e) => handleCustomInputChange(e.target.value)}
+                                            className="text-center text-lg min-h-[120px] p-4 text-foreground/70 italic resize-none"
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <Input
+                                            type="text"
+                                            placeholder="Type your answer..."
+                                            value={customInputValue}
+                                            onChange={(e) => handleCustomInputChange(e.target.value)}
+                                            className="text-center text-lg h-14"
+                                            autoFocus
+                                        />
+                                    );
+                                })()}
                             </div>
                         )}
                     </div>
@@ -441,7 +460,7 @@ const GenericStep = ({
                     {title}
                 </h2>
 
-                {config.variants && config.variants.length > 0 && (
+                {config.variants && config.variants.length > 1 && (
                     <div className="mb-4">
                         <VariantSelector
                             variants={config.variants}
