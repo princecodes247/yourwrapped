@@ -56,7 +56,7 @@ export const steps: StepConfig[] = [
         dataKey: 'topPhrase',
         variantKey: 'phraseVariant',
         title: (data) => `${data.recipientName}'s signature phrase`,
-        variants: PHRASE_VARIANTS,
+        variants: [PHRASE_VARIANTS[0]],
         placeholder: "e.g. That's wild, I'm so tired",
     },
     {
@@ -84,7 +84,7 @@ export const steps: StepConfig[] = [
         dataKey: 'favorites',
         variantKey: 'favoritesVariant',
         title: (data) => `${data.recipientName}'s favorites`,
-        variants: [FAVORITES_VARIANTS[0]],
+        variants: FAVORITES_VARIANTS,
         maxSelections: 3,
         placeholder: "e.g. Pop, Horror, Shonen",
     },
