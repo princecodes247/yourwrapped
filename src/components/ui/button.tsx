@@ -21,6 +21,8 @@ const buttonVariants = cva(
         subtle: "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground",
         // Emotional - for wrapped interactions
         emotional: "bg-transparent border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50",
+        // Glossy - 3D effect
+        glossy: "btn-glossy text-primary-foreground font-semibold hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -29,10 +31,15 @@ const buttonVariants = cva(
         xl: "h-14 rounded-xl px-10 text-lg",
         icon: "h-10 w-10",
       },
+      shape: {
+        default: "rounded-full",
+        circle: "rounded-full",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      shape: "default",
     },
   },
 );

@@ -230,8 +230,8 @@ const GenericStep = ({
                                     className={cn(
                                         "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98] backdrop-blur-sm",
                                         isSelected || isCustomSelected
-                                            ? "border-primary bg-primary/10 text-foreground shadow-sm"
-                                            : "border-border/50 bg-card/40 text-foreground hover:border-primary/50 hover:bg-card/60"
+                                            ? "btn-glossy-selected text-primary-foreground shadow-sm"
+                                            : "btn-glossy-subtle text-foreground hover:bg-card/60"
                                     )}
                                     style={{ animationDelay: `${200 + index * 50}ms` }}
                                 >
@@ -284,8 +284,8 @@ const GenericStep = ({
                                     className={cn(
                                         "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
                                         (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
-                                            ? "border-primary bg-primary/10 text-foreground shadow-lg"
-                                            : "border-border/50 bg-card/40 text-foreground hover:border-primary/50 hover:bg-card/60"
+                                            ? "btn-glossy-selected text-primary-foreground shadow-lg"
+                                            : "btn-glossy-subtle text-foreground hover:bg-card/60"
                                     )}
                                 >
                                     {option.emoji && <span className="text-xl">{option.emoji}</span>}
