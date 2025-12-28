@@ -23,13 +23,14 @@ const Preview = () => {
   const { wrappedData, updateWrappedData } = useWrappedStore();
   const [isCreating, setIsCreating] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [previewId] = useState(() => crypto.randomUUID());
   const [createdId, setCreatedId] = useState<string>("");
 
   const handleCreateWrapped = async () => {
     console.log("jo")
     try {
       setIsCreating(true);
-      const id = await createWrapped(wrappedData as any);
+      const id = await createWrapped(wrappedData as any, previewId);
       setCreatedId(id);
       toast.success("Wrapped created successfully!");
 
@@ -105,6 +106,7 @@ const Preview = () => {
         isActionLoading={isCreating}
         currentSlide={currentSlide}
         setCurrentSlide={setCurrentSlide}
+        previewId={createdId || previewId}
       />
 
       <ShareDialog
