@@ -9,6 +9,7 @@ const Share = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [id, setId] = useState<string | null>(null);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     // Fetch data using the hook
     const { data: fetchedData, isLoading, isError } = useWrapped(id);
@@ -34,7 +35,7 @@ const Share = () => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-background text-center px-6">
                 <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
                 <p className="text-muted-foreground mb-8">We couldn't load this Wrapped. It might have been deleted or the link is invalid.</p>
-                <Button onClick={() => navigate('/create')}>Create your own</Button>
+                <Button variant="glossy" onClick={() => navigate('/create')}>Create your own</Button>
             </div>
         );
     }
@@ -45,6 +46,8 @@ const Share = () => {
             isSharedView={true}
             onAction={() => navigate('/create')}
             actionLabel="Create your own Wrapped"
+            currentSlide={currentSlide}
+            setCurrentSlide={setCurrentSlide}
         />
     );
 };
