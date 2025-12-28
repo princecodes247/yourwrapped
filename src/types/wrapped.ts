@@ -76,6 +76,8 @@ export interface WrappedData {
 
   // Background Music
   bgMusic?: string;
+
+  previewId?: string;
 }
 
 export interface SlideConfig {

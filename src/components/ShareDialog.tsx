@@ -19,7 +19,7 @@ interface ShareDialogProps {
 
 export function ShareDialog({ open, onOpenChange, wrappedId }: ShareDialogProps) {
     const [copied, setCopied] = useState(false);
-    const shareUrl = `${window.location.origin}/share?id=${wrappedId}`;
+    const shareUrl = `${window.location.origin}/share/${wrappedId}`;
 
     const handleCopy = async () => {
         try {

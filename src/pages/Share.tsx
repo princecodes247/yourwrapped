@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useWrapped } from "@/hooks/use-wrapped";
 import WrappedSlides from "@/components/WrappedSlides";
 import { Loader2 } from "lucide-react";
@@ -10,11 +10,15 @@ const Share = () => {
     const navigate = useNavigate();
     const [id, setId] = useState<string | null>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
-
+    const { shareId } = useParams();
     // Fetch data using the hook
     const { data: fetchedData, isLoading, isError } = useWrapped(id);
 
     useEffect(() => {
+        if (shareId) {
+            setId(shareId);
+            return
+        }
         const searchParams = new URLSearchParams(location.search);
         const urlId = searchParams.get('id');
         if (urlId) {
@@ -48,7 +52,7 @@ const Share = () => {
             actionLabel="Create your own Wrapped"
             currentSlide={currentSlide}
             setCurrentSlide={setCurrentSlide}
-            wrappedId={id || undefined}
+            previewId={fetchedData.previewId || undefined}
         />
     );
 };

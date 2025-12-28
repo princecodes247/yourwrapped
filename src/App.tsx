@@ -24,6 +24,7 @@ const App = () => (
             <Route path="/create" element={<Create />} />
             <Route path="/preview" element={<Preview />} />
             <Route path="/share" element={<Share />} />
+            <Route path="/share/:shareId" element={<Share />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
