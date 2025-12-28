@@ -76,7 +76,7 @@ const Preview = () => {
           <button onClick={() => navigate('/create')} className="underline hover:text-primary/80">Back to Editing</button>
         </div>
 
-        <div className="flex relative items-center gap-2">
+        <div className="flex flex-wrap relative items-center gap-2">
           <Select
             value={wrappedData.accentTheme || 'blue'}
             onValueChange={(value) => updateWrappedData({ accentTheme: value as any })}
