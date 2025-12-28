@@ -117,12 +117,12 @@ export const SlideContent = ({
                     <p className="text-muted-foreground mb-8 opacity-0 animate-fade-up">
                         {creatorVariant.id === 'message' ? "A message for you" : `As told by ${creatorName}`}
                     </p>
-                    <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
+                    <h2 className="text-3xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
                         {INTRO_ALTERNATES[getDeterministicIndex(seed, INTRO_ALTERNATES.length, 2)]}
-                        <br />
+                        {/* <br /> */}{" "}
                         <span className="text-primary">{data.relationship ? RELATIONSHIP_LABELS[data.relationship].toLowerCase() : 'someone special'}</span>
                     </h2>
-                    <p className="text-2xl text-muted-foreground opacity-0 animate-fade-up delay-400">
+                    <p className="text-xl text-muted-foreground opacity-0 animate-fade-up delay-400">
                         become even more themselves.
                     </p>
                 </div>
@@ -134,7 +134,7 @@ export const SlideContent = ({
                         {eraVariant.displayPrefix}
                     </p>
                     <div className="opacity-0 animate-fade-up delay-200">
-                        <span className="text-6xl md:text-7xl mb-6 block">
+                        <span className="text-5xl md:text-7xl mb-6 block">
                             {getEraLabel(data, data.mainCharacterEra || '')?.emoji}
                         </span>
                         <h2 className="text-4xl md:text-5xl font-light text-foreground">
@@ -256,10 +256,10 @@ export const SlideContent = ({
                 <div className="text-center">
                     {data.outroMessage === 'summary' ? (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
-                                2025: The Year of
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                                2025
                                 <br />
-                                <span className="text-primary">{getEraLabel(data, data.mainCharacterEra || '')?.label || 'Change'}</span>
+                                <span className="text-primary">The {getEraLabel(data, data.mainCharacterEra || '')?.label || 'Change'}</span>
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
                                 Defined by {getEmotionLabel(data, data.topEmotions?.[0] || '')?.label?.toLowerCase() || 'emotions'}, {data.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
@@ -267,7 +267,7 @@ export const SlideContent = ({
                         </>
                     ) : data.outroMessage === 'default' ? (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
                                 Here's to {recipientName}
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap">
@@ -276,7 +276,7 @@ export const SlideContent = ({
                         </>
                     ) : (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
                                 For {recipientName}
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap italic">

@@ -611,6 +611,7 @@ export const THEMES: ThemeConfig[] = [
       '--background': '265 48% 5%',
       '--foreground': '210 40% 98%',
       '--primary': '263 70% 50%',
+      '--primary-foreground': '210 40% 98%',
       '--accent': '280 65% 60%',
       '--glow': '263 70% 50%',
       '--ring': '263 70% 50%',
