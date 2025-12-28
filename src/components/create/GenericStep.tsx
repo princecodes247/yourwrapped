@@ -369,10 +369,10 @@ const GenericStep = ({
                                             onClick={() => handleListAdd(option.label)}
                                             disabled={(value as string[])?.includes(option.label)}
                                             className={cn(
-                                                "text-xs px-3 py-1.5 rounded-full border transition-all duration-200 flex items-center gap-1.5",
+                                                "text-xs px-3 py-1.5 rounded-full border transition-all text-muted-foreground duration-200 flex items-center gap-1.5",
                                                 (value as string[])?.includes(option.label)
-                                                    ? "opacity-30 cursor-not-allowed bg-secondary/20 border-transparent grayscale"
-                                                    : "bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+                                                    ? "opacity-50 cursor-not-allowed bg-secondary/20 border-transparent grayscale"
+                                                    : "bg-secondary/30 border-transparent hover:bg-secondary/50 hover:text-foreground"
                                             )}
                                         >
                                             {option.emoji && <span>{option.emoji}</span>}
