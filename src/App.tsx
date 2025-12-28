@@ -9,6 +9,7 @@ import Create from "./pages/Create";
 import Preview from "./pages/Preview";
 import Share from "./pages/Share";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/create" element={<Create />} />
             <Route path="/preview" element={<Preview />} />
             <Route path="/share" element={<Share />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

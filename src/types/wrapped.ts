@@ -76,6 +76,9 @@ export interface WrappedData {
 
   // Background Music
   bgMusic?: string;
+
+  // Metadata
+  createdAt?: string;
 }
 
 export interface SlideConfig {

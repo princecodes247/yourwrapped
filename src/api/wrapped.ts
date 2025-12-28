@@ -43,3 +43,8 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
     console.log({ response })
     return response.slug;
 };
+
+export const getAllWrapped = async () => {
+    const data = await apiClient.get<{ totalWraps: number; wraps: WrappedData[] }>("/wrapped");
+    return data
+};
