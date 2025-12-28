@@ -5,17 +5,19 @@ interface UseSlideNavigationProps {
     currentSlide: number;
     setCurrentSlide: (slide: number | SetStateAction<number>) => void;
     slideDuration?: number;
+    initialPaused?: boolean;
 }
 
 export const useSlideNavigation = ({
     totalSlides,
     currentSlide,
     setCurrentSlide,
-    slideDuration = 5000
+    slideDuration = 5000,
+    initialPaused = false
 }: UseSlideNavigationProps) => {
     const [isAnimating, setIsAnimating] = useState(true);
     const [progress, setProgress] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
+    const [isPaused, setIsPaused] = useState(initialPaused);
 
     useEffect(() => {
         setIsAnimating(true);

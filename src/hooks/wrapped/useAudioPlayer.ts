@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MUSIC_OPTIONS } from "@/types/wrapped";
 
-export const useAudioPlayer = (bgMusic?: string) => {
+export const useAudioPlayer = (bgMusic?: string, isFinished: boolean = false, shouldPlay: boolean = true) => {
     const [isMuted, setIsMuted] = useState(false);
     const [isAudioLoading, setIsAudioLoading] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -51,7 +51,7 @@ export const useAudioPlayer = (bgMusic?: string) => {
 
         // Attempt to play
         const playAudio = async () => {
-            if (audioRef.current) {
+            if (audioRef.current && shouldPlay) {
                 try {
                     audioRef.current.muted = isMuted;
                     await audioRef.current.play();
@@ -86,7 +86,15 @@ export const useAudioPlayer = (bgMusic?: string) => {
                 audioRef.current.removeEventListener('playing', handlePlaying);
             }
         };
-    }, [bgMusic]);
+        if (isFinished && audioRef.current) {
+            audioRef.current.pause();
+        } else if (!isFinished && audioRef.current && shouldPlay && !audioRef.current.paused) {
+            // Resume if needed, though usually playAudio handles start.
+            // If we just finished and went back, we might need to play.
+            // But let's keep it simple for now.
+            if (audioRef.current.paused) audioRef.current.play().catch(e => console.log(e));
+        }
+    }, [bgMusic, shouldPlay, isFinished]);
 
     // Handle mute toggle
     useEffect(() => {
@@ -95,10 +103,21 @@ export const useAudioPlayer = (bgMusic?: string) => {
         }
     }, [isMuted]);
 
+    const play = async () => {
+        if (audioRef.current) {
+            try {
+                await audioRef.current.play();
+            } catch (err) {
+                console.log("Manual play failed:", err);
+            }
+        }
+    };
+
     return {
         isMuted,
         setIsMuted,
         isAudioLoading,
-        hasMusic: bgMusic && bgMusic !== 'none'
+        hasMusic: bgMusic && bgMusic !== 'none',
+        play
     };
 };

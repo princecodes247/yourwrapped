@@ -1,4 +1,4 @@
-import { SetStateAction, useRef } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import { WrappedData, THEMES } from "@/types/wrapped";
 import { cn } from "@/lib/utils";
 import { useAudioPlayer } from "@/hooks/wrapped/useAudioPlayer";
@@ -31,15 +31,20 @@ const WrappedSlides = ({
     previewId
 }: WrappedSlidesProps) => {
     const slideRef = useRef<HTMLDivElement>(null);
-
-    // Hooks
-    const { isMuted, setIsMuted, isAudioLoading, hasMusic } = useAudioPlayer(data.bgMusic);
+    const [showGuide, setShowGuide] = useState(true);
 
     const { isAnimating, progress, setIsPaused, handleTap } = useSlideNavigation({
         totalSlides: 9, // Total number of slides
         currentSlide,
-        setCurrentSlide
+        setCurrentSlide,
+        initialPaused: true
     });
+
+    // Calculate if we are at the end
+    const isFinished = currentSlide === 8 && progress >= 100;
+
+    // Hooks
+    const { isMuted, setIsMuted, isAudioLoading, hasMusic, play } = useAudioPlayer(data.bgMusic, isFinished, !showGuide);
 
     const { isSaving, handleSaveSlide } = useSlideCapture(slideRef, currentSlide);
 
@@ -60,8 +65,41 @@ const WrappedSlides = ({
         'outro'
     ];
 
+    const handleStart = () => {
+        setShowGuide(false);
+        setIsPaused(false);
+        play();
+    };
+
     return (
         <div>
+            {showGuide && (
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+                    <div className="flex flex-col items-center gap-8 max-w-md px-6 text-center">
+                        <div className="flex items-center gap-12 text-white/80">
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center">
+                                    ←
+                                </div>
+                                <span className="text-sm">Tap Left<br />to go back</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center">
+                                    →
+                                </div>
+                                <span className="text-sm">Tap Right<br />to go next</span>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={handleStart}
+                            className="px-8 py-3 bg-white text-black rounded-full font-medium hover:scale-105 transition-transform"
+                        >
+                            Got it
+                        </button>
+                    </div>
+                </div>
+            )}
             <SlideBackground
                 ref={slideRef}
                 currentTheme={currentTheme}
