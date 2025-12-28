@@ -438,7 +438,7 @@ const WrappedSlides = ({
                         </p>
                         {onAction && (
                             <Button
-                                variant="emotional"
+                                variant="glossy"
                                 size="lg"
                                 onClick={onAction}
                                 disabled={isActionLoading}
@@ -579,7 +579,7 @@ const WrappedSlides = ({
 
                 {/* Branding Footer */}
                 <div className="absolute bottom-6 left-0 right-0 text-center z-40 pointer-events-none">
-                    <p className="text-[12px] uppercase tracking-[0.3em] text-white/40 font-medium">
+                    <p className="text-[12px] uppercase tracking-[0.3em] text-primary/40 font-medium">
                         yourwrapped.com
                     </p>
                     {/* <p className="text-[8px] text-white/20 mt-1">
