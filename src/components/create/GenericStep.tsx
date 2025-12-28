@@ -7,7 +7,7 @@ import VariantSelector from "./VariantSelector";
 import { cn } from "@/lib/utils";
 import { X, Plus } from "lucide-react";
 import { StepConfig } from "@/types/step-config";
-import { WrappedData } from "@/types/wrapped";
+import { WrappedData, THEMES } from "@/types/wrapped";
 
 interface GenericStepProps {
     config: StepConfig;
@@ -222,6 +222,36 @@ const GenericStep = ({
                         {currentOptions.map((option, index) => {
                             const isSelected = !option.allowCustomInput && value === option.value;
                             const isCustomSelected = option.allowCustomInput && isCustomInputActive;
+
+                            if (config.dataKey === 'accentTheme') {
+                                const theme = THEMES.find(t => t.id === option.value);
+                                if (!theme) return null;
+
+                                return (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => handleSingleSelect(option)}
+                                        className={cn(
+                                            "flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98] backdrop-blur-sm",
+                                            isSelected
+                                                ? "btn-glossy-selected text-primary-foreground shadow-sm"
+                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
+                                        )}
+                                        style={{ animationDelay: `${200 + index * 50}ms` }}
+                                    >
+                                        <div
+                                            className="w-10 h-10 rounded-full shadow-sm shrink-0"
+                                            style={{
+                                                background: `linear-gradient(135deg, hsl(${theme.styles['--background']}), hsl(${theme.styles['--primary']}))`
+                                            }}
+                                        />
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-medium">{option.label}</span>
+                                            <span className="text-[10px] opacity-70 capitalize">{theme.isDark ? 'Dark' : 'Light'} Theme</span>
+                                        </div>
+                                    </button>
+                                );
+                            }
 
                             return (
                                 <button

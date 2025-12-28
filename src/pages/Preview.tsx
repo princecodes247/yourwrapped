@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MUSIC_OPTIONS } from "@/types/wrapped";
+import { MUSIC_OPTIONS, THEMES } from "@/types/wrapped";
 import { Music } from "lucide-react";
 
 const Preview = () => {
@@ -77,20 +77,66 @@ const Preview = () => {
         </div>
 
         <div className="flex relative items-center gap-2">
-          <Music className="w-4 h-4" />
+          <Select
+            value={wrappedData.accentTheme || 'blue'}
+            onValueChange={(value) => updateWrappedData({ accentTheme: value as any })}
+          >
+            <SelectTrigger className="w-[180px] h-9 text-xs bg-background/50 border-primary/20 p-2">
+              {(() => {
+                const selectedTheme = THEMES.find(t => t.id === (wrappedData.accentTheme || 'blue'));
+                if (selectedTheme) {
+                  return (
+                    <div className="flex items-center gap-2 w-full">
+                      <div
+                        className="w-4 h-4 rounded-full shadow-sm shrink-0"
+                        style={{
+                          background: `linear-gradient(135deg, hsl(${selectedTheme.styles['--background']}), hsl(${selectedTheme.styles['--primary']}))`
+                        }}
+                      />
+                      <span className="truncate">{selectedTheme.label}</span>
+                    </div>
+                  );
+                }
+                return <SelectValue placeholder="Select Theme" />;
+              })()}
+            </SelectTrigger>
+            <SelectContent>
+              {THEMES.map((theme) => (
+                <SelectItem key={theme.id} value={theme.id} className="py-2">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-8 rounded-full shadow-sm shrink-0"
+                      style={{
+                        background: `linear-gradient(135deg, hsl(${theme.styles['--background']}), hsl(${theme.styles['--primary']}))`
+                      }}
+                    />
+                    <div className="flex flex-col text-left">
+                      <span className="font-medium text-xs">{theme.label}</span>
+                      <span className="text-[10px] text-muted-foreground opacity-70 capitalize">{theme.isDark ? 'Dark' : 'Light'} Theme</span>
+                    </div>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <div className="w-px h-4 bg-primary/20 mx-1" />
+
+          <Music className="w-4 h-4 text-muted-foreground" />
           <Select
             value={wrappedData.bgMusic || 'none'}
             onValueChange={handleMusicChange}
           >
-            <SelectTrigger className="w-[180px] h-8 text-xs bg-background/50 border-primary/20">
+            <SelectTrigger className="w-[140px] h-9 text-xs bg-background/50 border-primary/20">
               <SelectValue placeholder="Select Music" />
             </SelectTrigger>
-            <SelectContent
-
-            >
+            <SelectContent>
               {MUSIC_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  <span className="flex items-center gap-2">
+                    <span>{option.emoji}</span>
+                    <span>{option.label}</span>
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>
