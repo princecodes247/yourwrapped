@@ -55,7 +55,7 @@ const WrappedSlides = ({
         return true;
     });
 
-    const { isAnimating, progress, setIsPaused, handleTap } = useSlideNavigation({
+    const { isAnimating, isPaused, progress, setIsPaused, handleTap } = useSlideNavigation({
         totalSlides: SLIDE_IDS.length, // Total number of slides
         currentSlide,
         setCurrentSlide,
@@ -127,6 +127,7 @@ const WrappedSlides = ({
                     toggleMute={() => setIsMuted(!isMuted)}
                     isAudioLoading={isAudioLoading}
                     isSaving={isSaving}
+                    isPaused={isPaused}
                     onSave={handleSaveSlide}
                     isSharedView={isSharedView}
                 />
@@ -144,6 +145,7 @@ const WrappedSlides = ({
                                 onAction={onAction}
                                 actionLabel={actionLabel}
                                 isActionLoading={isActionLoading}
+                                setIsPaused={setIsPaused}
                             />
                         </div>
                     </div>

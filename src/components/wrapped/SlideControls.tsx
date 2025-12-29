@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Loader2, Volume2, VolumeX, Download } from "lucide-react";
 
 interface SlideControlsProps {
@@ -7,6 +8,7 @@ interface SlideControlsProps {
     toggleMute: () => void;
     isAudioLoading: boolean;
     isSaving: boolean;
+    isPaused: boolean;
     onSave: () => void;
     isSharedView?: boolean;
 }
@@ -17,11 +19,14 @@ export const SlideControls = ({
     toggleMute,
     isAudioLoading,
     isSaving,
+    isPaused,
     onSave,
     isSharedView
 }: SlideControlsProps) => {
     return (
-        <div className="absolute top-8 right-4 z-50 no-capture flex gap-2">
+        <div className={cn('absolute top-8 right-4 z-50 no-capture flex gap-2',
+            // isPaused && 'hidden'
+        )}>
             {hasMusic && (
                 <Button
                     variant="ghost"

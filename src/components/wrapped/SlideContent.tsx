@@ -20,7 +20,7 @@ import {
 import { CountUp } from "./CountUp";
 import { Button } from "@/components/ui/button";
 import { Loader2, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { API_BASE_URL } from "@/lib/api-client";
 
@@ -33,6 +33,7 @@ interface SlideContentProps {
     onAction?: () => void;
     actionLabel?: string;
     isActionLoading?: boolean;
+    setIsPaused?: (paused: boolean) => void;
 }
 
 export const SlideContent = ({
@@ -43,11 +44,19 @@ export const SlideContent = ({
     previewId,
     onAction,
     actionLabel,
-    isActionLoading
+    isActionLoading,
+    setIsPaused
 }: SlideContentProps) => {
     // Deterministic Logic
     const seed = getSeed(previewId, data);
     const [expandedMemory, setExpandedMemory] = useState<number | null>(null);
+
+    // Pause progress when memory is expanded
+    useEffect(() => {
+        if (setIsPaused) {
+            setIsPaused(expandedMemory !== null);
+        }
+    }, [expandedMemory, setIsPaused]);
 
     // Alternate Texts
     const INTRO_ALTERNATES = [
@@ -308,14 +317,14 @@ export const SlideContent = ({
                             {/* Expanded View Overlay */}
                             {expandedMemory !== null && data.memories && (
                                 <div
-                                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md p-4 animate-fade-in"
+                                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md p-4 pointer-events-auto"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setExpandedMemory(null);
                                     }}
                                 >
                                     <div
-                                        className="relative max-w-4xl max-h-[90vh] w-full bg-white p-2 md:p-4 pb-10 shadow-2xl transform scale-100 animate-fade-up"
+                                        className="relative max-w-4xl max-h-[80vh] min-h-[300px] w-full bg-white p-2 md:p-4 pb-10 shadow-2xl transform scale-100 animate-fade-up"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <button
@@ -325,11 +334,11 @@ export const SlideContent = ({
                                             <span className="sr-only">Close</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                         </button>
-                                        <div className="w-full h-full flex items-center justify-center bg-zinc-100 overflow-hidden">
+                                        <div className="w-full h-full max-w-4xl max-h-[70vh] flex items-center justify-center bg-zinc-100 overflow-hidden">
                                             <img
                                                 src={`${API_BASE_URL}${data.memories[expandedMemory]}`}
                                                 alt="Memory Expanded"
-                                                className="max-w-full max-h-[80vh] object-contain"
+                                                className="w-full h-full object-cover"
                                             />
                                         </div>
                                     </div>
