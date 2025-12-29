@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
+import { API_BASE_URL, apiClient } from '@/lib/api-client';
 import { WrappedData } from '@/types/wrapped';
 
 
@@ -51,7 +51,7 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
 
 export const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
-    formData.append('file', file);
-    const response = await apiClient.upload<{ url: string }>('/upload', formData);
-    return response.url;
+    formData.append('image', file);
+    const response = await apiClient.upload<{ url: string }>('/wrapped/upload', formData);
+    return `${API_BASE_URL}${response.url}`;
 };
