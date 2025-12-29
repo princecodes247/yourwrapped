@@ -286,7 +286,7 @@ export const SlideContent = ({
 
                     {isGallery ? (
                         <>
-                            <div className="grid grid-cols-2 gap-2 md:gap-4 w-full max-w-2xl mx-auto p-4">
+                            <div className="grid grid-cols-2 gap-2 md:gap-4 w-full max-w-2xl mx-auto p-4 animate-fade-up">
                                 {data.memories?.map((img, index) => {
                                     // Deterministic random rotation
                                     const rotation = getDeterministicNumber((seed + index) * (index + 1), -20, 20)
