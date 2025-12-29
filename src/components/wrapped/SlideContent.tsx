@@ -352,17 +352,32 @@ export const SlideContent = ({
                             )}
                         </>
                     ) : (
-                        <div className="relative w-full max-w-lg mx-auto opacity-0 animate-fade-up delay-200">
-                            <div className="absolute inset-0 bg-white/5 transform rotate-2 rounded-lg blur-sm"></div>
-                            <div className="relative bg-[#f8f5e6] text-zinc-800 p-8 md:p-12 rounded-lg shadow-xl transform -rotate-1">
-                                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
-                                    style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+                        <div className="relative w-full max-w-lg mx-auto opacity-0 animate-fade-up delay-200 perspective-1000">
+                            {/* Tape */}
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-10 bg-[#ffffff]/40 backdrop-blur-[2px] -rotate-1 z-20 shadow-[0_1px_2px_rgba(0,0,0,0.1)] border-l border-r border-white/30 mask-tape"></div>
+
+                            <div className="relative bg-[#fdfbf7] text-zinc-800 p-8 md:p-12 pt-16  shadow-[0_2px_10px_rgba(0,0,0,0.1),0_15px_40px_rgba(0,0,0,0.15)] transform -rotate-1 transition-transform hover:rotate-0 duration-500 origin-top">
+                                {/* Paper Texture */}
+                                <div className="absolute inset-0 opacity-[0.15] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/notebook.png')] mix-blend-multiply "></div>
+
+                                {/* Ruled Lines */}
+                                <div className="absolute inset-0 pointer-events-none rounded-sm"
+                                    style={{
+                                        backgroundImage: 'linear-gradient(transparent 27px, #94a3b8 28px)',
+                                        backgroundSize: '100% 28px',
+                                        marginTop: '3.5rem',
+                                        opacity: 0.2
+                                    }}>
                                 </div>
-                                <div className="font-handwriting text-2xl md:text-3xl leading-relaxed whitespace-pre-wrap font-medium">
-                                    {data.funMoment || "No story shared..."}
-                                </div>
-                                <div className="mt-6 text-right font-handwriting text-xl text-zinc-500">
-                                    — {creatorName}
+
+                                {/* Content */}
+                                <div className="relative z-10">
+                                    <div className="font-handwriting text-2xl md:text-3xl leading-[28px] whitespace-pre-wrap font-medium text-zinc-800/90" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.05)' }}>
+                                        {data.funMoment || "No story shared..."}
+                                    </div>
+                                    <div className="mt-8 text-right font-handwriting text-xl text-zinc-500 rotate-1">
+                                        — {creatorName}
+                                    </div>
                                 </div>
                             </div>
                         </div>
