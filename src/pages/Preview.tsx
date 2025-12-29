@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 import { useWrappedStore } from "@/store/wrappedStore";
 import WrappedSlides from "@/components/WrappedSlides";
 import { createWrapped } from "@/api/wrapped";
@@ -58,14 +58,7 @@ const Preview = () => {
 
   // Redirect if no data(optional, but good UX)
   if (!wrappedData.recipientName) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-center px-6">
-        <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
-        <p className="text-muted-foreground mb-8">Start creating your Wrapped to see a preview.</p>
-
-        <Button variant="glossy" onClick={() => navigate('/create')}>Create your own</Button>
-      </div>
-    );
+    return <Navigate to="/create" />;
   }
 
   return (

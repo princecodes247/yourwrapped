@@ -6,6 +6,7 @@ import {
     OBSESSIONS_VARIANTS,
     FAVORITES_VARIANTS,
     IMPROVEMENT_VARIANTS,
+    MEMORIES_VARIANTS,
     CREATOR_VARIANTS,
     THEMES,
     MUSIC_OPTIONS,
@@ -97,6 +98,15 @@ export const steps: StepConfig[] = [
         title: 'A quiet improvement',
         variants: IMPROVEMENT_VARIANTS,
         maxSelections: 3,
+    },
+    {
+        id: 'memories',
+        type: 'media-text',
+        dataKey: 'memories', // Primary data key, but component will handle others
+        variantKey: 'memoriesVariant',
+        title: (data) => `A moment with ${data.recipientName}`,
+        variants: MEMORIES_VARIANTS,
+        optional: true,
     },
     {
         id: 'outro',

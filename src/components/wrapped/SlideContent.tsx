@@ -21,6 +21,7 @@ import { CountUp } from "./CountUp";
 import { Button } from "@/components/ui/button";
 import { Loader2, Share2 } from "lucide-react";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface SlideContentProps {
     slideId: string;
@@ -45,6 +46,7 @@ export const SlideContent = ({
 }: SlideContentProps) => {
     // Deterministic Logic
     const seed = getSeed(previewId, data);
+    const [expandedMemory, setExpandedMemory] = useState<number | null>(null);
 
     // Alternate Texts
     const INTRO_ALTERNATES = [
@@ -262,6 +264,93 @@ export const SlideContent = ({
                     <p className="text-muted-foreground mt-8 text-lg opacity-0 animate-fade-up delay-600">
                         {IMPROVEMENT_OUTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_OUTRO_ALTERNATES.length, 5)]}
                     </p>
+                </div>
+            );
+        case 'memories':
+            const isGallery = data.memoriesVariant === 'gallery';
+            return (
+                <div className="text-center w-full max-w-4xl mx-auto relative min-h-[60vh] flex flex-col items-center justify-center">
+                    <p className="text-muted-foreground mb-8 uppercase tracking-widest text-sm opacity-0 animate-fade-up">
+                        {isGallery ? "Captured Moments" : "A Story to Tell"}
+                    </p>
+
+                    {isGallery ? (
+                        <>
+                            <div className="grid grid-cols-2 gap-6 md:gap-8 w-full max-w-2xl mx-auto p-4">
+                                {data.memories?.map((img, index) => {
+                                    // Deterministic random rotation
+                                    const rotation = `${getDeterministicNumber((seed + index) * (index + 1), -6, 6)}deg`
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setExpandedMemory(index);
+                                            }}
+                                            className={cn("bg-white p-1.5 md:p-3 pb-8 shadow-xl relative z-50 transition-all duration-300 cursor-pointer pointer-events-auto")}
+                                            style={{
+                                                transform: `rotate(${rotation})`,
+                                                animationDelay: `${index * 150}ms`,
+                                            }}
+                                        >
+                                            <div className="aspect-square overflow-hidden bg-zinc-100">
+                                                <img src={img} alt="Memory" className="w-full h-full object-cover" />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            {(!data.memories || data.memories.length === 0) && (
+                                <div className="text-muted-foreground italic">No photos added</div>
+                            )}
+
+                            {/* Expanded View Overlay */}
+                            {expandedMemory !== null && data.memories && (
+                                <div
+                                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md p-4 animate-fade-in"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedMemory(null);
+                                    }}
+                                >
+                                    <div
+                                        className="relative max-w-4xl max-h-[90vh] w-full bg-white p-2 md:p-4 pb-10 shadow-2xl transform scale-100 animate-fade-up"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button
+                                            onClick={() => setExpandedMemory(null)}
+                                            className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
+                                        >
+                                            <span className="sr-only">Close</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                        <div className="w-full h-full flex items-center justify-center bg-zinc-100 overflow-hidden">
+                                            <img
+                                                src={data.memories[expandedMemory]}
+                                                alt="Memory Expanded"
+                                                className="max-w-full max-h-[80vh] object-contain"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="relative w-full max-w-lg mx-auto opacity-0 animate-fade-up delay-200">
+                            <div className="absolute inset-0 bg-white/5 transform rotate-2 rounded-lg blur-sm"></div>
+                            <div className="relative bg-[#f8f5e6] text-zinc-800 p-8 md:p-12 rounded-lg shadow-xl transform -rotate-1">
+                                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+                                    style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+                                </div>
+                                <div className="font-handwriting text-2xl md:text-3xl leading-relaxed whitespace-pre-wrap font-medium">
+                                    {data.funMoment || "No story shared..."}
+                                </div>
+                                <div className="mt-6 text-right font-handwriting text-xl text-zinc-500">
+                                    — {creatorName}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         case 'outro':

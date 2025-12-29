@@ -163,6 +163,7 @@ const GenericStep = ({
 
     // Validation
     const isValid = () => {
+        if (config.optional) return true;
         if (currentVariant?.hideInput) return true;
         if (Array.isArray(value)) {
             return value.length > 0;
@@ -500,6 +501,73 @@ const GenericStep = ({
                         )}
                     </div>
                 );
+
+            case 'media-text':
+                if (variantId === 'story') {
+                    return (
+                        <div className="w-full max-w-md mx-auto">
+                            <Textarea
+                                placeholder="Once upon a time..."
+                                value={(wrappedData.funMoment as string) || ""}
+                                onChange={(e) => {
+                                    updateWrappedData({ funMoment: e.target.value });
+                                    setValue(e.target.value); // Keep local value in sync for validation
+                                }}
+                                className="text-lg min-h-[200px] p-6 text-foreground/80 leading-relaxed resize-none bg-card/50 backdrop-blur-sm border-white/10 focus:border-primary/50"
+                                autoFocus
+                            />
+                        </div>
+                    );
+                } else {
+                    // Gallery
+                    return (
+                        <div className="w-full max-w-md mx-auto">
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                {(wrappedData.memories || []).map((img, idx) => (
+                                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/10">
+                                        <img src={img} alt={`Memory ${idx}`} className="w-full h-full object-cover" />
+                                        <button
+                                            onClick={() => {
+                                                const newMemories = (wrappedData.memories || []).filter((_, i) => i !== idx);
+                                                updateWrappedData({ memories: newMemories });
+                                                setValue(newMemories);
+                                            }}
+                                            className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-red-500/80 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                {(!wrappedData.memories || wrappedData.memories.length < 4) && (
+                                    <label className="aspect-square rounded-xl border-2 border-dashed border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary">
+                                        <Plus className="w-8 h-8" />
+                                        <span className="text-xs font-medium uppercase tracking-wider">Add Photo</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => {
+                                                        const newMemories = [...(wrappedData.memories || []), reader.result as string];
+                                                        updateWrappedData({ memories: newMemories });
+                                                        setValue(newMemories);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                        />
+                                    </label>
+                                )}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Add up to 4 photos
+                            </p>
+                        </div>
+                    );
+                }
 
             default:
                 return null;

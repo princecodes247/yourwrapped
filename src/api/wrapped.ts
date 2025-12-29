@@ -21,6 +21,9 @@ export const WrappedDataSchema = z.object({
     favoritesVariant: z.string().optional(),
     quietImprovement: z.array(z.string()).optional(),
     improvementVariant: z.string().optional(),
+    memories: z.array(z.string()).optional(),
+    funMoment: z.string().optional(),
+    memoriesVariant: z.string().optional(),
     outroMessage: z.string().optional(),
     outroVariant: z.string().optional(), // Kept for compatibility if needed
     creatorName: z.string().optional(),

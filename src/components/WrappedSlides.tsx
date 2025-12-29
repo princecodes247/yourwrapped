@@ -32,16 +32,38 @@ const WrappedSlides = ({
 }: WrappedSlidesProps) => {
     const slideRef = useRef<HTMLDivElement>(null);
     const [showGuide, setShowGuide] = useState(isSharedView);
+    // Slide IDs in order
+    const ALL_SLIDE_IDS = [
+        'cover',
+        'relationship',
+        'era',
+        'phrase',
+        'emotions',
+        'obsessions',
+        'favorites',
+        'memories',
+        'improvement',
+        'outro'
+    ];
+
+    const SLIDE_IDS = ALL_SLIDE_IDS.filter(id => {
+        if (id === 'memories') {
+            const hasMemories = data.memories && data.memories.length > 0;
+            const hasStory = data.funMoment && data.funMoment.trim().length > 0;
+            return hasMemories || hasStory;
+        }
+        return true;
+    });
 
     const { isAnimating, progress, setIsPaused, handleTap } = useSlideNavigation({
-        totalSlides: 9, // Total number of slides
+        totalSlides: SLIDE_IDS.length, // Total number of slides
         currentSlide,
         setCurrentSlide,
         initialPaused: true
     });
 
     // Calculate if we are at the end
-    const isFinished = currentSlide === 8 && progress >= 100;
+    const isFinished = false;
 
     // Hooks
     const { isMuted, setIsMuted, isAudioLoading, hasMusic, play } = useAudioPlayer(data.bgMusic, isFinished, !showGuide);
@@ -51,19 +73,6 @@ const WrappedSlides = ({
     const recipientName = data.recipientName || "Someone";
     const creatorName = data.creatorName || "A friend";
     const currentTheme = THEMES.find(t => t.id === data.accentTheme) || THEMES[0];
-
-    // Slide IDs in order
-    const SLIDE_IDS = [
-        'cover',
-        'relationship',
-        'era',
-        'phrase',
-        'emotions',
-        'obsessions',
-        'favorites',
-        'improvement',
-        'outro'
-    ];
 
     const handleStart = () => {
         setShowGuide(false);
