@@ -37,7 +37,7 @@ const Dashboard = () => {
     // Custom Card Component for Glassmorphism
     const GlassCard = ({ children, className, delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) => (
         <Card className={cn(
-            "bg-black/40 backdrop-blur-xl border-white/5 shadow-2xl hover:bg-black/60 hover:border-white/10 transition-all duration-500 animate-fade-up opacity-0 group relative overflow-hidden",
+            "bg-zinc-900/40 backdrop-blur-md border-white/5 shadow-xl hover:bg-zinc-900/60 hover:border-white/10 transition-all duration-500 animate-fade-up opacity-0 group relative overflow-hidden",
             className
         )} style={{ animationDelay: `${delay}ms`, animationFillMode: 'forwards' }}>
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -74,43 +74,43 @@ const Dashboard = () => {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <GlassCard delay={100}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-400">Total Wraps</CardTitle>
-                            <Users className="h-4 w-4 text-primary/70" />
+                            <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Wraps</CardTitle>
+                            <Users className="h-4 w-4 text-primary/50" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-semibold counter-reveal text-white">{data?.totalWraps}</div>
+                            <div className="text-2xl font-medium counter-reveal text-zinc-100">{data?.totalWraps}</div>
                         </CardContent>
                     </GlassCard>
                     <GlassCard delay={200}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-400">Top Theme</CardTitle>
-                            <Palette className="h-4 w-4 text-primary/70" />
+                            <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Top Theme</CardTitle>
+                            <Palette className="h-4 w-4 text-primary/50" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-semibold capitalize text-white truncate">{data?.topTheme?._id}</div>
+                            <div className="text-2xl font-medium capitalize text-zinc-100 truncate">{data?.topTheme?._id}</div>
                         </CardContent>
                     </GlassCard>
                     <GlassCard delay={300}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-400">Top Era</CardTitle>
-                            <TrendingUp className="h-4 w-4 text-primary/70" />
+                            <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Top Era</CardTitle>
+                            <TrendingUp className="h-4 w-4 text-primary/50" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-semibold capitalize truncate text-white">
+                            <div className="text-2xl font-medium capitalize truncate text-zinc-100">
                                 {data?.topEra?._id || 'N/A'}
                             </div>
                         </CardContent>
                     </GlassCard>
                     <GlassCard delay={400}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-400">Top Music</CardTitle>
-                            <Calendar className="h-4 w-4 text-primary/70" />
+                            <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Top Music</CardTitle>
+                            <Calendar className="h-4 w-4 text-primary/50" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-semibold counter-reveal text-white truncate">
+                            <div className="text-2xl font-medium counter-reveal text-zinc-100 truncate">
                                 {data?.topMusic?._id || 'None'}
                             </div>
                         </CardContent>
