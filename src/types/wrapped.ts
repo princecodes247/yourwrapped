@@ -42,7 +42,8 @@ export interface WrappedData {
   phraseVariant?: string;
 
   // Slide 5 - Most Used Emotions
-  topEmotions?: string[];
+  // Slide 5 - Most Used Emotions
+  topEmotions?: { id: string; percentage: number }[];
   emotionsVariant?: string;
 
   // Slide 6 - Top 3 Obsessions

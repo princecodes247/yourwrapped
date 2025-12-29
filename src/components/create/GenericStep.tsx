@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { useWrappedStore } from "@/store/wrappedStore";
 import StepLayout from "./StepLayout";
 import VariantSelector from "./VariantSelector";
@@ -103,12 +104,24 @@ const GenericStep = ({
                 // If opening, maybe focus?
             }
         } else {
-            const selectedValue = option.value;
-            const currentArray = (value as string[]) || [];
-            if (currentArray.includes(selectedValue)) {
-                setValue(currentArray.filter(v => v !== selectedValue));
-            } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
-                setValue([...currentArray, selectedValue]);
+            if (config.showPercentages) {
+                const selectedValue = option.value;
+                const currentArray = (value as { id: string, percentage: number }[]) || [];
+                const existingIndex = currentArray.findIndex(v => v.id === selectedValue);
+
+                if (existingIndex >= 0) {
+                    setValue(currentArray.filter((_, i) => i !== existingIndex));
+                } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
+                    setValue([...currentArray, { id: selectedValue, percentage: 50 }]);
+                }
+            } else {
+                const selectedValue = option.value;
+                const currentArray = (value as string[]) || [];
+                if (currentArray.includes(selectedValue)) {
+                    setValue(currentArray.filter(v => v !== selectedValue));
+                } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
+                    setValue([...currentArray, selectedValue]);
+                }
             }
         }
     };
@@ -274,10 +287,6 @@ const GenericStep = ({
                         {isCustomInputActive && (
                             <div className={cn("col-span-full animate-fade-up")}>
                                 {(() => {
-                                    // Find the option that triggered the custom input
-                                    // Since we are in the map loop, we don't have access to 'option' here if it's outside the map
-                                    // But wait, the previous code was inside the map? No, it was after the map.
-                                    // I need to find the option that allows custom input.
                                     const customOption = currentOptions.find(o => o.allowCustomInput);
 
                                     return customOption?.inputType === 'textarea' ? (
@@ -309,39 +318,97 @@ const GenericStep = ({
                     <div>
                         {/* Tags display for multi-select */}
                         <div className="flex flex-wrap gap-2 justify-center mb-6 min-h-[40px]">
-                            {(value as string[])?.map((item, index) => (
-                                <span
-                                    key={index}
-                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
-                                >
-                                    <span className="text-sm font-medium">{item}</span>
-                                    <button
-                                        onClick={() => handleListRemove(index)}
-                                        className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                            {config.showPercentages ? (
+                                (value as { id: string, percentage: number }[])?.map((item, index) => {
+                                    const option = currentOptions.find(o => o.value === item.id);
+                                    return (
+                                        <span
+                                            key={index}
+                                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
+                                        >
+                                            <span className="text-sm font-medium">{option?.label || item.id}</span>
+                                            <span className="text-xs opacity-70">({item.percentage}%)</span>
+                                            <button
+                                                onClick={() => handleListRemove(index)}
+                                                className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </span>
+                                    );
+                                })
+                            ) : (
+                                (value as string[])?.map((item, index) => (
+                                    <span
+                                        key={index}
+                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
                                     >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </span>
-                            ))}
+                                        <span className="text-sm font-medium">{item}</span>
+                                        <button
+                                            onClick={() => handleListRemove(index)}
+                                            className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </span>
+                                ))
+                            )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                            {currentOptions.map((option) => (
-                                <button
-                                    key={option.value}
-                                    onClick={() => handleMultiSelect(option)}
-                                    className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
-                                        (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
-                                            ? "btn-glossy-selected text-primary-foreground shadow-lg"
-                                            : "btn-glossy-subtle text-foreground hover:bg-card/60"
-                                    )}
-                                >
-                                    {option.emoji && <span className="text-xl">{option.emoji}</span>}
-                                    <span className="text-sm font-medium">{option.label}</span>
-                                </button>
-                            ))}
+                            {currentOptions.map((option) => {
+                                const isSelected = config.showPercentages
+                                    ? (value as { id: string }[])?.some(v => v.id === option.value)
+                                    : (value as string[])?.includes(option.value);
+
+                                return (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => handleMultiSelect(option)}
+                                        className={cn(
+                                            "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
+                                            isSelected || (option.allowCustomInput && isCustomInputActive)
+                                                ? "btn-glossy-selected text-primary-foreground shadow-lg"
+                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
+                                        )}
+                                    >
+                                        {option.emoji && <span className="text-xl">{option.emoji}</span>}
+                                        <span className="text-sm font-medium">{option.label}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
+
+                        {config.showPercentages && (value as { id: string, percentage: number }[])?.length > 0 && (
+                            <div className="mt-8 space-y-6 animate-fade-up text-left max-w-md mx-auto bg-card/30 p-6 rounded-xl border border-white/5">
+                                <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-4">Adjust Intensity</p>
+                                {(value as { id: string, percentage: number }[]).map((item, index) => {
+                                    const option = currentOptions.find(o => o.value === item.id);
+                                    return (
+                                        <div key={item.id} className="space-y-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm font-medium flex items-center gap-2">
+                                                    {option?.emoji} {option?.label || item.id}
+                                                </span>
+                                                <span className="text-sm text-muted-foreground font-mono">{item.percentage}%</span>
+                                            </div>
+                                            <Slider
+                                                value={[item.percentage]}
+                                                min={0}
+                                                max={100}
+                                                step={5}
+                                                onValueChange={(vals) => {
+                                                    const newValue = [...(value as { id: string, percentage: number }[])];
+                                                    newValue[index] = { ...newValue[index], percentage: vals[0] };
+                                                    setValue(newValue);
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+
                         {isCustomInputActive && (
                             <div className="mt-4 animate-fade-up flex gap-2">
                                 <Input
@@ -363,7 +430,7 @@ const GenericStep = ({
                         )}
                         {config.maxSelections && (
                             <p className="text-xs text-muted-foreground mt-4">
-                                {(value as string[])?.length || 0}/{config.maxSelections} selected
+                                {(value as any[])?.length || 0}/{config.maxSelections} selected
                             </p>
                         )}
                     </div>

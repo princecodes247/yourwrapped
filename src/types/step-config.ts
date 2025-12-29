@@ -32,4 +32,7 @@ export interface StepConfig {
     showBack?: boolean;
     nextLabel?: string;
     customNextAction?: (data: Partial<WrappedData>, navigate: NavigateFunction) => void;
+
+    // Custom features
+    showPercentages?: boolean;
 }

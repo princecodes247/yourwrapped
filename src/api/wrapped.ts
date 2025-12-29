@@ -13,7 +13,7 @@ export const WrappedDataSchema = z.object({
     eraVariant: z.string().optional(),
     topPhrase: z.string().optional(),
     phraseVariant: z.string().optional(),
-    topEmotions: z.array(z.string()).optional(),
+    topEmotions: z.array(z.object({ id: z.string(), percentage: z.number() })).optional(),
     emotionsVariant: z.string().optional(),
     obsessions: z.array(z.string()).optional(),
     obsessionsVariant: z.string().optional(),

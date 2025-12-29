@@ -67,6 +67,7 @@ export const steps: StepConfig[] = [
         title: (data) => `${data.recipientName}'s top emotions`,
         variants: [EMOTIONS_VARIANTS[0]],
         maxSelections: 3,
+        showPercentages: true,
     },
     {
         id: 'obsessions',

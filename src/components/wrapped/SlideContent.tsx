@@ -168,11 +168,11 @@ export const SlideContent = ({
                     </p>
                     <div className="space-y-4 max-w-sm mx-auto">
                         {data.topEmotions?.map((emotion, index) => {
-                            const emotionData = getEmotionLabel(data, emotion);
-                            const width = index === 0 ? 95 : index === 1 ? 75 : 50;
+                            const emotionData = getEmotionLabel(data, typeof emotion === 'string' ? emotion : emotion?.id);
+                            const width = !!emotion?.percentage ? emotion.percentage : index === 0 ? 95 : index === 1 ? 75 : 50;
                             return (
                                 <div
-                                    key={emotion}
+                                    key={typeof emotion === 'string' ? emotion : emotion?.id}
                                     className="opacity-0 animate-fade-up"
                                     style={{ animationDelay: `${200 + index * 150}ms` }}
                                 >
@@ -274,7 +274,7 @@ export const SlideContent = ({
                                 <span className="text-primary">The {getEraLabel(data, data.mainCharacterEra || '')?.label || 'Change'}</span>
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
-                                Defined by {getEmotionLabel(data, data.topEmotions?.[0] || '')?.label?.toLowerCase() || 'emotions'}, {data.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
+                                Defined by {getEmotionLabel(data, data.topEmotions?.[0]?.id || '')?.label?.toLowerCase() || 'emotions'}, {data.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
                             </p>
                         </>
                     ) : data.outroMessage === 'default' ? (
