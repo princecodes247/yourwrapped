@@ -552,7 +552,7 @@ const GenericStep = ({
                                     </div>
                                 ))}
                                 {(!wrappedData.memories || wrappedData.memories.length < 4) && (
-                                    <label className="aspect-square relative rounded-xl border-2 border-dashed border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary">
+                                    <label className="aspect-square relative rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary">
                                         <Plus className="w-8 h-8" />
                                         <span className="text-xs font-medium uppercase tracking-wider">Add Photo</span>
                                         <input

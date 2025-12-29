@@ -286,10 +286,10 @@ export const SlideContent = ({
 
                     {isGallery ? (
                         <>
-                            <div className="grid grid-cols-2 gap-6 md:gap-8 w-full max-w-2xl mx-auto p-4">
+                            <div className="grid grid-cols-2 gap-2 md:gap-4 w-full max-w-2xl mx-auto p-4">
                                 {data.memories?.map((img, index) => {
                                     // Deterministic random rotation
-                                    const rotation = `${getDeterministicNumber((seed + index) * (index + 1), -6, 6)}deg`
+                                    const rotation = getDeterministicNumber((seed + index) * (index + 1), -20, 20)
                                     return (
                                         <div
                                             key={index}
@@ -297,13 +297,19 @@ export const SlideContent = ({
                                                 e.stopPropagation();
                                                 setExpandedMemory(index);
                                             }}
-                                            className={cn("bg-white p-1.5 md:p-3 pb-8 shadow-xl relative z-50 transition-all duration-300 cursor-pointer pointer-events-auto")}
+                                            data-rotation={rotation}
+                                            className={cn(
+                                                "polaroid-image-frame",
+                                                "bg-[#fffdfb] p-2 md:p-3 pb-8 md:pb-10 relative z-50 transition-all duration-500 cursor-pointer pointer-events-auto hover:scale-105 hover:z-[60]",
+                                                "shadow-[0_3px_15px_rgba(0,0,0,0.1),0_10px_30px_rgba(0,0,0,0.05)]", // Realistic layered shadow
+                                                "hover:shadow-[0_20px_40px_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)]", // Lifted shadow on hover
+                                                "before:absolute before:inset-0 before:bg-[url('https://www.transparenttextures.com/patterns/paper.png')] before:opacity-20 before:mix-blend-multiply before:pointer-events-none" // Subtle paper texture
+                                            )}
                                             style={{
-                                                transform: `rotate(${rotation})`,
                                                 animationDelay: `${index * 150}ms`,
                                             }}
                                         >
-                                            <div className="aspect-square overflow-hidden bg-zinc-100">
+                                            <div className="aspect-square overflow-hidden bg-zinc-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
                                                 <img src={`${API_BASE_URL}${img}`} alt="Memory" className="w-full h-full object-cover" />
                                             </div>
                                         </div>
