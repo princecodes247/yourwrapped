@@ -11,6 +11,7 @@ import { X, Plus, Loader2 } from "lucide-react";
 import { StepConfig } from "@/types/step-config";
 import { WrappedData, THEMES } from "@/types/wrapped";
 import { uploadImage } from "@/api/wrapped";
+import { API_BASE_URL } from "@/lib/api-client";
 
 interface GenericStepProps {
     config: StepConfig;
@@ -527,7 +528,7 @@ const GenericStep = ({
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 {(wrappedData.memories || []).map((img, idx) => (
                                     <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/10">
-                                        <img src={img} alt={`Memory ${idx}`} className="w-full h-full object-cover" />
+                                        <img src={`${API_BASE_URL}${img}`} alt={`Memory ${idx}`} className="w-full h-full object-cover" />
                                         <button
                                             onClick={() => {
                                                 const newMemories = (wrappedData.memories || []).filter((_, i) => i !== idx);

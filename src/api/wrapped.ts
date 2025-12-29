@@ -53,5 +53,5 @@ export const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', file);
     const response = await apiClient.upload<{ url: string }>('/wrapped/upload', formData);
-    return `${API_BASE_URL}${response.url}`;
+    return `${response.url}`;
 };

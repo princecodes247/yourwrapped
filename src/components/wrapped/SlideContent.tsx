@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Share2 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { API_BASE_URL } from "@/lib/api-client";
 
 interface SlideContentProps {
     slideId: string;
@@ -294,7 +295,7 @@ export const SlideContent = ({
                                             }}
                                         >
                                             <div className="aspect-square overflow-hidden bg-zinc-100">
-                                                <img src={img} alt="Memory" className="w-full h-full object-cover" />
+                                                <img src={`${API_BASE_URL}${img}`} alt="Memory" className="w-full h-full object-cover" />
                                             </div>
                                         </div>
                                     );
@@ -326,7 +327,7 @@ export const SlideContent = ({
                                         </button>
                                         <div className="w-full h-full flex items-center justify-center bg-zinc-100 overflow-hidden">
                                             <img
-                                                src={data.memories[expandedMemory]}
+                                                src={`${API_BASE_URL}${data.memories[expandedMemory]}`}
                                                 alt="Memory Expanded"
                                                 className="max-w-full max-h-[80vh] object-contain"
                                             />
