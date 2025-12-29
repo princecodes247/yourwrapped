@@ -127,13 +127,23 @@ const GenericStep = ({
     };
 
     const handleCustomMultiAdd = () => {
-        if (!customInputValue.trim()) return;
+        const text = customInputValue.trim();
+        if (!text) return;
 
-        const currentArray = (value as string[]) || [];
-        if (!config.maxSelections || currentArray.length < config.maxSelections) {
-            setValue([...currentArray, customInputValue.trim()]);
-            setCustomInputValue("");
-            setIsCustomInputActive(false); // Close after adding? Or keep open? Let's close.
+        if (config.showPercentages) {
+            const currentArray = (value as { id: string; percentage: number }[]) || [];
+            if ((!config.maxSelections || currentArray.length < config.maxSelections) && !currentArray.some(v => v.id === text)) {
+                setValue([...currentArray, { id: text, percentage: 50 }]);
+                setCustomInputValue("");
+                setIsCustomInputActive(false);
+            }
+        } else {
+            const currentArray = (value as string[]) || [];
+            if ((!config.maxSelections || currentArray.length < config.maxSelections) && !currentArray.includes(text)) {
+                setValue([...currentArray, text]);
+                setCustomInputValue("");
+                setIsCustomInputActive(false);
+            }
         }
     };
 
