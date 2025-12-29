@@ -355,30 +355,6 @@ const GenericStep = ({
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            {currentOptions.map((option) => {
-                                const isSelected = config.showPercentages
-                                    ? (value as { id: string }[])?.some(v => v.id === option.value)
-                                    : (value as string[])?.includes(option.value);
-
-                                return (
-                                    <button
-                                        key={option.value}
-                                        onClick={() => handleMultiSelect(option)}
-                                        className={cn(
-                                            "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
-                                            isSelected || (option.allowCustomInput && isCustomInputActive)
-                                                ? "btn-glossy-selected text-primary-foreground shadow-lg"
-                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
-                                        )}
-                                    >
-                                        {option.emoji && <span className="text-xl">{option.emoji}</span>}
-                                        <span className="text-sm font-medium">{option.label}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-
                         {config.showPercentages && (value as { id: string, percentage: number }[])?.length > 0 && (
                             <div className="mt-8 space-y-6 animate-fade-up text-left max-w-md mx-auto bg-card/30 p-6 rounded-xl border border-white/5">
                                 <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-4">Adjust Intensity</p>
@@ -408,6 +384,29 @@ const GenericStep = ({
                                 })}
                             </div>
                         )}
+                        <div className="grid grid-cols-2 gap-3">
+                            {currentOptions.map((option) => {
+                                const isSelected = config.showPercentages
+                                    ? (value as { id: string }[])?.some(v => v.id === option.value)
+                                    : (value as string[])?.includes(option.value);
+
+                                return (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => handleMultiSelect(option)}
+                                        className={cn(
+                                            "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
+                                            isSelected || (option.allowCustomInput && isCustomInputActive)
+                                                ? "btn-glossy-selected text-primary-foreground shadow-lg"
+                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
+                                        )}
+                                    >
+                                        {option.emoji && <span className="text-xl">{option.emoji}</span>}
+                                        <span className="text-sm font-medium">{option.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
 
                         {isCustomInputActive && (
                             <div className="mt-4 animate-fade-up flex gap-2">
