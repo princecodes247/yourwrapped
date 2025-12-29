@@ -48,3 +48,10 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
     console.log({ response })
     return response.slug;
 };
+
+export const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await apiClient.upload<{ url: string }>('/upload', formData);
+    return response.url;
+};

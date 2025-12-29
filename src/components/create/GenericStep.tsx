@@ -7,9 +7,10 @@ import { useWrappedStore } from "@/store/wrappedStore";
 import StepLayout from "./StepLayout";
 import VariantSelector from "./VariantSelector";
 import { cn } from "@/lib/utils";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Loader2 } from "lucide-react";
 import { StepConfig } from "@/types/step-config";
 import { WrappedData, THEMES } from "@/types/wrapped";
+import { uploadImage } from "@/api/wrapped";
 
 interface GenericStepProps {
     config: StepConfig;
@@ -46,6 +47,7 @@ const GenericStep = ({
     );
     const [customInputValue, setCustomInputValue] = useState("");
     const [isCustomInputActive, setIsCustomInputActive] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     // Initialize variant if needed
     useEffect(() => {
@@ -546,19 +548,30 @@ const GenericStep = ({
                                             type="file"
                                             accept="image/*"
                                             className="hidden"
-                                            onChange={(e) => {
+                                            disabled={isUploading}
+                                            onChange={async (e) => {
                                                 const file = e.target.files?.[0];
                                                 if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onloadend = () => {
-                                                        const newMemories = [...(wrappedData.memories || []), reader.result as string];
+                                                    try {
+                                                        setIsUploading(true);
+                                                        const url = await uploadImage(file);
+                                                        const newMemories = [...(wrappedData.memories || []), url];
                                                         updateWrappedData({ memories: newMemories });
                                                         setValue(newMemories);
-                                                    };
-                                                    reader.readAsDataURL(file);
+                                                    } catch (error) {
+                                                        console.error("Failed to upload image:", error);
+                                                        // Ideally show a toast or error message here
+                                                    } finally {
+                                                        setIsUploading(false);
+                                                    }
                                                 }
                                             }}
                                         />
+                                        {isUploading && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
+                                                <Loader2 className="w-6 h-6 animate-spin text-white" />
+                                            </div>
+                                        )}
                                     </label>
                                 )}
                             </div>
