@@ -243,9 +243,21 @@ export const SlideContent = ({
                     <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 opacity-0 animate-fade-up delay-200">
                         {IMPROVEMENT_INTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_INTRO_ALTERNATES.length, 4)]}
                     </h2>
-                    <p className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up delay-400">
-                        {getImprovementLabel(data, data.quietImprovement || '')}
-                    </p>
+                    <div className="space-y-4">
+
+                        {Array.isArray(data.quietImprovement) ? data.quietImprovement?.map((imp, index) => (
+                            <p
+                                key={index}
+                                className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up"
+                                style={{ animationDelay: `${400 + index * 150}ms` }}
+                            >
+                                {getImprovementLabel(data, imp)}
+                            </p>
+                        )) : <p className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up delay-400">
+                            {getImprovementLabel(data, data.quietImprovement || '')}
+                        </p>
+                        }
+                    </div>
                     <p className="text-muted-foreground mt-8 text-lg opacity-0 animate-fade-up delay-600">
                         {IMPROVEMENT_OUTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_OUTRO_ALTERNATES.length, 5)]}
                     </p>

@@ -90,11 +90,12 @@ export const steps: StepConfig[] = [
     },
     {
         id: 'improvement',
-        type: 'single-select',
+        type: 'multi-select',
         dataKey: 'quietImprovement',
         variantKey: 'improvementVariant',
         title: 'A quiet improvement',
         variants: IMPROVEMENT_VARIANTS,
+        maxSelections: 3,
     },
     {
         id: 'outro',

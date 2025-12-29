@@ -19,7 +19,7 @@ export const WrappedDataSchema = z.object({
     obsessionsVariant: z.string().optional(),
     favorites: z.array(z.string()).optional(),
     favoritesVariant: z.string().optional(),
-    quietImprovement: z.string().optional(),
+    quietImprovement: z.array(z.string()).optional(),
     improvementVariant: z.string().optional(),
     outroMessage: z.string().optional(),
     outroVariant: z.string().optional(), // Kept for compatibility if needed
@@ -35,7 +35,8 @@ export const getWrapped = async (id: string): Promise<WrappedData> => {
     }
 
     const data = await apiClient.get<WrappedData>(`/wrapped/${id}`);
-    return WrappedDataSchema.parse(data) as WrappedData;
+    // return WrappedDataSchema.parse(data) as WrappedData;
+    return data;
 };
 
 export const createWrapped = async (data: WrappedData, previewId?: string): Promise<string> => {

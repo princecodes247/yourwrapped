@@ -54,7 +54,7 @@ export interface WrappedData {
   favoritesVariant?: string;
 
   // Slide 8 - Quiet Improvement
-  quietImprovement?: string;
+  quietImprovement?: string[];
   quietImprovementNote?: string;
   improvementVariant?: string;
 
