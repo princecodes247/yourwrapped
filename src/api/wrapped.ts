@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
+import { API_BASE_URL, apiClient } from '@/lib/api-client';
 import { WrappedData } from '@/types/wrapped';
 
 
@@ -21,6 +21,9 @@ export const WrappedDataSchema = z.object({
     favoritesVariant: z.string().optional(),
     quietImprovement: z.array(z.string()).optional(),
     improvementVariant: z.string().optional(),
+    memories: z.array(z.string()).optional(),
+    funMoment: z.string().optional(),
+    memoriesVariant: z.string().optional(),
     outroMessage: z.string().optional(),
     outroVariant: z.string().optional(), // Kept for compatibility if needed
     creatorName: z.string().optional(),
@@ -44,4 +47,11 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
     const response = await apiClient.post<{ slug: string }>('/wrapped', payload);
     console.log({ response })
     return response.slug;
+};
+
+export const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const response = await apiClient.upload<{ url: string }>('/wrapped/upload', formData);
+    return `${response.url}`;
 };
