@@ -124,7 +124,7 @@ const Preview = () => {
 
           <Music className="w-4 h-4 text-muted-foreground" />
           <Select
-            value={wrappedData.bgMusic || 'none'}
+            value={wrappedData.bgMusic || 'calm'}
             onValueChange={handleMusicChange}
           >
             <SelectTrigger className="w-[140px] h-9 text-xs bg-background/50 border-primary/20">

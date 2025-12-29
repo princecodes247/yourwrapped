@@ -101,11 +101,11 @@ export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
 };
 
 export const MUSIC_OPTIONS: Option[] = [
-  { value: 'none', label: 'No Music', emoji: '🔇' },
+  { value: 'calm', label: 'Calm', emoji: '🧘' },
   { value: 'upbeat', label: 'Upbeat', emoji: '🎵' },
   { value: 'chill', label: 'Lo-Fi Chill', emoji: '☕' },
-  { value: 'calm', label: 'Calm', emoji: '🧘' },
   { value: 'emotional', label: 'Emotional', emoji: '🎸' },
+  { value: 'none', label: 'No Music', emoji: '🔇' },
 ];
 
 export const MAIN_CHARACTER_ERAS = [
