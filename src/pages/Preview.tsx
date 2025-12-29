@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWrappedStore } from "@/store/wrappedStore";
 import WrappedSlides from "@/components/WrappedSlides";
@@ -25,6 +25,10 @@ const Preview = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [previewId] = useState(() => crypto.randomUUID());
   const [createdId, setCreatedId] = useState<string>("");
+
+  useEffect(() => {
+    updateWrappedData({ bgMusic: 'calm' });
+  }, [updateWrappedData]);
 
   const handleCreateWrapped = async () => {
     console.log("jo")
