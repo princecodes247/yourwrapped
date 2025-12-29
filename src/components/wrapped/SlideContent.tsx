@@ -166,25 +166,26 @@ export const SlideContent = ({
                     <p className="text-muted-foreground mb-8 uppercase tracking-widest text-sm opacity-0 animate-fade-up">
                         {emotionsVariant.displayPrefix}
                     </p>
-                    <div className="space-y-4 max-w-sm mx-auto">
+                    <div className="space-y-6 max-w-sm mx-auto mt-12">
                         {data.topEmotions?.map((emotion, index) => {
                             const emotionData = getEmotionLabel(data, typeof emotion === 'string' ? emotion : emotion?.id);
                             const width = !!emotion?.percentage ? emotion.percentage : index === 0 ? 95 : index === 1 ? 75 : 50;
                             return (
                                 <div
                                     key={typeof emotion === 'string' ? emotion : emotion?.id}
-                                    className="opacity-0 animate-fade-up"
+                                    className="opacity-0 animate-fade-up group"
                                     style={{ animationDelay: `${200 + index * 150}ms` }}
                                 >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-lg font-medium text-foreground flex items-center gap-2">
-                                            {emotionData?.emoji} {emotionData?.label}
+                                    <div className="flex items-end justify-between mb-2 px-1">
+                                        <span className="text-xl font-light text-foreground flex items-center gap-3">
+                                            <span className="text-2xl filter drop-shadow-lg">{emotionData?.emoji}</span>
+                                            <span className="tracking-wide">{emotionData?.label}</span>
                                         </span>
-                                        <span className="text-muted-foreground">{width}%</span>
+                                        <span className="text-sm font-mono text-muted-foreground/80">{width}%</span>
                                     </div>
-                                    <div className="h-3 bg-secondary rounded-full overflow-hidden">
+                                    <div className="h-2 bg-zinc-900/10 dark:bg-white/5 rounded-full overflow-hidden backdrop-blur-sm border border-white/5 shadow-inner">
                                         <div
-                                            className="h-full bg-primary rounded-full progress-fill"
+                                            className="h-full bg-gradient-to-r from-primary/60 via-primary/80 to-primary rounded-full progress-fill shadow-[0_0_10px_rgba(var(--primary),0.3)]"
                                             style={{ width: `${width}%` }}
                                         />
                                     </div>
