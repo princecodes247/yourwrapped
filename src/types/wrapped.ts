@@ -65,7 +65,12 @@ export interface WrappedData {
   // Slide 9 - Something You Overcame
   overcame?: string;
 
-  // Slide 10 - The You Now
+  // Slide 10 - Memories (New)
+  memories?: string[]; // Array of image URLs (or base64)
+  funMoment?: string;
+  memoriesVariant?: string;
+
+  // Slide 11 - The You Now
   currentTraits?: string[];
 
   // Slide 11 - From Me to You (Premium)
@@ -510,6 +515,21 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
       { value: 'other', label: 'Other', emoji: '✨', allowCustomInput: true },
     ]
   },
+];
+
+export const MEMORIES_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'gallery',
+    question: "Add some pictures of you two",
+    displayPrefix: "Memories",
+    options: []
+  },
+  {
+    id: 'story',
+    question: "Share a fun moment or story",
+    displayPrefix: "A Fun Moment",
+    options: []
+  }
 ];
 
 export const CURRENT_TRAITS = [
