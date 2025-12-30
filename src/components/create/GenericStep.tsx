@@ -12,6 +12,8 @@ import { StepConfig } from "@/types/step-config";
 import { WrappedData, THEMES } from "@/types/wrapped";
 import { uploadImage } from "@/api/wrapped";
 import { API_BASE_URL } from "@/lib/api-client";
+import { toast } from "sonner";
+import { heicTo, isHeic } from 'heic-to';
 
 interface GenericStepProps {
     config: StepConfig;
@@ -558,11 +560,24 @@ const GenericStep = ({
                                         <input
                                             type="file"
                                             accept="image/*"
+                                            // accept="image/png, image/jpeg, image/jpg, image/webp"
                                             className="hidden"
                                             disabled={isUploading}
                                             onChange={async (e) => {
-                                                const file = e.target.files?.[0];
+                                                let file = e.target.files?.[0];
                                                 if (file) {
+                                                    // Double check for HEIC/HEIF as some browsers might ignore accept
+                                                    if (
+                                                        await isHeic(file)
+                                                    ) {
+                                                        // toast.error("HEIC format is not supported. Please use JPG or PNG.");
+                                                        file = await heicTo({
+                                                            blob: file,
+                                                            type: "image/jpeg",
+                                                            quality: 0.5
+                                                        }) as any as File;
+                                                    }
+
                                                     try {
                                                         setIsUploading(true);
                                                         const url = await uploadImage(file);
@@ -571,7 +586,7 @@ const GenericStep = ({
                                                         setValue(newMemories);
                                                     } catch (error) {
                                                         console.error("Failed to upload image:", error);
-                                                        // Ideally show a toast or error message here
+                                                        toast.error("Failed to upload image. Please try again.");
                                                     } finally {
                                                         setIsUploading(false);
                                                     }
