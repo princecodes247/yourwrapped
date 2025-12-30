@@ -5,6 +5,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, LineChart, L
 import { Loader2, Users, Palette, Calendar, TrendingUp, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
     const { data, isLoading, error } = useQuery({
@@ -26,9 +27,7 @@ const Dashboard = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-background text-destructive">
-                Error loading dashboard: {(error as Error).message}
-            </div>
+            <Navigate to="/admin/login" />
         );
     }
 
