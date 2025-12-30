@@ -6,10 +6,12 @@ import {
     OBSESSIONS_VARIANTS,
     FAVORITES_VARIANTS,
     IMPROVEMENT_VARIANTS,
+    MEMORIES_VARIANTS,
     CREATOR_VARIANTS,
     THEMES,
     MUSIC_OPTIONS,
-    RelationshipType
+    RelationshipType,
+    EMOTIONS
 } from "@/types/wrapped";
 
 const RELATIONSHIP_OPTIONS = [
@@ -42,14 +44,6 @@ export const steps: StepConfig[] = [
         staticOptions: RELATIONSHIP_OPTIONS,
     },
     {
-        id: 'accentTheme',
-        type: 'single-select',
-        dataKey: 'accentTheme',
-        title: 'Choose a vibe',
-        subtitle: 'Select a color theme for the experience',
-        staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),
-    },
-    {
         id: 'era',
         type: 'single-select',
         dataKey: 'mainCharacterEra',
@@ -63,7 +57,7 @@ export const steps: StepConfig[] = [
         dataKey: 'topPhrase',
         variantKey: 'phraseVariant',
         title: (data) => `${data.recipientName}'s signature phrase`,
-        variants: PHRASE_VARIANTS,
+        variants: [PHRASE_VARIANTS[0]],
         placeholder: "e.g. That's wild, I'm so tired",
     },
     {
@@ -72,8 +66,9 @@ export const steps: StepConfig[] = [
         dataKey: 'topEmotions',
         variantKey: 'emotionsVariant',
         title: (data) => `${data.recipientName}'s top emotions`,
-        variants: EMOTIONS_VARIANTS,
+        variants: [EMOTIONS_VARIANTS[0]],
         maxSelections: 3,
+        showPercentages: true,
     },
     {
         id: 'obsessions',
@@ -97,11 +92,21 @@ export const steps: StepConfig[] = [
     },
     {
         id: 'improvement',
-        type: 'single-select',
+        type: 'multi-select',
         dataKey: 'quietImprovement',
         variantKey: 'improvementVariant',
         title: 'A quiet improvement',
         variants: IMPROVEMENT_VARIANTS,
+        maxSelections: 3,
+    },
+    {
+        id: 'memories',
+        type: 'media-text',
+        dataKey: 'memories', // Primary data key, but component will handle others
+        variantKey: 'memoriesVariant',
+        title: (data) => `A moment with ${data.recipientName}`,
+        variants: MEMORIES_VARIANTS,
+        optional: true,
     },
     {
         id: 'outro',
@@ -121,8 +126,17 @@ export const steps: StepConfig[] = [
                 value: 'dedication',
                 label: "Write a custom dedication?",
                 allowCustomInput: true,
+                inputType: 'textarea'
             }
         ],
+    },
+    {
+        id: 'accentTheme',
+        type: 'single-select',
+        dataKey: 'accentTheme',
+        title: 'Choose a vibe',
+        subtitle: 'Select a color theme for the experience',
+        staticOptions: THEMES.map(t => ({ value: t.id, label: t.label, emoji: t.emoji })),
     },
     {
         id: 'creator',

@@ -15,6 +15,7 @@ export interface Option {
   label: string;
   emoji?: string;
   allowCustomInput?: boolean;
+  inputType?: 'text' | 'textarea';
 }
 
 export interface QuestionVariant {
@@ -41,7 +42,8 @@ export interface WrappedData {
   phraseVariant?: string;
 
   // Slide 5 - Most Used Emotions
-  topEmotions?: string[];
+  // Slide 5 - Most Used Emotions
+  topEmotions?: { id: string; percentage: number }[];
   emotionsVariant?: string;
 
   // Slide 6 - Top 3 Obsessions
@@ -53,7 +55,7 @@ export interface WrappedData {
   favoritesVariant?: string;
 
   // Slide 8 - Quiet Improvement
-  quietImprovement?: string;
+  quietImprovement?: string[];
   quietImprovementNote?: string;
   improvementVariant?: string;
 
@@ -63,7 +65,12 @@ export interface WrappedData {
   // Slide 9 - Something You Overcame
   overcame?: string;
 
-  // Slide 10 - The You Now
+  // Slide 10 - Memories (New)
+  memories?: string[]; // Array of image URLs (or base64)
+  funMoment?: string;
+  memoriesVariant?: string;
+
+  // Slide 11 - The You Now
   currentTraits?: string[];
 
   // Slide 11 - From Me to You (Premium)
@@ -79,6 +86,7 @@ export interface WrappedData {
 
   // Metadata
   createdAt?: string;
+  previewId?: string;
 }
 
 export interface SlideConfig {
@@ -100,11 +108,11 @@ export const RELATIONSHIP_LABELS: Record<RelationshipType, string> = {
 };
 
 export const MUSIC_OPTIONS: Option[] = [
-  { value: 'none', label: 'No Music', emoji: '🔇' },
+  { value: 'calm', label: 'Calm', emoji: '🧘' },
   { value: 'upbeat', label: 'Upbeat', emoji: '🎵' },
   { value: 'chill', label: 'Lo-Fi Chill', emoji: '☕' },
-  { value: 'calm', label: 'Calm', emoji: '🧘' },
   { value: 'emotional', label: 'Emotional', emoji: '🎸' },
+  { value: 'none', label: 'No Music', emoji: '🔇' },
 ];
 
 export const MAIN_CHARACTER_ERAS = [
@@ -326,33 +334,30 @@ export const OBSESSIONS_VARIANTS: QuestionVariant[] = [
   },
   {
     id: 'hyperfixations',
-    question: "What consumed their attention?",
-    displayPrefix: "2025 Biggest Obsessions",
+    question: "What became their comfort zone this year?",
+    displayPrefix: "2025 Comfort Zones",
     options: [
-      { value: 'f1', label: 'Formula 1', emoji: '🏎️' },
-      { value: 'eras-tour', label: 'The Eras Tour', emoji: '🎤' },
-      { value: 'soccer', label: 'Soccer', emoji: '⚽' },
-      { value: 'baldurs-gate', label: 'Baldur\'s Gate 3', emoji: '🎲' },
-      { value: 'kpop', label: 'K-Pop', emoji: '🎵' },
-      { value: 'astrology', label: 'Astrology', emoji: '🔮' },
-      { value: 'coding', label: 'Coding', emoji: '💻' },
-      { value: 'anime', label: 'Anime', emoji: '📺' },
-      { value: 'chess', label: 'Chess', emoji: '♟️' },
+      { value: 'comfort-shows', label: 'Comfort Shows', emoji: '📺' },
+      { value: 'comfort-food', label: 'Comfort Food', emoji: '🍜' },
+      { value: 'routine', label: 'Routine', emoji: '🗓️' },
+      { value: 'alone-time', label: 'Alone Time', emoji: '🌫️' },
+      { value: 'music', label: 'Music on Repeat', emoji: '🎶' },
+      { value: 'familiar-places', label: 'Familiar Places', emoji: '🏠' },
+      { value: 'the-gym', label: 'The Gym', emoji: '🏋️' },
     ]
   },
   {
     id: 'rabbit-holes',
-    question: "What rabbit holes did they fall into?",
-    displayPrefix: "Rabbit Holes Entered",
+    question: "What quietly ate up a lot of their time?",
+    displayPrefix: "Time Well (or Poorly) Spent",
     options: [
-      { value: 'true-crime', label: 'True Crime', emoji: '🕵️' },
-      { value: 'conspiracy-theories', label: 'Conspiracy Theories', emoji: '👽' },
-      { value: 'history', label: 'History', emoji: '📜' },
-      { value: 'space', label: 'Space', emoji: '🌌' },
-      { value: 'philosophy', label: 'Philosophy', emoji: '🤔' },
-      { value: 'wikipedia', label: 'Wikipedia Spirals', emoji: '🌐' },
-      { value: 'tiktok-trends', label: 'TikTok Trends', emoji: '📱' },
-      { value: 'lore', label: 'Deep Lore', emoji: '📖' },
+      { value: 'youtube-spirals', label: 'YouTube Spirals', emoji: '▶️' },
+      { value: 'tiktok', label: 'TikTok', emoji: '📲' },
+      { value: 'side-projects', label: 'Side Projects', emoji: '🛠️' },
+      { value: 'late-night-talks', label: 'Late-Night Talks', emoji: '🌙' },
+      { value: 'overthinking', label: 'Overthinking', emoji: '💭' },
+      { value: 'researching', label: 'Researching Things That Didn’t Matter', emoji: '🔍' },
+      { value: 'gaming', label: '“Just One More Game”', emoji: '🕹️' },
     ]
   },
   {
@@ -514,6 +519,21 @@ export const IMPROVEMENT_VARIANTS: QuestionVariant[] = [
   },
 ];
 
+export const MEMORIES_VARIANTS: QuestionVariant[] = [
+  {
+    id: 'gallery',
+    question: "Add some pictures of you two",
+    displayPrefix: "Memories",
+    options: []
+  },
+  {
+    id: 'story',
+    question: "Share a fun moment or story",
+    displayPrefix: "A Fun Moment",
+    options: []
+  }
+];
+
 export const CURRENT_TRAITS = [
   { value: 'resilient', label: 'Resilient' },
   { value: 'grounded', label: 'Grounded' },
@@ -612,6 +632,7 @@ export const THEMES: ThemeConfig[] = [
       '--background': '265 48% 5%',
       '--foreground': '210 40% 98%',
       '--primary': '263 70% 50%',
+      '--primary-foreground': '210 40% 98%',
       '--accent': '280 65% 60%',
       '--glow': '263 70% 50%',
       '--ring': '263 70% 50%',

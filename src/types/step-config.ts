@@ -6,7 +6,8 @@ export type StepInputType =
     | 'text-with-suggestions'
     | 'single-select'
     | 'multi-select'
-    | 'list-builder';
+    | 'list-builder'
+    | 'media-text';
 
 export interface StepConfig {
     id: string;
@@ -32,4 +33,8 @@ export interface StepConfig {
     showBack?: boolean;
     nextLabel?: string;
     customNextAction?: (data: Partial<WrappedData>, navigate: NavigateFunction) => void;
+
+    // Custom features
+    showPercentages?: boolean;
+    optional?: boolean;
 }

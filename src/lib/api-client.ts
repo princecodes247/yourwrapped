@@ -40,4 +40,15 @@ export const apiClient = {
         });
         return handleResponse<T>(response);
     },
+
+    upload: async <T>(endpoint: string, formData: FormData, headers: HeadersInit = {}): Promise<T> => {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: 'POST',
+            headers: {
+                ...headers,
+            },
+            body: formData,
+        });
+        return handleResponse<T>(response);
+    },
 };

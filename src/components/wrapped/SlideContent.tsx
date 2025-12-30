@@ -20,7 +20,9 @@ import {
 import { CountUp } from "./CountUp";
 import { Button } from "@/components/ui/button";
 import { Loader2, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { API_BASE_URL } from "@/lib/api-client";
 
 interface SlideContentProps {
     slideId: string;
@@ -31,6 +33,7 @@ interface SlideContentProps {
     onAction?: () => void;
     actionLabel?: string;
     isActionLoading?: boolean;
+    setIsPaused?: (paused: boolean) => void;
 }
 
 export const SlideContent = ({
@@ -41,10 +44,19 @@ export const SlideContent = ({
     previewId,
     onAction,
     actionLabel,
-    isActionLoading
+    isActionLoading,
+    setIsPaused
 }: SlideContentProps) => {
     // Deterministic Logic
     const seed = getSeed(previewId, data);
+    const [expandedMemory, setExpandedMemory] = useState<number | null>(null);
+
+    // Pause progress when memory is expanded
+    useEffect(() => {
+        if (setIsPaused) {
+            setIsPaused(expandedMemory !== null);
+        }
+    }, [expandedMemory, setIsPaused]);
 
     // Alternate Texts
     const INTRO_ALTERNATES = [
@@ -117,12 +129,12 @@ export const SlideContent = ({
                     <p className="text-muted-foreground mb-8 opacity-0 animate-fade-up">
                         {creatorVariant.id === 'message' ? "A message for you" : `As told by ${creatorName}`}
                     </p>
-                    <h2 className="text-4xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
+                    <h2 className="text-3xl md:text-5xl font-light text-foreground mb-4 opacity-0 animate-fade-up delay-200">
                         {INTRO_ALTERNATES[getDeterministicIndex(seed, INTRO_ALTERNATES.length, 2)]}
-                        <br />
+                        {/* <br /> */}{" "}
                         <span className="text-primary">{data.relationship ? RELATIONSHIP_LABELS[data.relationship].toLowerCase() : 'someone special'}</span>
                     </h2>
-                    <p className="text-2xl text-muted-foreground opacity-0 animate-fade-up delay-400">
+                    <p className="text-xl text-muted-foreground opacity-0 animate-fade-up delay-400">
                         become even more themselves.
                     </p>
                 </div>
@@ -134,7 +146,7 @@ export const SlideContent = ({
                         {eraVariant.displayPrefix}
                     </p>
                     <div className="opacity-0 animate-fade-up delay-200">
-                        <span className="text-6xl md:text-7xl mb-6 block">
+                        <span className="text-5xl md:text-7xl mb-6 block">
                             {getEraLabel(data, data.mainCharacterEra || '')?.emoji}
                         </span>
                         <h2 className="text-4xl md:text-5xl font-light text-foreground">
@@ -166,25 +178,26 @@ export const SlideContent = ({
                     <p className="text-muted-foreground mb-8 uppercase tracking-widest text-sm opacity-0 animate-fade-up">
                         {emotionsVariant.displayPrefix}
                     </p>
-                    <div className="space-y-4 max-w-sm mx-auto">
+                    <div className="space-y-6 max-w-sm mx-auto mt-12">
                         {data.topEmotions?.map((emotion, index) => {
-                            const emotionData = getEmotionLabel(data, emotion);
-                            const width = index === 0 ? 95 : index === 1 ? 75 : 50;
+                            const emotionData = getEmotionLabel(data, typeof emotion === 'string' ? emotion : emotion?.id);
+                            const width = !!emotion?.percentage ? emotion.percentage : index === 0 ? 95 : index === 1 ? 75 : 50;
                             return (
                                 <div
-                                    key={emotion}
-                                    className="opacity-0 animate-fade-up"
+                                    key={typeof emotion === 'string' ? emotion : emotion?.id}
+                                    className="opacity-0 animate-fade-up group"
                                     style={{ animationDelay: `${200 + index * 150}ms` }}
                                 >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-lg font-medium text-foreground flex items-center gap-2">
-                                            {emotionData?.emoji} {emotionData?.label}
+                                    <div className="flex items-end justify-between mb-2 px-1">
+                                        <span className="text-xl font-light text-foreground flex items-center gap-3">
+                                            <span className="text-2xl filter drop-shadow-lg">{emotionData?.emoji}</span>
+                                            <span className="tracking-wide">{emotionData?.label}</span>
                                         </span>
-                                        <span className="text-muted-foreground">{width}%</span>
+                                        <span className="text-sm font-mono text-muted-foreground/80">{width}%</span>
                                     </div>
-                                    <div className="h-3 bg-secondary rounded-full overflow-hidden">
+                                    <div className="h-2 bg-zinc-900/10 dark:bg-white/5 rounded-full overflow-hidden backdrop-blur-sm border border-white/5 shadow-inner">
                                         <div
-                                            className="h-full bg-primary rounded-full progress-fill"
+                                            className="h-full bg-gradient-to-r from-primary/60 via-primary/80 to-primary rounded-full progress-fill shadow-[0_0_10px_rgba(var(--primary),0.3)]"
                                             style={{ width: `${width}%` }}
                                         />
                                     </div>
@@ -243,12 +256,132 @@ export const SlideContent = ({
                     <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 opacity-0 animate-fade-up delay-200">
                         {IMPROVEMENT_INTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_INTRO_ALTERNATES.length, 4)]}
                     </h2>
-                    <p className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up delay-400">
-                        {getImprovementLabel(data, data.quietImprovement || '')}
-                    </p>
+                    <div className="space-y-4">
+
+                        {Array.isArray(data.quietImprovement) ? data.quietImprovement?.map((imp, index) => (
+                            <p
+                                key={index}
+                                className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up"
+                                style={{ animationDelay: `${400 + index * 150}ms` }}
+                            >
+                                {getImprovementLabel(data, imp)}
+                            </p>
+                        )) : <p className="text-2xl md:text-3xl text-primary opacity-0 animate-fade-up delay-400">
+                            {getImprovementLabel(data, data.quietImprovement || '')}
+                        </p>
+                        }
+                    </div>
                     <p className="text-muted-foreground mt-8 text-lg opacity-0 animate-fade-up delay-600">
                         {IMPROVEMENT_OUTRO_ALTERNATES[getDeterministicIndex(seed, IMPROVEMENT_OUTRO_ALTERNATES.length, 5)]}
                     </p>
+                </div>
+            );
+        case 'memories':
+            const isGallery = data.memoriesVariant === 'gallery';
+            return (
+                <div className="text-center w-full max-w-4xl mx-auto relative min-h-[60vh] flex flex-col items-center justify-center">
+                    <p className="text-muted-foreground mb-8 uppercase tracking-widest text-sm opacity-0 animate-fade-up">
+                        {isGallery ? "Captured Moments" : "A Story to Tell"}
+                    </p>
+
+                    {isGallery ? (
+                        <>
+                            <div className="grid grid-cols-2 gap-2 md:gap-4 w-full max-w-2xl mx-auto p-4 animate-fade-up">
+                                {data.memories?.map((img, index) => {
+                                    // Deterministic random rotation
+                                    const rotation = getDeterministicNumber((seed + index) * (index + 1), -20, 20)
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setExpandedMemory(index);
+                                            }}
+                                            data-rotation={rotation}
+                                            className={cn(
+                                                "polaroid-image-frame",
+                                                "bg-[#fffdfb] p-2 md:p-3 pb-8 md:pb-10 relative z-50 transition-all duration-500 cursor-pointer pointer-events-auto hover:scale-105 hover:z-[60]",
+                                                "shadow-[0_3px_15px_rgba(0,0,0,0.1),0_10px_30px_rgba(0,0,0,0.05)]", // Realistic layered shadow
+                                                "hover:shadow-[0_20px_40px_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)]", // Lifted shadow on hover
+                                                "before:absolute before:inset-0 before:bg-[url('https://www.transparenttextures.com/patterns/paper.png')] before:opacity-20 before:mix-blend-multiply before:pointer-events-none" // Subtle paper texture
+                                            )}
+                                            style={{
+                                                animationDelay: `${index * 150}ms`,
+                                            }}
+                                        >
+                                            <div className="aspect-square overflow-hidden bg-zinc-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
+                                                <img src={`${API_BASE_URL}${img}`} alt="Memory" className="w-full h-full object-cover" />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            {(!data.memories || data.memories.length === 0) && (
+                                <div className="text-muted-foreground italic">No photos added</div>
+                            )}
+
+                            {/* Expanded View Overlay */}
+                            {expandedMemory !== null && data.memories && (
+                                <div
+                                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-md p-4 pointer-events-auto"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedMemory(null);
+                                    }}
+                                >
+                                    <div
+                                        className="relative max-w-4xl max-h-[80vh] min-h-[300px] w-full bg-white p-2 md:p-4 pb-10 shadow-2xl transform scale-100 animate-fade-up"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button
+                                            onClick={() => setExpandedMemory(null)}
+                                            className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
+                                        >
+                                            <span className="sr-only">Close</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                        <div className="w-full h-full max-w-4xl max-h-[70vh] flex items-center justify-center bg-zinc-100 overflow-hidden">
+                                            <img
+                                                src={`${API_BASE_URL}${data.memories[expandedMemory]}`}
+                                                alt="Memory Expanded"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="relative w-full max-w-lg mx-auto opacity-0 animate-fade-up delay-200 perspective-1000">
+                            {/* Tape */}
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-10 bg-[#ffffff]/40 backdrop-blur-[2px] -rotate-1 z-20 shadow-[0_1px_2px_rgba(0,0,0,0.1)] border-l border-r border-white/30 mask-tape"></div>
+
+                            <div className="relative bg-[#fdfbf7] text-zinc-800 p-8 md:p-12 pt-16  shadow-[0_2px_10px_rgba(0,0,0,0.1),0_15px_40px_rgba(0,0,0,0.15)] transform -rotate-1 transition-transform hover:rotate-0 duration-500 origin-top">
+                                {/* Paper Texture */}
+                                <div className="absolute inset-0 opacity-[0.15] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/notebook.png')] mix-blend-multiply "></div>
+
+                                {/* Ruled Lines */}
+                                <div className="absolute inset-0 pointer-events-none rounded-sm"
+                                    style={{
+                                        backgroundImage: 'linear-gradient(transparent 27px, #94a3b8 28px)',
+                                        backgroundSize: '100% 28px',
+                                        marginTop: '3.5rem',
+                                        opacity: 0.2
+                                    }}>
+                                </div>
+
+                                {/* Content */}
+                                <div className="relative z-10">
+                                    <div className="font-handwriting text-2xl md:text-3xl leading-[28px] whitespace-pre-wrap font-medium text-zinc-800/90" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.05)' }}>
+                                        {data.funMoment || "No story shared..."}
+                                    </div>
+                                    <div className="mt-8 text-right font-handwriting text-xl text-zinc-500 rotate-1">
+                                        — {creatorName}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         case 'outro':
@@ -256,18 +389,18 @@ export const SlideContent = ({
                 <div className="text-center">
                     {data.outroMessage === 'summary' ? (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
-                                2025: The Year of
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                                2025
                                 <br />
-                                <span className="text-primary">{getEraLabel(data, data.mainCharacterEra || '')?.label || 'Change'}</span>
+                                <span className="text-primary">The {getEraLabel(data, data.mainCharacterEra || '')?.label || 'Change'}</span>
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200">
-                                Defined by {getEmotionLabel(data, data.topEmotions?.[0] || '')?.label?.toLowerCase() || 'emotions'}, {data.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
+                                Defined by {getEmotionLabel(data, data.topEmotions?.[0]?.id || '')?.label?.toLowerCase() || 'emotions'}, {data.obsessions?.[0] || 'obsessions'}, and being unapologetically you.
                             </p>
                         </>
                     ) : data.outroMessage === 'default' ? (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
                                 Here's to {recipientName}
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap">
@@ -276,7 +409,7 @@ export const SlideContent = ({
                         </>
                     ) : (
                         <>
-                            <h2 className="text-4xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
+                            <h2 className="text-3xl md:text-5xl font-light text-foreground mb-8 opacity-0 animate-fade-up">
                                 For {recipientName}
                             </h2>
                             <p className="text-xl text-muted-foreground mb-12 max-w-md mx-auto opacity-0 animate-fade-up delay-200 whitespace-pre-wrap italic">

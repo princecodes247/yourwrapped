@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { useWrappedStore } from "@/store/wrappedStore";
 import StepLayout from "./StepLayout";
 import VariantSelector from "./VariantSelector";
 import { cn } from "@/lib/utils";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Loader2 } from "lucide-react";
 import { StepConfig } from "@/types/step-config";
-import { WrappedData } from "@/types/wrapped";
+import { WrappedData, THEMES } from "@/types/wrapped";
+import { uploadImage } from "@/api/wrapped";
+import { API_BASE_URL } from "@/lib/api-client";
 
 interface GenericStepProps {
     config: StepConfig;
@@ -44,6 +48,7 @@ const GenericStep = ({
     );
     const [customInputValue, setCustomInputValue] = useState("");
     const [isCustomInputActive, setIsCustomInputActive] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     // Initialize variant if needed
     useEffect(() => {
@@ -102,24 +107,46 @@ const GenericStep = ({
                 // If opening, maybe focus?
             }
         } else {
-            const selectedValue = option.value;
-            const currentArray = (value as string[]) || [];
-            if (currentArray.includes(selectedValue)) {
-                setValue(currentArray.filter(v => v !== selectedValue));
-            } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
-                setValue([...currentArray, selectedValue]);
+            if (config.showPercentages) {
+                const selectedValue = option.value;
+                const currentArray = (value as { id: string, percentage: number }[]) || [];
+                const existingIndex = currentArray.findIndex(v => v.id === selectedValue);
+
+                if (existingIndex >= 0) {
+                    setValue(currentArray.filter((_, i) => i !== existingIndex));
+                } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
+                    setValue([...currentArray, { id: selectedValue, percentage: 50 }]);
+                }
+            } else {
+                const selectedValue = option.value;
+                const currentArray = (value as string[]) || [];
+                if (currentArray.includes(selectedValue)) {
+                    setValue(currentArray.filter(v => v !== selectedValue));
+                } else if (!config.maxSelections || currentArray.length < config.maxSelections) {
+                    setValue([...currentArray, selectedValue]);
+                }
             }
         }
     };
 
     const handleCustomMultiAdd = () => {
-        if (!customInputValue.trim()) return;
+        const text = customInputValue.trim();
+        if (!text) return;
 
-        const currentArray = (value as string[]) || [];
-        if (!config.maxSelections || currentArray.length < config.maxSelections) {
-            setValue([...currentArray, customInputValue.trim()]);
-            setCustomInputValue("");
-            setIsCustomInputActive(false); // Close after adding? Or keep open? Let's close.
+        if (config.showPercentages) {
+            const currentArray = (value as { id: string; percentage: number }[]) || [];
+            if ((!config.maxSelections || currentArray.length < config.maxSelections) && !currentArray.some(v => v.id === text)) {
+                setValue([...currentArray, { id: text, percentage: 50 }]);
+                setCustomInputValue("");
+                setIsCustomInputActive(false);
+            }
+        } else {
+            const currentArray = (value as string[]) || [];
+            if ((!config.maxSelections || currentArray.length < config.maxSelections) && !currentArray.includes(text)) {
+                setValue([...currentArray, text]);
+                setCustomInputValue("");
+                setIsCustomInputActive(false);
+            }
         }
     };
 
@@ -149,6 +176,7 @@ const GenericStep = ({
 
     // Validation
     const isValid = () => {
+        if (config.optional) return true;
         if (currentVariant?.hideInput) return true;
         if (Array.isArray(value)) {
             return value.length > 0;
@@ -223,6 +251,36 @@ const GenericStep = ({
                             const isSelected = !option.allowCustomInput && value === option.value;
                             const isCustomSelected = option.allowCustomInput && isCustomInputActive;
 
+                            if (config.dataKey === 'accentTheme') {
+                                const theme = THEMES.find(t => t.id === option.value);
+                                if (!theme) return null;
+
+                                return (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => handleSingleSelect(option)}
+                                        className={cn(
+                                            "flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left min-h-[72px] active:scale-[0.98] backdrop-blur-sm",
+                                            isSelected
+                                                ? "btn-glossy-selected text-primary-foreground shadow-sm"
+                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
+                                        )}
+                                        style={{ animationDelay: `${200 + index * 50}ms` }}
+                                    >
+                                        <div
+                                            className="w-10 h-10 rounded-full shadow-sm shrink-0"
+                                            style={{
+                                                background: `linear-gradient(135deg, hsl(${theme.styles['--background']}), hsl(${theme.styles['--primary']}))`
+                                            }}
+                                        />
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-medium">{option.label}</span>
+                                            <span className="text-[10px] opacity-70 capitalize">{theme.isDark ? 'Dark' : 'Light'} Theme</span>
+                                        </div>
+                                    </button>
+                                );
+                            }
+
                             return (
                                 <button
                                     key={option.value}
@@ -242,14 +300,28 @@ const GenericStep = ({
                         })}
                         {isCustomInputActive && (
                             <div className={cn("col-span-full animate-fade-up")}>
-                                <Input
-                                    type="text"
-                                    placeholder="Type your answer..."
-                                    value={customInputValue}
-                                    onChange={(e) => handleCustomInputChange(e.target.value)}
-                                    className="text-center text-lg h-14"
-                                    autoFocus
-                                />
+                                {(() => {
+                                    const customOption = currentOptions.find(o => o.allowCustomInput);
+
+                                    return customOption?.inputType === 'textarea' ? (
+                                        <Textarea
+                                            placeholder="Type your dedication..."
+                                            value={customInputValue}
+                                            onChange={(e) => handleCustomInputChange(e.target.value)}
+                                            className="text-center text-lg min-h-[120px] p-4 text-foreground/70 italic resize-none"
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <Input
+                                            type="text"
+                                            placeholder="Type your answer..."
+                                            value={customInputValue}
+                                            onChange={(e) => handleCustomInputChange(e.target.value)}
+                                            className="text-center text-lg h-14"
+                                            autoFocus
+                                        />
+                                    );
+                                })()}
                             </div>
                         )}
                     </div>
@@ -260,39 +332,96 @@ const GenericStep = ({
                     <div>
                         {/* Tags display for multi-select */}
                         <div className="flex flex-wrap gap-2 justify-center mb-6 min-h-[40px]">
-                            {(value as string[])?.map((item, index) => (
-                                <span
-                                    key={index}
-                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
-                                >
-                                    <span className="text-sm font-medium">{item}</span>
-                                    <button
-                                        onClick={() => handleListRemove(index)}
-                                        className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                            {config.showPercentages ? (
+                                (value as { id: string, percentage: number }[])?.map((item, index) => {
+                                    const option = currentOptions.find(o => o.value === item.id);
+                                    return (
+                                        <span
+                                            key={index}
+                                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
+                                        >
+                                            <span className="text-sm font-medium">{item?.id ?? option?.label}</span>
+                                            <span className="text-xs opacity-70">({item.percentage}%)</span>
+                                            <button
+                                                onClick={() => handleListRemove(index)}
+                                                className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </span>
+                                    );
+                                })
+                            ) : (
+                                (value as string[])?.map((item, index) => (
+                                    <span
+                                        key={index}
+                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary border border-primary/30"
                                     >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </span>
-                            ))}
+                                        <span className="text-sm font-medium">{item}</span>
+                                        <button
+                                            onClick={() => handleListRemove(index)}
+                                            className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </span>
+                                ))
+                            )}
                         </div>
 
+                        {config.showPercentages && (value as { id: string, percentage: number }[])?.length > 0 && (
+                            <div className="mt-8 space-y-6 animate-fade-up text-left max-w-md mx-auto bg-card/30 p-6 rounded-xl border border-white/5">
+                                <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-4">Adjust Intensity</p>
+                                {(value as { id: string, percentage: number }[]).map((item, index) => {
+                                    const option = currentOptions.find(o => o.value === item.id);
+                                    return (
+                                        <div key={item.id} className="space-y-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm font-medium flex items-center gap-2">
+                                                    {option?.emoji} {option?.label || item.id}
+                                                </span>
+                                                <span className="text-sm text-muted-foreground font-mono">{item.percentage}%</span>
+                                            </div>
+                                            <Slider
+                                                value={[item.percentage]}
+                                                min={0}
+                                                max={100}
+                                                step={5}
+                                                onValueChange={(vals) => {
+                                                    const newValue = [...(value as { id: string, percentage: number }[])];
+                                                    newValue[index] = { ...newValue[index], percentage: vals[0] };
+                                                    setValue(newValue);
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                         <div className="grid grid-cols-2 gap-3">
-                            {currentOptions.map((option) => (
-                                <button
-                                    key={option.value}
-                                    onClick={() => handleMultiSelect(option)}
-                                    className={cn(
-                                        "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
-                                        (value as string[])?.includes(option.value) || (option.allowCustomInput && isCustomInputActive)
-                                            ? "btn-glossy-selected text-primary-foreground shadow-lg"
-                                            : "btn-glossy-subtle text-foreground hover:bg-card/60"
-                                    )}
-                                >
-                                    {option.emoji && <span className="text-xl">{option.emoji}</span>}
-                                    <span className="text-sm font-medium">{option.label}</span>
-                                </button>
-                            ))}
+                            {currentOptions.map((option) => {
+                                const isSelected = config.showPercentages
+                                    ? (value as { id: string }[])?.some(v => v.id === option.value)
+                                    : (value as string[])?.includes(option.value);
+
+                                return (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => handleMultiSelect(option)}
+                                        className={cn(
+                                            "flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 min-h-[60px] active:scale-[0.98] backdrop-blur-sm",
+                                            isSelected || (option.allowCustomInput && isCustomInputActive)
+                                                ? "btn-glossy-selected text-primary-foreground shadow-lg"
+                                                : "btn-glossy-subtle text-foreground hover:bg-card/60"
+                                        )}
+                                    >
+                                        {option.emoji && <span className="text-xl">{option.emoji}</span>}
+                                        <span className="text-sm font-medium">{option.label}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
+
                         {isCustomInputActive && (
                             <div className="mt-4 animate-fade-up flex gap-2">
                                 <Input
@@ -314,7 +443,7 @@ const GenericStep = ({
                         )}
                         {config.maxSelections && (
                             <p className="text-xs text-muted-foreground mt-4">
-                                {(value as string[])?.length || 0}/{config.maxSelections} selected
+                                {(value as any[])?.length || 0}/{config.maxSelections} selected
                             </p>
                         )}
                     </div>
@@ -386,6 +515,84 @@ const GenericStep = ({
                     </div>
                 );
 
+            case 'media-text':
+                if (variantId === 'story') {
+                    return (
+                        <div className="w-full max-w-md mx-auto">
+                            <Textarea
+                                placeholder="Once upon a time..."
+                                value={(wrappedData.funMoment as string) || ""}
+                                onChange={(e) => {
+                                    updateWrappedData({ funMoment: e.target.value });
+                                    setValue(e.target.value); // Keep local value in sync for validation
+                                }}
+                                className="text-lg min-h-[200px] p-6 text-foreground/80 leading-relaxed resize-none bg-card/50 backdrop-blur-sm border-white/10 focus:border-primary/50"
+                                autoFocus
+                            />
+                        </div>
+                    );
+                } else {
+                    // Gallery
+                    return (
+                        <div className="w-full max-w-md mx-auto">
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                {(wrappedData.memories || []).map((img, idx) => (
+                                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/10">
+                                        <img src={`${API_BASE_URL}${img}`} alt={`Memory ${idx}`} className="w-full h-full object-cover" />
+                                        <button
+                                            onClick={() => {
+                                                const newMemories = (wrappedData.memories || []).filter((_, i) => i !== idx);
+                                                updateWrappedData({ memories: newMemories });
+                                                setValue(newMemories);
+                                            }}
+                                            className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-red-500/80 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-all"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                {(!wrappedData.memories || wrappedData.memories.length < 4) && (
+                                    <label className="aspect-square relative rounded-xl border-2 border-dashed border-primary/50 bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary">
+                                        <Plus className="w-8 h-8" />
+                                        <span className="text-xs font-medium uppercase tracking-wider">Add Photo</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            disabled={isUploading}
+                                            onChange={async (e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    try {
+                                                        setIsUploading(true);
+                                                        const url = await uploadImage(file);
+                                                        const newMemories = [...(wrappedData.memories || []), url];
+                                                        updateWrappedData({ memories: newMemories });
+                                                        setValue(newMemories);
+                                                    } catch (error) {
+                                                        console.error("Failed to upload image:", error);
+                                                        // Ideally show a toast or error message here
+                                                    } finally {
+                                                        setIsUploading(false);
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                        {isUploading && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
+                                                <Loader2 className="w-6 h-6 animate-spin text-white" />
+                                            </div>
+                                        )}
+                                    </label>
+                                )}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Add up to 4 photos
+                            </p>
+                        </div>
+                    );
+                }
+
             default:
                 return null;
         }
@@ -411,7 +618,7 @@ const GenericStep = ({
                     {title}
                 </h2>
 
-                {config.variants && config.variants.length > 0 && (
+                {config.variants && config.variants.length > 1 && (
                     <div className="mb-4">
                         <VariantSelector
                             variants={config.variants}
