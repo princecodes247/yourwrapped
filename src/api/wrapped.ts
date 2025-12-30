@@ -66,6 +66,8 @@ export const getAllWrapped = async () => {
 export const loginAdmin = async (data: { username: string; password: string }) => {
     const response = await apiClient.post<{ token: string }>("/auth/login", data);
     return response.token;
+};
+
 export const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', file);
