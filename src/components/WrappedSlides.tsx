@@ -63,7 +63,7 @@ const WrappedSlides = ({
     });
 
     // Calculate if we are at the end
-    const isFinished = false;
+    const isFinished = currentSlide === SLIDE_IDS.length - 1 && progress >= 100;
 
     // Hooks
     const { isMuted, setIsMuted, isAudioLoading, hasMusic, play } = useAudioPlayer(data.bgMusic, isFinished, !showGuide);
