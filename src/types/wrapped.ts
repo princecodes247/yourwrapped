@@ -84,6 +84,8 @@ export interface WrappedData {
   // Background Music
   bgMusic?: string;
 
+  // Metadata
+  createdAt?: string;
   previewId?: string;
 }
 

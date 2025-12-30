@@ -23,6 +23,7 @@ export const apiClient = {
                 'Content-Type': 'application/json',
                 ...headers,
             },
+            credentials: 'include',
         });
         return handleResponse<T>(response);
     },
@@ -35,6 +36,7 @@ export const apiClient = {
                 ...headers,
             },
             body: JSON.stringify(body),
+            credentials: 'include',
         });
         return handleResponse<T>(response);
     },

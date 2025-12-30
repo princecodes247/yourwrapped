@@ -49,6 +49,25 @@ export const createWrapped = async (data: WrappedData, previewId?: string): Prom
     return response.slug;
 };
 
+export const getAllWrapped = async () => {
+    const data = await apiClient.get<{
+        totalWraps: number;
+        topTheme: { _id: string };
+        topEra: { _id: string };
+        topMusic: { _id: string }
+        wrapsOverTime: { year: number; count: number }[];
+        themeDistribution: { theme: string; count: number }[];
+        topEras: { era: string; count: number }[];
+        wraps: WrappedData[]
+    }>("/wrapped/stats");
+    return data
+};
+
+export const loginAdmin = async (data: { username: string; password: string }) => {
+    const response = await apiClient.post<{ token: string }>("/auth/login", data);
+    return response.token;
+};
+
 export const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', file);
