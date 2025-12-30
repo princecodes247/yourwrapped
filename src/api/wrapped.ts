@@ -54,6 +54,11 @@ export const getAllWrapped = async () => {
         themeDistribution: { theme: string; count: number }[];
         topEras: { era: string; count: number }[];
         wraps: WrappedData[]
-    }>("/wrapped");
+    }>("/wrapped/stats");
     return data
+};
+
+export const loginAdmin = async (data: { username: string; password: string }) => {
+    const response = await apiClient.post<{ token: string }>("/auth/login", data);
+    return response.token;
 };
